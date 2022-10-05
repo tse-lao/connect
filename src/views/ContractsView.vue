@@ -27,7 +27,8 @@ export default {
       );
 
       const totalContracts = await factoryContract.methods
-        .countContracts().call();
+        .countContracts()
+        .call();
 
       console.log(totalContracts);
       let total = totalContracts;
@@ -52,16 +53,17 @@ export default {
 </script>
 
 <template>
-  <main>
+  <div class="contract-view">
     <TitleVue title="Contracts" />
     <div class="actions">
-      <button class="btn-success" @click="showCreate">Create Contract</button>
+      <button class="success" @click="showCreate">Create Contract</button>
     </div>
 
     <div v-if="createOn">
       <CreateContractVue />
     </div>
     <Loading v-if="loading" />
+
     <div class="grid-container" v-else>
       <ContractElementVue
         v-for="(item, index) in contracts"
@@ -69,20 +71,16 @@ export default {
         :key="index"
       />
     </div>
-  </main>
+  </div>
 </template>
 
-<style scoped>
-main {
-  margin: 24px;
-  padding: 0;
-}
+<style>
 .grid-container {
   display: flex;
   flex-wrap: wrap;
 }
 .actions {
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
 }
 </style>

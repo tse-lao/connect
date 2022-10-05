@@ -1,50 +1,52 @@
 <template>
   <div class="contract_create">
     <!--  What information do we need to add here?  -->
-
-    <div class="class-form">
-      <FormKit type="form" @submit="onSubmit" v-model="data">
-        <FormKitSchema :schema="form" />
-      </FormKit>
-    </div>
-
-    <div class="createForm">
-      <div class="enterForm">
-        <FormKit type="form" @submit="onAddSubmit" v-model="inputFormat">
-          <FormKitSchema :schema="inputForm" />
+    <div class="first-section">
+      <div class="class-form">
+        <FormKit type="form" @submit="onSubmit" v-model="data">
+          <FormKitSchema :schema="form" />
         </FormKit>
       </div>
 
-      <div class="previewForm">
-        <FormKit
-          v-for="(value, key) in dataCode"
-          v-bind:key="key"
-          :type="value.$formkit"
-          :name="value.name"
-          :label="value.label"
-          :classes="{
-            outer: 'mb-5 color-white',
-            label: 'block mb-1 font-bold text-sm',
-            inner:
-              'max-w-md border border-gray-400 rounded-lg mb-1 overflow-hidden focus-within:border-blue-500',
-            input:
-              'w-full h-10 px-3 border-none text-base text-white-700 placeholder-gray-400',
-            help: 'text-xs text-gray-500',
-          }"
-        />
+      <div class="createForm">
+        <div class="enterForm">
+          <FormKit type="form" @submit="onAddSubmit" v-model="inputFormat">
+            <FormKitSchema :schema="inputForm" />
+          </FormKit>
+        </div>
+
+        <div class="previewForm">
+          <FormKit
+            v-for="(value, key) in dataCode"
+            v-bind:key="key"
+            :type="value.$formkit"
+            :name="value.name"
+            :label="value.label"
+            :classes="{
+              outer: 'mb-5 color-white',
+              label: 'block mb-1 font-bold text-sm',
+              inner:
+                'max-w-md border border-gray-400 rounded-lg mb-1 overflow-hidden focus-within:border-blue-500',
+              input:
+                'w-full h-10 px-3 border-none text-base text-white-700 placeholder-gray-400',
+              help: 'text-xs text-gray-500',
+            }"
+          />
+        </div>
       </div>
     </div>
+    <div class="second-section">
+      <div class="result">
+        {{ dataCode }}
+      </div>
 
-    <div class="result">
-      {{ dataCode }}
+      <button @click="startContract" class="btn-succes">Submit</button>
     </div>
-
-    <button @click="startContract" class="btn-succes">Submit</button>
   </div>
 </template>
   
 <script>
-import Web3 from 'web3';
+import Web3 from "web3";
 import contractInterface from "@/assets/contracts/artifacts/Contracts.json";
 import createForm from "./forms/createContract.json";
 import createInput from "./forms/createInput.json";
@@ -72,8 +74,11 @@ export default {
       //find something smarter for thi
       const mainContract = "0xF5268BbBf2D33E99c63F9056dA853dB46C8018A8";
       const web3 = new Web3(window.ethereum);
-      const contract = new web3.eth.Contract(contractInterface.abi, mainContract)
-      console.log(contract)
+      const contract = new web3.eth.Contract(
+        contractInterface.abi,
+        mainContract
+      );
+      console.log(contract);
     },
 
     startContract() {
@@ -86,10 +91,9 @@ export default {
 
       const stringedJSON = JSON.stringify(data);
 
-      //write file to IPFS here. 
-      
-      
-  /*     WriteFile(stringedJSON, "json").then((result) => {
+      //write file to IPFS here.
+
+      /*     WriteFile(stringedJSON, "json").then((result) => {
         console.log(result);
         this.createContract(result);
       }); */
@@ -110,13 +114,20 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .contract_create {
-  border: 1px solid #c2c2c2;
   padding: 24px;
   margin: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
 }
-
+.first-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 .two_section_form {
   display: flex;
   flex-direction: row;
@@ -128,31 +139,30 @@ export default {
   flex-direction: column;
   border: none;
   margin-bottom: 8px;
+}
+input {
+  margin: 12px;
+  margin-left: 0;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  color: white !important;
+}
+.formkit-input {
+  color: white !important;
+}
 
-  input {
-    margin: 12px;
-    margin-left: 0;
-    padding: 8px;
-    font-size: 14px;
-    border-radius: 6px;
-    border: none;
-    color: white !important;
-  }
-  .formkit-input {
-    color: white !important;
-  }
+textarea {
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 12px;
+}
 
-  textarea {
-    border-radius: 6px;
-    padding: 8px;
-    font-size: 12px;
-  }
-
-  .createForm {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-  }
+.createForm {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
 }
 </style>
   

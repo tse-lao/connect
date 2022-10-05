@@ -15,6 +15,18 @@ a,
   transition: 0.4s;
 }
 
+button,
+  .success{
+    padding: 12px 12px;
+    background-color:hsla(160, 100%, 37%, 1);
+    border-radius: 4px;
+    border:none;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-family: monospace;
+  }
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
@@ -24,7 +36,8 @@ a,
 @media (min-width: 1024px) {
   body {
     display: flex;
-    place-items: center;
+    place-items: start;
+    margin-top: 64px;
   }
 
   #app {
