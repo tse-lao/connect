@@ -1,0 +1,42 @@
+[
+    {
+        "$formkit": "select",
+        "name": "type",
+        "label": "formkit",
+        "help": "What kind of form do you want",
+        "validation": "required", 
+        "options":["text", "textarea", "date", "checkbox", "select"]
+      },
+    {
+      "$formkit": "text",
+      "name": "name",
+      "label": "Name",
+      "help": "what is the name of the form?.",
+      "validation": "required"
+    },
+    {
+      "$formkit": "text",
+      "name": "label",
+      "label": "Label name",
+      "help": "Please provide a name for the form. ",
+      "validation": "required|length:5"
+    },
+    {
+        "$formkit": "text",
+        "name": "placeholder",
+        "label": "placeholder",
+        "help": "Please select placeholder here."
+      },
+      {
+        "$formkit": "text",
+        "name": "validation",
+        "label": "validation",
+        "help": "Examples of validations: required|number|length:5 "
+      },
+    {
+      "$formkit": "checkbox",
+      "name": "open",
+      "id": "open",
+      "label": "Is this open?"
+    }
+  ]

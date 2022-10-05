@@ -1,0 +1,205 @@
+<script lang="ts">
+
+</script>
+
+<template>
+  <div class="app">
+    <div id="leftSide">
+      <div id="nav">
+        <div id="logo">
+          <img
+            src="@/assets/images/logo.png"
+            class="nav-item-icon"
+          />
+        </div>
+        <div class="nav-item" to="/" @click="$router.push('/')">
+          <img
+            src="@/assets/icons/web-technology/display.svg"
+            class="nav-item-icon"
+          />
+          <router-link to="/">Home</router-link>
+        </div>
+         <div class="nav-item" @click="$router.push('/contracts')">
+          <img
+            class="nav-item-icon"
+            src="@/assets/icons/file-1.svg"
+            alt="Dashboard"
+          />
+          <router-link to="/contracts">Contracts</router-link>
+        </div>
+        <div class="nav-item" @click="$router.push('/files')">
+          <img
+            class="nav-item-icon"
+            src="./assets/icons/files.svg"
+            alt="Files"
+          />
+          <router-link to="/files">Files</router-link>
+        </div>
+        <div class="nav-item" @click="$router.push('/settings')">
+          <img
+            class="nav-item-icon"
+            src="./assets/icons/cog.svg"
+            alt="Dashboard"
+          />
+          <router-link to="/settings">Settings</router-link>
+        </div>
+       
+        
+        
+        <div>
+            <span>GasPrice: </span>
+            <span>info</span>
+        </div>
+      </div>
+    </div>
+    <div id="content">
+      <RouterView />
+    </div>
+  </div>
+</template>
+<style scoped>
+  
+:root {
+  
+    text-align: center;
+    color: white;
+}
+
+body {
+   background-color: #18141d;
+    margin: 0;
+    color: #c2c2c2;
+    font-family: monospace;
+   /*  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif; */
+}
+.formkit-input{
+    color: white  !important;
+}
+#leftSide {
+  width: 100px;
+  height: 100%;
+  background-color: #21212a;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+#logo img{
+  filter: invert(0);
+  width: 32px;
+  height: 32px;
+  opacity: 100%;
+}
+#logo {
+  display: block;
+  width: 50%;
+  height: 50%;
+  margin: auto;
+  padding: 10% 0 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  margin-bottom: 24px;
+  margin-top: 24px;
+}
+#nav {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+}
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #cacacc;
+  font-weight: 600;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 12px;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+}
+.nav-item:hover {
+  filter: brightness(0) invert(1);
+  cursor: pointer;
+  border-right: solid 1px #fff;
+}
+.nav-item:hover a {
+  color: #fff !important;
+}
+
+.nav-item a {
+  color: #cacacc;
+  text-decoration: none;
+}
+.nav-item-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  padding: 10px;
+  fill: #f4f9ff;
+  color: #f4f9ff;
+  filter: brightness(3) invert(1);
+}
+
+.bottom-settings{
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #cacacc;
+  gap: 12px;
+  margin: 20px;
+  padding: 8px 4px;
+  border-radius: 6px;
+  align-items: center;
+}
+
+#content {
+  margin-left: 100px;
+  padding: 12px;
+}
+
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  nav {
+    text-align: left;
+    margin-left: -1rem;
+    font-size: 1rem;
+
+    padding: 1rem 0;
+    margin-top: 1rem;
+  }
+  
+}
+
+*, *::before, *::after {
+  box-sizing: content-box;
+}
+#app{
+    grid-template-columns: 0;
+  }
+</style>
