@@ -1,12 +1,11 @@
 <script lang="js">
-
 export default {
     name:"ContractElement",
     props:{
         data:{
             type:String,
         }
-    }, 
+    },
     mounted(){
         console.log(this.data);
     }

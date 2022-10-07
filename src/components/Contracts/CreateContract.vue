@@ -36,18 +36,15 @@
       </div>
     </div>
     <div class="second-section">
-      <div class="result">
-        {{ dataCode }}
-      </div>
-
-      <button @click="startContract" class="btn-succes">Submit</button>
+      <button @click="startContract" class="succes">Submit</button>
     </div>
   </div>
 </template>
-  
-<script>
-import Web3 from "web3";
+<script lang="ts">
 import contractInterface from "@/assets/contracts/artifacts/Contracts.json";
+import functions from "@/store/api/files";
+import { mapState } from "vuex";
+import Web3 from "web3";
 import createForm from "./forms/createContract.json";
 import createInput from "./forms/createInput.json";
 
@@ -78,25 +75,39 @@ export default {
         contractInterface.abi,
         mainContract
       );
-      console.log(contract);
+
+      //make sure that we extract the user address.
+
+
+      console.log(this.accounts);
+
+      const approve = await contract.methods
+        .CreateNewContract(link, "", web3.utils.toWei("0.05"), true)
+        .send({ from: this.accounts })
+        .then((receipt) => {
+          console.log("approved");
+          console.log(receipt);
+
+          //on success we can update the allownace.
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      console.log(approve);
     },
 
-    startContract() {
-      //create a jsonStringify object to write to IPFS, and retireve back a link.
-
+    async startContract() {
       var data = {
         data: this.data,
         form: this.dataCode,
       };
 
       const stringedJSON = JSON.stringify(data);
+      const result = await functions.uploadToIPFS(stringedJSON);
 
       //write file to IPFS here.
-
-      /*     WriteFile(stringedJSON, "json").then((result) => {
-        console.log(result);
-        this.createContract(result);
-      }); */
+      this.createContract(result);
     },
 
     async onSubmit() {
@@ -112,6 +123,9 @@ export default {
     this.form = createForm;
     this.inputForm = createInput;
   },
+  computed: mapState({
+    accounts: (state) => state.account.address,
+  }),
 };
 </script>
 <style>
@@ -165,5 +179,3 @@ textarea {
   gap: 12px;
 }
 </style>
-  
-  

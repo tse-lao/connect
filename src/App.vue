@@ -1,5 +1,29 @@
 <script lang="ts">
+import AccountDetails from "@/components/Account/AccountDetails.vue";
+import { mapState } from "vuex";
+export default {
+  components:{AccountDetails},
+  data(){
+    return (
+      {viewAccount: false,}
+    )
+    
+  },
+  methods: {
+    login() {
+      if (window.ethereum) {
+        this.$store.dispatch("account/loginAccount");
 
+      }
+    },
+    detailsShow() {
+      this.viewAccount = !this.viewAccount;
+    }
+  },
+  computed: mapState({
+    accounts: (state) => state.account.address
+  }),
+};
 </script>
 
 <template>
@@ -7,10 +31,7 @@
     <div id="leftSide">
       <div id="nav">
         <div id="logo">
-          <img
-            src="@/assets/images/logo.png"
-            class="nav-item-icon"
-          />
+          <img src="@/assets/images/logo.png" class="nav-item-icon" />
         </div>
         <div class="nav-item" to="/" @click="$router.push('/')">
           <img
@@ -19,7 +40,7 @@
           />
           <router-link to="/">Home</router-link>
         </div>
-         <div class="nav-item" @click="$router.push('/contracts')">
+        <div class="nav-item" @click="$router.push('/contracts')">
           <img
             class="nav-item-icon"
             src="@/assets/icons/file-1.svg"
@@ -43,39 +64,50 @@
           />
           <router-link to="/settings">Settings</router-link>
         </div>
-       
-        
-        
-        <div>
-            <span>GasPrice: </span>
-            <span>info</span>
+        <div class="nav-item" @click="login">
+          {{accounts}}
+          <img
+            src="@/assets/images/logo-universal.png"
+            alt={{accounts}}
+            class="profile-pic"
+          />
         </div>
+        <AccountDetails v-if="viewAccount"/>
       </div>
     </div>
     <div id="content">
       <RouterView />
     </div>
+  
   </div>
 </template>
 <style scoped>
-  
 :root {
-  
-    text-align: center;
-    color: white;
+  text-align: center;
+  color: white;
 }
 
 body {
-   background-color: #18141d;
-    margin: 0;
-    color: #c2c2c2;
-    font-family: monospace;
-   /*  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+  background-color: #18141d;
+  margin: 0;
+  color: #c2c2c2;
+  font-family: monospace;
+  /*  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif; */
 }
-.formkit-input{
-    color: white  !important;
+.profile-pic {
+  height: 64px;
+  position: fixed;
+  width: 64px;
+  border-radius: 50%;
+  border: 1px solid #000;
+}
+.profile-pic:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+.formkit-input {
+  color: white !important;
 }
 #leftSide {
   width: 100px;
@@ -86,8 +118,10 @@ body {
   top: 0;
   bottom: 0;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
-#logo img{
+#logo img {
   filter: invert(0);
   width: 32px;
   height: 32px;
@@ -150,7 +184,7 @@ body {
   filter: brightness(3) invert(1);
 }
 
-.bottom-settings{
+.bottom-settings {
   bottom: 0;
   display: flex;
   flex-direction: column;
@@ -166,7 +200,6 @@ body {
   margin-left: 100px;
   padding: 12px;
 }
-
 
 @media (min-width: 1024px) {
   header {
@@ -193,13 +226,5 @@ body {
     padding: 1rem 0;
     margin-top: 1rem;
   }
-  
 }
-
-*, *::before, *::after {
-  box-sizing: content-box;
-}
-#app{
-    grid-template-columns: 0;
-  }
 </style>

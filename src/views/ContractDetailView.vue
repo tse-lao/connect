@@ -1,11 +1,10 @@
 <script>
-import EthCrypto from 'eth-crypto';
-import contractInterface from "../assets/contracts/artifacts/ShareContract.json";
+import contractInterface from "@/assets/contracts/artifacts/ShareContract.json";
 import Web3 from "web3";
-    
+import functions from "@/store/api/files";
+
 export default {
-  name: "Contract Detail",
-  components: { Password, Title, Title, OwnerContractDetails },
+  name: "ContractDetail",
   data() {
     return {
       registered: false,
@@ -22,6 +21,7 @@ export default {
         owner: "",
         parentContract: "",
         link: "",
+        fee: "",
         title: "DefaultTitle",
       },
       data: {
@@ -52,13 +52,10 @@ export default {
       const provider = new ethers.providers.JsonRpcProvider(
         import.meta.env.VITE_INFURA
       );
-        const web3 = new Web3(window.ethereum);
-        const contractAddress = "0xf0bbE607A76089FD7A716b8E55e9E349ad8A956C";
-      const contract = new web3.eth.Contract(contractInterface.abi, contractAddress)
       
-    
+      const web3 = new Web3(window.ethereum);
+      const contractAddress = "0xf0bbE607A76089FD7A716b8E55e9E349ad8A956C";
 
-      console.log(contract);
       //const transactionDeploy = contract.deployTransaction()
 
       console.log(provider);
@@ -73,7 +70,7 @@ export default {
       };
 
       console.log(expandedSig);
-      const signature = ethers.utils.joinSignature(expandedSig);
+      const signature = web3.utils.joinSignature(expandedSig);
       const txData = {
         gasPrice: tx.gasPrice,
         gasLimit: tx.gasLimit,
@@ -83,11 +80,11 @@ export default {
         chainId: tx.chainId,
         to: tx.to, // you might need to include this if it's a regular tx and not simply a contract deployment
       };
-      const rsTx = await ethers.utils.resolveProperties(txData);
-      const raw = ethers.utils.serializeTransaction(rsTx); // returns RLP encoded tx
-      const msgHash = ethers.utils.keccak256(raw); // as specified by ECDSA
-      const msgBytes = ethers.utils.arrayify(msgHash); // create binary hash
-      const recoveredPubKey = ethers.utils.recoverPublicKey(
+      const rsTx = await web3.utils.resolveProperties(txData);
+      const raw = web3.utils.serializeTransaction(rsTx); // returns RLP encoded tx
+      const msgHash = web3.utils.keccak256(raw); // as specified by ECDSA
+      const msgBytes = web3.utils.arrayify(msgHash); // create binary hash
+      const recoveredPubKey = web.utils.recoverPublicKey(
         msgBytes,
         signature
       );
@@ -99,33 +96,28 @@ export default {
     },
 
     async retrieveContract(contractAddress) {
-      const provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_INFURA
-      );
-
-      const contract = new ethers.Contract(
-        contractAddress,
+      const web3 = new Web3(window.ethereum);
+      const contract = new web3.eth.Contract(
         contractInterface.abi,
-        provider
+        contractAddress
       );
+      const contractDetails = await contract.methods.getContractDetails().call();
 
-      const contractDetails = await contract.getContractDetails();
-      if (contractDetails.length > 0) {
+ 
         this.details.owner = contractDetails[0];
         this.details.link = contractDetails[2];
         this.details.title = contractDetails[3];
         this.details.parentContract = contractDetails[1];
-      }
+        this.details.fee = contractDetails[4];
+      
+
+      
+      this.retrieveIPFS(contractDetails[2]);
     },
 
-    async retrieveIPFS() {
-      GetIPFS(this.details.link).then((result) => {
-        this.data = JSON.parse(result);
-        if (this.data.form.length > 0) {
-          this.formData = this.data.form;
-          this.entryForm = true;
-        }
-      });
+    async retrieveIPFS(link) {
+      const result = await functions.readIPFS(link);
+      console.log(result);
     },
 
     async submitDataToContract() {
@@ -196,7 +188,7 @@ export default {
         />
       </div>
 
-      <Title :title="details.title" />
+     {{details.title}}
     </div>
 
     <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
@@ -230,7 +222,7 @@ export default {
             </tr>
             <tr>
               <th>Fee</th>
-              <td>{{ data.data.fee }}</td>
+              <td>{{ details.fee }}</td>
             </tr>
             <tr>
               <th>End date</th>
@@ -256,10 +248,8 @@ export default {
         </FormKit>
       </div>
     </div>
-    <div v-if="menuSelect === 'owner'">
-      <OwnerContractDetails />
-    </div>
-    <Password v-if="show" />
+
+    
   </main>
 </template>
   <style >
