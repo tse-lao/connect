@@ -116,8 +116,9 @@ export default {
     },
 
     async retrieveIPFS(link) {
-      const result = await functions.readIPFS(link);
+      const result = functions.readIPFS("QmVCKMJRjomyx88seTrgWn94CpeC6Ep1Vbo4vA4mJR9D6d");
       console.log(result);
+      
     },
 
     async submitDataToContract() {

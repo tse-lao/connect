@@ -27,7 +27,7 @@ export default {
     }
   },
 
-  async readIPFS(data: string) {
+  async readIPFS(data) {
     const id = import.meta.env.VITE_INFURA_ID;
     const key = import.meta.env.VITE_INFURA_SECRET_KEY;
     const auth: string =
@@ -40,17 +40,12 @@ export default {
         authorization: auth,
       },
     });
-    
-    const result = client.cat(data);
-    console.log(result);
-    
-    for await (const chunk of client.cat(data)) {
-      console.log(chunk);
-      const result = Buffer.from(chunk).toString();
 
-      console.log(result);
+    for await (const file of client.cat("QmY9zf6Arto7sUqAPp6ik2xXBYSormMBH7pispPtaUmKqD")) {
+      let utf8decoder = new TextDecoder();
+      console.log(file)
+      const decode = JSON.parse(utf8decoder.decode(file));
+      console.log(decode);
     }
-    
-    return "something went wrong"
-  },
+  }
 };

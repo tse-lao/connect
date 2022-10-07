@@ -1,8 +1,9 @@
 <script lang="ts">
 import AccountDetails from "@/components/Account/AccountDetails.vue";
 import { mapState } from "vuex";
+import ProfilePicture from "./components/Account/ProfilePicture.vue";
 export default {
-  components:{AccountDetails},
+  components:{ AccountDetails, ProfilePicture },
   data(){
     return (
       {viewAccount: false,}
@@ -64,13 +65,8 @@ export default {
           />
           <router-link to="/settings">Settings</router-link>
         </div>
-        <div class="nav-item" @click="login">
-          {{accounts}}
-          <img
-            src="@/assets/images/logo-universal.png"
-            alt={{accounts}}
-            class="profile-pic"
-          />
+        <div class="profile-icon" @click="login">
+          <ProfilePicture :address="accounts" />
         </div>
         <AccountDetails v-if="viewAccount"/>
       </div>
@@ -104,7 +100,17 @@ body {
   border: 1px solid #000;
 }
 .profile-pic:hover {
-  background: rgba(0, 0, 0, 0.5);
+  opacity: 0.5;
+}
+.profile-icon{
+  margin: auto;
+  padding: 8px;
+}
+.profile-icon:hover{
+  opacity: 0.5;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.4)
 }
 .formkit-input {
   color: white !important;
