@@ -76,8 +76,8 @@ export default {
 
 <style>
 .grid-container {
-  display: flex;
-  flex-wrap: wrap;
+  display:flex;
+  flex-direction: column;
 }
 .actions {
   display: flex;

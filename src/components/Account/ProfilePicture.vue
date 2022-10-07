@@ -9,7 +9,7 @@ export default {
     };
   },
   methods: {
-    createIcon() {
+    makeIcon() {
       if (this.address != null) {
         /*       var options = {
           foreground: [0, 189, 126, 255], // rgba black
@@ -26,29 +26,20 @@ export default {
 
         var icon = createIcon({
           // All options are optional
-          seed: "randstring", // seed used to generate icon data, default: random
+          seed: this.address, // seed used to generate icon data, default: random
           color: "#dfe", // to manually specify the icon color, default: random
           bgcolor: "transparent", // choose a different background color, default: white
-          size: 15, // width/height of the icon in blocks, default: 10
+          size: 10, // width/height of the icon in blocks, default: 10
           scale: 3, // width/height of each block in pixels, default: 5
         });
+        
 
         document.getElementById("prof").replaceWith(icon);
       }
     },
   },
   mounted() {
-    this.createIcon();
-  },
-  watch: {
-    address: {
-      immediate: true,
-      deep: true,
-      handler(newValue, oldValue) {
-        this.createIcon();
-        console.log(newValue);
-      },
-    },
+    this.makeIcon();
   },
   props: {
     address: {
@@ -68,5 +59,6 @@ export default {
 .profile-image {
   height: 64px;
   width: 64px;
+  border-radius: 50%;
 }
 </style>

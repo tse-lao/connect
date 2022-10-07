@@ -1,7 +1,7 @@
 <script lang="ts">
 import AccountDetails from "@/components/Account/AccountDetails.vue";
+import ProfilePicture from "@/components/Account/ProfilePicture.vue";
 import { mapState } from "vuex";
-import ProfilePicture from "./components/Account/ProfilePicture.vue";
 export default {
   components:{ AccountDetails, ProfilePicture },
   data(){

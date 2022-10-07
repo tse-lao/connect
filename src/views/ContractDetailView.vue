@@ -253,7 +253,7 @@ export default {
     
   </main>
 </template>
-  <style >
+<style scoped>
 main {
   display: flex;
   padding: 32px;
@@ -275,11 +275,6 @@ main {
   padding: 24px;
   cursor: pointer;
 }
-.title {
-  font-size: 32px;
-  font-weight: 300;
-}
-
 .basic-info {
   display: flex;
   flex-direction: row;

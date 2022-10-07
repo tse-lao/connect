@@ -1,51 +1,104 @@
 <script lang="js">
+import api from "@/store/api/web3";
+import ProfilePicture from "@/components/Account/ProfilePicture.vue";
+
+//TODO: make better interface to be used all around the application'
 export default {
     name:"ContractElement",
+    components: {ProfilePicture},
+    data(){
+      return {
+        contractdata: null,
+        loading: true,
+      }
+    },
     props:{
         data:{
             type:String,
         }
     },
+    methods:{
+      async readContract(){
+        //TODO: implement the contract. 
+         const result = await api.readShareContracts(this.data);
+         
+         console.log(result);
+         
+         this.contractData = result;
+         
+         console.log(this.contractData);
+         this.loading= false;
+        
+      }
+      
+    },
     mounted(){
+      
+        this.loading = true;
+        this.readContract(this.data);
         console.log(this.data);
+        
     }
 }
 </script>
 
 <template>
-  <main>
-    <div
-      class="box"
-      @click="$router.push({ path: `/contract/${data}`, params: { id: data } })"
-    >
-      <div class="main_info">
-        <h1 class="title">Update needed for this.</h1>
+  <main v-if="!loading">
+    <div class="box"  @click="$router.push({ path: `/contract/${data}`, params: { id: data } })" >
+      <div class="element">
+        <div >
+          <ProfilePicture :address="data" />
+        </div>
       </div>
-      <div class="bottom">
-        <div class="box-extra">Contract: data in the contract</div>
+      <div class="element bigger">
+          <h4>{{ contractData.title }}</h4>
+         <span class="small"> {{data}}</span>
+      </div>
+      <div class="element">
+        <div >
+          <ProfilePicture :address="contractData.owner" />
+        </div>
+        
+        <span class="truncate">{{contractData.owner}}</span>
+      </div>
+      <div class="element">
+        <span>Reward</span>
+        <span>{{contractData.fee}}</span>
       </div>
     </div>
   </main>
 </template>
 <style>
 .box {
-  border-radius: 4px;
+  border-radius: 8px;
   display: flex;
-  flex-direction: column;
-  align-items: left;
+  flex: 1;
+  gap: 6px;
+  flex-direction: row;
+
+  align-items: center;
   padding: 24px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   background: rgba(255, 255, 255, 0.2);
   margin: 12px;
+  width: 100%;
 }
-.main-info h1 {
-  font-size: 12px;
+.small{
+  font-size: 10px;
 }
-
-.bottom {
+.truncate {
+  width:64px;
+  white-space:nowrap; 
+  overflow:hidden; 
+  text-overflow: ellipsis;
+}
+.element{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 6px;
+  flex:1;
+  text-align:center;
 }
 
 .box:hover {
@@ -54,44 +107,29 @@ export default {
   cursor: pointer;
   background: rgba(255, 255, 255, 0.2);
 }
-.title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.top-box {
-  display: flex;
-  align-content: center;
-  align-items: center;
-  margin: 8px;
-}
-.description {
+span{
   font-size: 14px;
-  font-weight: 200;
-
-  /**Truncate text**/
-  overflow: hidden;
-  line-height: 1.3rem;
-  max-height: 8rem;
-  -webkit-box-orient: vertical;
-  display: block;
-  display: -webkit-box;
-  overflow: hidden !important;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 4;
+  font-weight: 100;
 }
-
-.additional {
-  font-size: 12px;
+.icon-class {
+  position: relative;
+}
+.bigger{
+  flex: 4;
   text-align: left;
-  align-content: left;
-  min-width: 100px;
 }
-.box-extra {
-  margin: 10px;
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
+.special {
+  background: red;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  position: relative;
+    top: -20px;
+    right: -33px;
+}
+.restyle_picture {
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
 }
 </style>
