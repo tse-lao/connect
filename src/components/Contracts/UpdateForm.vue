@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import createInput from "./forms/createInput.json";
 
 export default {
