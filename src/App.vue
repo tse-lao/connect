@@ -14,7 +14,8 @@ export default {
     login() {
       if (window.ethereum) {
         this.$store.dispatch("account/loginAccount");
-
+        //we call the child component to rerender; 
+        this.$refs.profilePic.makeIcon(this.accounts.address);
       }
     },
     detailsShow() {
@@ -69,7 +70,7 @@ export default {
         </div>
         
         <div class="profile-icon" @click="login">
-          <ProfilePicture :address="accounts.address" />
+          <ProfilePicture ref="profilePic" :address="accounts.address" />
         </div>
         <div class="nav-item">
           {{accounts.balance}} 

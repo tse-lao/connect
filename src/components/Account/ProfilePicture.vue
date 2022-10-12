@@ -9,8 +9,10 @@ export default {
     };
   },
   methods: {
-    makeIcon() {
-      if (this.address != null) {
+    makeIcon(addressGiven) {
+      
+      console.log(addressGiven);
+      if (addressGiven != null) {
         /*       var options = {
           foreground: [0, 189, 126, 255], // rgba black
           background: [0,0,0,0], // rgba white
@@ -26,7 +28,7 @@ export default {
 
         var icon = createIcon({
           // All options are optional
-          seed: this.address, // seed used to generate icon data, default: random
+          seed: addressGiven, // seed used to generate icon data, default: random
           color: "#dfe", // to manually specify the icon color, default: random
           bgcolor: "transparent", // choose a different background color, default: white
           size: 10, // width/height of the icon in blocks, default: 10
@@ -39,7 +41,7 @@ export default {
     },
   },
   mounted() {
-    this.makeIcon();
+    this.makeIcon(this.address);
   },
   props: {
     address: {
