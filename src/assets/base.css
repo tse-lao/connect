@@ -39,6 +39,11 @@
   --section-gap: 160px;
 }
 
+span{
+  font-size: 14px;
+  font-weight: 100;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
@@ -73,4 +78,14 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+input {
+  background: rgba(255,255,255,0.1);
+  color: var(--color-text);
+  border: none;
+  border-radius: 4px;
+  padding: 12px;
+  margin: 12px;
+  
 }

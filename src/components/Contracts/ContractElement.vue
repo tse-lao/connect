@@ -1,6 +1,6 @@
-<script lang="js">
-import api from "@/store/api/web3";
+<script lang="ts">
 import ProfilePicture from "@/components/Account/ProfilePicture.vue";
+import api from "@/store/api/web3";
 
 //TODO: make better interface to be used all around the application'
 export default {
@@ -21,23 +21,14 @@ export default {
       async readContract(){
         //TODO: implement the contract. 
          const result = await api.readShareContracts(this.data);
-         
-         console.log(result);
-         
          this.contractData = result;
-         
-         console.log(this.contractData);
-         this.loading= false;
-        
+         this.loading= false; 
       }
       
     },
     mounted(){
-      
         this.loading = true;
         this.readContract(this.data);
-        console.log(this.data);
-        
     }
 }
 </script>
@@ -62,7 +53,7 @@ export default {
         <span class="truncate">{{contractData.owner}}</span>
       </div>
       <div class="element">
-        <span>Reward</span>
+        <span>Rewards</span>
         <span>{{contractData.fee}}</span>
       </div>
     </div>
@@ -76,6 +67,7 @@ export default {
   gap: 6px;
   flex-direction: row;
 
+  
   align-items: center;
   padding: 24px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,

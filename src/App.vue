@@ -92,6 +92,11 @@ body {
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif; */
 }
+.app{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
 .profile-pic {
   height: 64px;
   position: fixed;
@@ -117,10 +122,10 @@ body {
 }
 #leftSide {
   width: 100px;
-  height: 100%;
+  height: 100vh;
   background-color: #21212a;
+  margin: 0;
   position: fixed;
-  left: 0;
   top: 0;
   bottom: 0;
   overflow-y: auto;
@@ -203,8 +208,10 @@ body {
 }
 
 #content {
-  margin-left: 100px;
   padding: 12px;
+  margin-left: 100px;
+  width: calc(100vw - 150px);
+  max-width: 1200px;
 }
 
 @media (min-width: 1024px) {
@@ -231,6 +238,12 @@ body {
 
     padding: 1rem 0;
     margin-top: 1rem;
+  }
+}
+
+@media(max-width: 700px ){
+  .app{
+    flex-direction: column;
   }
 }
 </style>

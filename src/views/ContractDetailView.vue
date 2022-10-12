@@ -1,10 +1,12 @@
-<script>
-import contractInterface from "@/assets/contracts/artifacts/ShareContract.json";
-import Web3 from "web3";
+<script lang="ts">
+import ContractAdmin from "@/components/Contracts/ContractAdmin.vue";
+import EditContract from "@/components/contracts/EditContract.vue";
 import functions from "@/store/api/files";
+import web3Functions from "@/store/api/web3";
 
 export default {
   name: "ContractDetail",
+  components: { EditContract, ContractAdmin },
   data() {
     return {
       registered: false,
@@ -48,11 +50,11 @@ export default {
   },
 
   methods: {
-    async getContractCreatorKey() {
+    /*     async getContractCreatorKey() {
       const provider = new ethers.providers.JsonRpcProvider(
         import.meta.env.VITE_INFURA
       );
-      
+
       const web3 = new Web3(window.ethereum);
       const contractAddress = "0xf0bbE607A76089FD7A716b8E55e9E349ad8A956C";
 
@@ -84,51 +86,44 @@ export default {
       const raw = web3.utils.serializeTransaction(rsTx); // returns RLP encoded tx
       const msgHash = web3.utils.keccak256(raw); // as specified by ECDSA
       const msgBytes = web3.utils.arrayify(msgHash); // create binary hash
-      const recoveredPubKey = web.utils.recoverPublicKey(
-        msgBytes,
-        signature
-      );
+      const recoveredPubKey = web.utils.recoverPublicKey(msgBytes, signature);
       const recoveredAddress = ethers.utils.recoverAddress(msgBytes, signature);
 
       console.log(recoveredPubKey);
 
       return recoveredPubKey;
-    },
+    }, */
 
     async retrieveContract(contractAddress) {
-      const web3 = new Web3(window.ethereum);
-      const contract = new web3.eth.Contract(
-        contractInterface.abi,
-        contractAddress
-      );
-      const contractDetails = await contract.methods.getContractDetails().call();
-
- 
-        this.details.owner = contractDetails[0];
-        this.details.link = contractDetails[2];
-        this.details.title = contractDetails[3];
-        this.details.parentContract = contractDetails[1];
-        this.details.fee = contractDetails[4];
-      
-
-      
-      this.retrieveIPFS(contractDetails[2]);
+      const result = await web3Functions.readShareContracts(contractAddress);
+      this.details = result;
+      this.retrieveIPFS(result.link);
     },
-
     async retrieveIPFS(link) {
-      const result = functions.readIPFS("QmVCKMJRjomyx88seTrgWn94CpeC6Ep1Vbo4vA4mJR9D6d");
-      console.log(result);
-      
+      const result = await functions.readIPFS(link);
+      this.formData = result.form;
+      if (this.formData.length > 0) {
+        this.entryForm = true;
+      }
     },
-
     async submitDataToContract() {
       console.log(this.inputData);
 
       const stringedJSON = JSON.stringify(this.inputData);
       console.log(stringedJSON);
 
+      const encrypted = false;
+
+      if (encrypted) {
+        console.log("shoudl be encrypted");
+      }
+
+      const result = await functions.uploadToIPFS(stringedJSON);
+
+      this.submitToContract(result);
+
       //now we need to make sure that we get the publickey.
-      var pubKey = await this.getContractCreatorKey();
+      /* var pubKey = await this.getContractCreatorKey();
       console.log(pubKey);
 
       //nowe we want to create file to submit to there.
@@ -136,50 +131,26 @@ export default {
         console.log(result);
         this.show = true;
         this.newLink = result;
-      });
+      }); */
     },
 
-    async submitToContract(password) {
-      console.log("submittingToContract now");
-      console.log(this.password);
-      const provider = new ethers.providers.JsonRpcProvider(
-        import.meta.env.VITE_INFURA
-      );
-
-      if (password.length > 1) {
-        await GetAccount(password).then((result) => {
-          console.log(result);
-
-          console.log(result[0].address);
-
-          this.privateKey = result[0].private_key;
-        });
-      }
-
-      console.log(this.privateKey);
-      const wallet = new ethers.Wallet(this.privateKey, provider);
-
-      const submitContract = new ethers.Contract(
+    async submitToContract(link) {
+      //create link from the the submission.
+      //here we create a submission to the contract.
+      //First we submit an not encrypted version.
+      const result = await web3Functions.submitToShareContract(
         this.contract,
-        contractInterface.abi,
-        wallet
+        link
       );
 
-      console.log(submitContract);
-
-      try {
-        const tx = await submitContract.userSubmission(this.newLink, false);
-        console.log(tx);
-      } catch (err) {
-        console.log(err);
-      }
+      console.log(result);
     },
   },
 };
 </script>
 
 <template>
-  <main class="content">
+  <div class="content">
     <div class="top-content">
       <div class="back" @click="$router.push('/contracts')">
         <img
@@ -188,127 +159,138 @@ export default {
           alt="go back"
         />
       </div>
-
-     {{details.title}}
     </div>
 
-    <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
+    <div class="two-layer-template">
+      <div class="left-two-layer-template">
+        <div class="panel contract-details">
+          <div class="row">
+            <h4>Owner</h4>
+            <span> {{ details.owner }}</span>
+          </div>
+          <div>
+            <h4>Parent Contract</h4>
+            <span> {{ details.parentContract }}</span>
+          </div>
 
-    <div class="submenu">
-      <div class="menu-item" @click="menuSelect = 'standard'">
-        Standard details.
-      </div>
-      <div class="menu-item" @click="menuSelect = 'owner'">Onwer options.</div>
-    </div>
+          <h4>Contract</h4>
+          <span>{{ contract }}</span>
 
-    <div v-if="menuSelect === 'standard'">
-      <div class="basic-info">
-        <div class="extra-details">
-          <table class="additional">
+          <h4>IPFS</h4>
+          <span>{{ details.link }}</span>
+          <h4>Fee</h4>
+          <span>{{ details.fee }}</span>
+        </div>
+        <div class="panel contract-stats">
+          <table>
             <tr>
-              <th>Owner</th>
-              <td>{{ details.owner }}</td>
+              <td>Total Participants</td>
+              <td>1000</td>
             </tr>
             <tr>
-              <th>Parent Contract</th>
-              <td>{{ details.parentContract }}</td>
+              <td>Total Participants</td>
+              <td>1000</td>
             </tr>
             <tr>
-              <th>Contract Address</th>
-              <td>{{ contract }}</td>
-            </tr>
-            <tr>
-              <th>IPFS link</th>
-              <td @click="retrieveIPFS">{{ details.link }}</td>
-            </tr>
-            <tr>
-              <th>Fee</th>
-              <td>{{ details.fee }}</td>
-            </tr>
-            <tr>
-              <th>End date</th>
-              <td>{{ data.data.endDate }}</td>
+              <td>Total Participants</td>
+              <td>1000</td>
             </tr>
           </table>
         </div>
-        <div class="description">
-          {{ data.data.description }}
+      </div>
+      <div class="right-two-layer-template">
+        <div class="submenu">
+          <div class="menu-item" @click="menuSelect = 'standard'">
+            Standard details.
+          </div>
+          <div class="menu-item" @click="menuSelect = 'owner'">
+            Onwer options.
+          </div>
+        </div>
+
+        <div v-if="menuSelect === 'standard'">
+          <div class="registerForm">
+            <h4>Data form for submission.</h4>
+            <FormKit
+              type="form"
+              @submit="submitDataToContract"
+              v-model="inputData"
+              v-if="entryForm"
+            >
+              <FormKitSchema :schema="formData" />
+            </FormKit>
+          </div>
+        </div>
+        <div v-if="menuSelect === 'owner'">
+          <EditContract
+            :contractDetails="details"
+            :contractAddress="contract"
+            :dataDetails="formData"
+          />
+
+          <ContractAdmin :contractAddress="contract" />
         </div>
       </div>
-      <div class="box-extra"></div>
-
-      <div class="registerForm">
-        <h4>Data form for submission.</h4>
-        <FormKit
-          type="form"
-          @submit="submitDataToContract"
-          v-model="inputData"
-          v-if="entryForm"
-        >
-          <FormKitSchema :schema="formData" />
-        </FormKit>
-      </div>
     </div>
-
-    
-  </main>
+    <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
+  </div>
 </template>
-<style scoped>
-main {
-  display: flex;
-  padding: 32px;
-  margin-left: 32px;
-  flex-direction: column;
-  text-align: left;
-}
-.back-icon {
-  height: 16px;
-  width: 16px;
-}
-.top-content {
-  display: flex;
-  align-items: center;
-  align-self: center;
-}
 
+<style scoped>
+.back-icon {
+  height: 24px;
+  width: 24px;
+  filter: invert(1);
+}
+.left-two-layer-template {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 .back {
   padding: 24px;
   cursor: pointer;
 }
-.basic-info {
+.two-layer-template {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+}
+table {
+  text-align: left;
+}
+.panel {
+  background: #21212a;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem;
+  flex: 1;
+  gap: 16px;
+}
+.submenu{
   display: flex;
   flex-direction: row;
-}
-
-.additional {
-  font-size: 14px;
-}
-td,
-th {
-  padding-right: 24px;
-}
-.box-extra {
   gap: 12px;
+  margin-bottom: 12px;
 }
-.registerForm {
-  margin-top: 24px;
-  align-items: center;
-}
-
-.submenu {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 24px;
-}
-
-.menu-item {
-  border: 1px solid green;
+.submenu .menu-item{
   padding: 12px;
-  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.menu-item:hover {
-  cursor: pointer;
-  background: green;
+.submenu .menu-item:hover {
+  border: 1px solid rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.4)
+}
+@media (min-width: 1024px) {
+  .two-layer-template {
+    display: flex;
+  }
+  .left-two-layer-template {
+    flex-direction: row;
+  }
 }
 </style>

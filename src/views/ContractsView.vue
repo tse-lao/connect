@@ -53,8 +53,7 @@ export default {
 </script>
 
 <template>
-  <div class="contract-view">
-    <TitleVue title="Contracts" />
+  <main>
     <div class="actions">
       <button class="success" @click="showCreate">Create Contract</button>
     </div>
@@ -71,13 +70,19 @@ export default {
         :key="index"
       />
     </div>
-  </div>
+  </main>
 </template>
 
 <style>
+.contract-view{
+  display: flex;
+  flex-direction: column;
+  
+}
 .grid-container {
   display:flex;
   flex-direction: column;
+  gap: 40px;
 }
 .actions {
   display: flex;
