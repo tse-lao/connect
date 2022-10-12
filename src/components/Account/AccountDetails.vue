@@ -3,7 +3,7 @@ import { mapState } from "vuex";
 
 export default {
   computed: mapState({
-    accounts: (state) => state.account.address,
+    accounts: (state:any) => state.account.address,
   }),
 };
 </script>

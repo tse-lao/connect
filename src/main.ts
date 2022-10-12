@@ -5,6 +5,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import "./assets/main.css";
 import router from "./router";
+
 globalThis.Buffer = Buffer
 
 const app = createApp(App);

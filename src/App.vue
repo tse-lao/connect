@@ -1,7 +1,7 @@
 <script lang="ts">
-import AccountDetails from "@/components/Account/AccountDetails.vue";
-import ProfilePicture from "@/components/Account/ProfilePicture.vue";
 import { mapState } from "vuex";
+import AccountDetails from "./components/Account/AccountDetails.vue";
+import ProfilePicture from "./components/Account/ProfilePicture.vue";
 export default {
   components:{ AccountDetails, ProfilePicture },
   data(){
@@ -12,18 +12,17 @@ export default {
   },
   methods: {
     login() {
-      if (window.ethereum) {
+      
         this.$store.dispatch("account/loginAccount");
         //we call the child component to rerender; 
-        this.$refs.profilePic.makeIcon(this.accounts.address);
-      }
+      
     },
     detailsShow() {
       this.viewAccount = !this.viewAccount;
     }
   },
   computed: mapState({
-    accounts: (state) => state.account
+    accounts: (state:any) => state.account
   }),
 };
 </script>

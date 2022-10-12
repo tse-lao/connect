@@ -4,3 +4,4 @@ interface ImportMetaEnv {
    
     // more env variables...
   }
+  

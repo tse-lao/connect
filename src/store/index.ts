@@ -5,7 +5,7 @@ import { contracts } from "./modules/contracts";
 
 const debug = process.env.NODE_ENV !== "production";
 
-export const store = createStore({
+export const store:any = createStore({
     modules:{
         account: accounts,
         contracts: contracts

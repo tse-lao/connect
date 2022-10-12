@@ -1,10 +1,10 @@
 <script lang="ts">
-import ContractAdmin from "@/components/Contracts/ContractAdmin.vue";
-import EditContract from "@/components/contracts/EditContract.vue";
-import functions from "@/store/api/files";
-import web3Functions from "@/store/api/web3";
 import { mapState } from 'vuex';
+import ContractAdmin from "../components/Contracts/ContractAdmin.vue";
 import ContractData from "../components/Contracts/ContractData.vue";
+import EditContract from "../components/Contracts/EditContract.vue";
+import functions from "../store/api/files";
+import web3Functions from "../store/api/web3";
 
 
 export default {
@@ -15,9 +15,9 @@ export default {
       registered: false,
       menuSelect: "standard",
       result: "nor esult",
-      contract: null,
+      contract: "",
       show: false,
-      amount: 0,
+      amount: "",
       owner: false,
       password: "",
       privateKey: null,
@@ -30,6 +30,8 @@ export default {
         link: "",
         fee: "",
         title: "DefaultTitle",
+        status: true,
+        balance: 0
       },
       data: {
         data: {
@@ -38,7 +40,7 @@ export default {
           description: "undefined",
         },
       },
-      formData: {},
+      formData: [],
     };
   },
   props: {
@@ -48,11 +50,11 @@ export default {
     },
   },
   computed: mapState({
-    account: (state) => state.account
+    account: (state:any) => state.account
   }),
 
   mounted() {
-    this.contract = this.$route.params.id;
+    this.contract = this.$route.params.id as string;
     this.retrieveContract(this.contract);
     //now we want to call something that retireve the contrat.
   },
@@ -102,25 +104,17 @@ export default {
       return recoveredPubKey;
     }, */
 
-    async retrieveContract(contractAddress) {
-      const result = await web3Functions.readShareContracts(contractAddress);
-      this.details = result;
-      this.retrieveIPFS(result.link);
+    async retrieveContract(contractAddress:string) {
+      const result:Object = await web3Functions.readShareContracts(contractAddress);
+      this.details = result as any;
+      this.retrieveIPFS(this.details.link);
       
       console.log(this.account.address)
       
-      if(result.owner === this.account.address){
-        console.log(this.account.address)
-        this.owner = true;
-      }
-      
     },
-    async retrieveIPFS(link) {
+    async retrieveIPFS(link:string) {
       const result = await functions.readIPFS(link);
       this.formData = result.form;
-      if (this.formData.length > 0) {
-        this.entryForm = true;
-      }
     },
     async submitDataToContract() {
       console.log(this.inputData);
@@ -134,9 +128,9 @@ export default {
         console.log("shoudl be encrypted");
       }
 
-      const result = await functions.uploadToIPFS(stringedJSON);
+      const link:any = await functions.uploadToIPFS(stringedJSON);
 
-      this.submitToContract(result);
+      this.submitToContract(link);
 
       //now we need to make sure that we get the publickey.
       /* var pubKey = await this.getContractCreatorKey();
@@ -150,7 +144,7 @@ export default {
       }); */
     },
 
-    async submitToContract(link) {
+    async submitToContract(link:string) {
       //create link from the the submission.
       //here we create a submission to the contract.
       //First we submit an not encrypted version.

@@ -21,25 +21,31 @@
 </template>
 
 <script lang="ts">
-import web3Functions from "@/store/api/web3";
+import web3Functions from "../../store/api/web3";
 
 export default {
   name: "EditContract",
   data(){
     return {
         newTitle: null,
-        newFee: 0,
+        newFee: "0",
     }
   },
   props: {
     contractAddress: {
       type: String,
+      default: "something"
     },
     contractDetails: {
       type: Object,
+      default: {
+        'title': "undefined", 
+        'fee': "0"
+      }
     },
     dataDetails: {
-      type: Array,
+      type: Object,
+      default: {}
     },
   },
   mounted(){
@@ -54,8 +60,6 @@ export default {
       
       if(this.newFee != this.contractDetails.fee){
         //now we change here a certain functionalit.
-        console.log(this.contractAddress);
-        console.log(this.newFee);
         const result = await web3Functions.changeFeeShareContract(this.contractAddress, this.newFee);
       }
       

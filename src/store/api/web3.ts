@@ -3,13 +3,17 @@ import shareContract from "@/assets/contracts/artifacts/ShareContract.json";
 import { store } from '@/store/index';
 import Web3 from 'web3';
 
+const abi:any = shareContract.abi;
 
 export default {
-  async readShareContracts(address: String) {
+  
+  async readShareContracts(address: string) {
     //import here the contract abi. 
+
+  
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
-      shareContract.abi,
+      abi,
       address
     );
     //TODO: make sure that we check if the contract exists. 
@@ -32,10 +36,10 @@ export default {
 
   },
 
-  async changeFeeShareContract(address: String, newFee: String) {
+  async changeFeeShareContract(address: string, newFee: string) {
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
-      shareContract.abi,
+      abi,
       address
     );
     //TODO: make sure that we check if the contract exists. 
@@ -45,22 +49,22 @@ export default {
     const approve = await contract.methods
       .changeFee(changeFee)
       .send({ from: sender })
-      .then((receipt) => {
+      .then((receipt:Object) => {
         console.log("approved");
         console.log(receipt);
 
         //on success we can update the allownace.
       })
-      .catch((error) => {
+      .catch((error:Error) => {
         console.log(error);
       });
   },
   
   
-  async openCloseContract(address: String) {
+  async openCloseContract(address: string) {
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
-      shareContract.abi,
+      abi,
       address
     );
     //TODO: make sure that we check if the contract exists. 
@@ -69,13 +73,13 @@ export default {
     const approve = await contract.methods
       .closeOrOpen()
       .send({ from: sender })
-      .then((receipt) => {
+      .then((receipt:Object) => {
         console.log("approved");
         console.log(receipt);
 
         //on success we can update the allownace.
       })
-      .catch((error) => {
+      .catch((error:any) => {
         console.log(error);
       });
       
@@ -83,58 +87,60 @@ export default {
   },
   
 
-  async depositToShareContract(address: String, amount: Number) {
+  async depositToShareContract(address: string, amount: string) {
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
-      shareContract.abi,
+      abi,
       address
     );
     //TODO: make sure that we check if the contract exists. 
     let sender = store.state.account.address;
     const newAmount = web3.utils.toWei(amount);
 
-    const approve = await contract.methods
+    await contract.methods
       .deposit()
       .send({ from: sender , value: newAmount})
-      .then((receipt) => {
+      .then((receipt:Object) => {
         console.log("approved");
         console.log(receipt);
 
         //on success we can update the allownace.
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((error:Error) => {
+        console.log(error)
+       
       });
+      
   },
 
-  async submitToShareContract(address: String, link: String) {
+  async submitToShareContract(address: string, link: string) {
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
-      shareContract.abi,
+    abi,
       address
     );
     
     let sender = store.state.account.address;
     
-    const approve = await contract.methods
+    await contract.methods
       .userSubmission(link, true)
       .send({ from: sender })
-      .then((receipt) => {
+      .then((receipt:Object) => {
         console.log("approved");
         console.log(receipt);
 
         //on success we can update the allownace.
       })
-      .catch((error) => {
+      .catch((error:Error) => {
         console.log(error);
       });
     
   }, 
   
-  async AllFromShareContract(address:String){
+  async AllFromShareContract(address:string){
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
-      shareContract.abi,
+      abi ,
       address
     );
     
