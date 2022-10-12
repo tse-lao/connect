@@ -11,7 +11,6 @@ export default {
   methods: {
     makeIcon(addressGiven) {
       
-      console.log(addressGiven);
       if (addressGiven != null) {
         /*       var options = {
           foreground: [0, 189, 126, 255], // rgba black

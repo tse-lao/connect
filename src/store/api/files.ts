@@ -43,9 +43,7 @@ export default {
 
     for await (const file of client.cat(data)) {
       let utf8decoder = new TextDecoder();
-      console.log(file)
       const decode = JSON.parse(utf8decoder.decode(file));
-      console.log(decode);
       
       return decode;
     }

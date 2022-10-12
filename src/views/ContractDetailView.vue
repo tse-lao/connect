@@ -3,10 +3,13 @@ import ContractAdmin from "@/components/Contracts/ContractAdmin.vue";
 import EditContract from "@/components/contracts/EditContract.vue";
 import functions from "@/store/api/files";
 import web3Functions from "@/store/api/web3";
+import { mapState } from 'vuex';
+import ContractData from "../components/Contracts/ContractData.vue";
+
 
 export default {
   name: "ContractDetail",
-  components: { EditContract, ContractAdmin },
+  components: { EditContract, ContractAdmin, ContractData },
   data() {
     return {
       registered: false,
@@ -14,6 +17,8 @@ export default {
       result: "nor esult",
       contract: null,
       show: false,
+      amount: 0,
+      owner: false,
       password: "",
       privateKey: null,
       inputData: {},
@@ -42,6 +47,9 @@ export default {
       default: "nothing found",
     },
   },
+  computed: mapState({
+    account: (state) => state.account
+  }),
 
   mounted() {
     this.contract = this.$route.params.id;
@@ -98,6 +106,14 @@ export default {
       const result = await web3Functions.readShareContracts(contractAddress);
       this.details = result;
       this.retrieveIPFS(result.link);
+      
+      console.log(this.account.address)
+      
+      if(result.owner === this.account.address){
+        console.log(this.account.address)
+        this.owner = true;
+      }
+      
     },
     async retrieveIPFS(link) {
       const result = await functions.readIPFS(link);
@@ -142,9 +158,21 @@ export default {
         this.contract,
         link
       );
+      
+      
 
       console.log(result);
     },
+    
+    async deposit(){
+      const result = await web3Functions.depositToShareContract(this.contract, this.amount);
+      
+    },
+    
+    async openCloseContract(){
+      const result = await web3Functions.openCloseContract(this.contract);
+      console.log(result);
+    }
   },
 };
 </script>
@@ -165,52 +193,72 @@ export default {
       <div class="left-two-layer-template">
         <div class="panel contract-details">
           <div class="row">
+            <h4>{{details.title}}</h4>
+          </div>
+          <div class="row">
             <h4>Owner</h4>
             <span> {{ details.owner }}</span>
           </div>
-          <div>
+          <div class="row">
             <h4>Parent Contract</h4>
             <span> {{ details.parentContract }}</span>
           </div>
-
-          <h4>Contract</h4>
-          <span>{{ contract }}</span>
-
-          <h4>IPFS</h4>
-          <span>{{ details.link }}</span>
-          <h4>Fee</h4>
-          <span>{{ details.fee }}</span>
+          <div class="row">
+            <h4>Contract</h4>
+            <span>{{ contract }}</span>
+          </div>
+          <div class="row">
+            <h4>IPFS</h4>
+            <span>{{ details.link }}</span>
+          </div>
+          <div class="row">
+            <h4>Fee</h4>
+            <span>{{ details.fee }}</span>
+          </div>
+          
         </div>
         <div class="panel contract-stats">
-          <table>
-            <tr>
-              <td>Total Participants</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>Total Participants</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>Total Participants</td>
-              <td>1000</td>
-            </tr>
-          </table>
-        </div>
+          <div class="row">
+            <h4>Rewards</h4>
+            <span> {{details.balance}}</span>
+          </div>
+          <div class="row">
+            <h4>Open status</h4>
+            <span v-if="details.status" class="open">OPEN</span>
+            <span v-else class="closed">Closed</span>
+          </div>
+          <div class="row">
+            <h4>Encryption Method</h4>
+            <span> ETHCKS</span>
+          </div>
+          <div class="row">
+            <button @click="openCloseContract" v-if="details.status">close</button>
+            <button @click="openCloseContract" v-else>open</button>
+          </div>
+          
+          <div class="row">
+            <input v-model="amount"/>
+            <button @click="deposit">Deposit</button>
+          </div>
+          
+          </div>
       </div>
-      <div class="right-two-layer-template">
+      <div class="box-width">
         <div class="submenu">
           <div class="menu-item" @click="menuSelect = 'standard'">
-            Standard details.
+            FORM format
           </div>
-          <div class="menu-item" @click="menuSelect = 'owner'">
-            Onwer options.
+          <div class="menu-item" @click="menuSelect = 'owner'" v-if="owner">
+            Owner options
           </div>
+          <div class="menu-item" @click="menuSelect = 'data'">
+            Contract Data
+          </div>
+
         </div>
 
-        <div v-if="menuSelect === 'standard'">
-          <div class="registerForm">
-            <h4>Data form for submission.</h4>
+        <div class="panel" v-if="menuSelect === 'standard'">
+          <div>
             <FormKit
               type="form"
               @submit="submitDataToContract"
@@ -221,15 +269,20 @@ export default {
             </FormKit>
           </div>
         </div>
-        <div v-if="menuSelect === 'owner'">
+        <div class="panel" v-if="menuSelect === 'owner'">
+          
           <EditContract
             :contractDetails="details"
             :contractAddress="contract"
             :dataDetails="formData"
           />
-
-          <ContractAdmin :contractAddress="contract" />
+          
         </div>
+        
+        <div class="panel" v-if="menuSelect === 'data'">
+          <ContractData :address="contract"/>
+        </div>
+       
       </div>
     </div>
     <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
@@ -242,7 +295,14 @@ export default {
   width: 24px;
   filter: invert(1);
 }
-
+.open{
+  color: #92e2a7;
+  font-weight: 900;
+}
+.closed{
+  color: #DB8D85;
+  font-weight: 900;
+}
 .left-two-layer-template {
   display: flex;
   flex-direction: column;
@@ -255,8 +315,6 @@ export default {
 .two-layer-template {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  align-content: center;
 }
 table {
   text-align: left;
@@ -271,7 +329,7 @@ table {
 }
 .submenu{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 12px;
   margin-bottom: 12px;
 }
@@ -281,7 +339,16 @@ table {
   border-radius: 4px;
   cursor: pointer;
 }
+.box-width{
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin: 2rem;
+}
 
+.row{
+  margin-bottom: 1rem;
+}
 .submenu .menu-item:hover {
   border: 1px solid rgba(255,255,255,0.8);
   background: rgba(0,0,0,0.4)
