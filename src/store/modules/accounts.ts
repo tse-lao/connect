@@ -4,6 +4,7 @@ export const accounts = {
   namespaced: true,
   state: {
     address: null,
+    balance: 1000,
   },
   mutations: {
     newAccount(state, newAddress) {

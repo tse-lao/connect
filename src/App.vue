@@ -22,7 +22,7 @@ export default {
     }
   },
   computed: mapState({
-    accounts: (state) => state.account.address
+    accounts: (state) => state.account
   }),
 };
 </script>
@@ -34,13 +34,15 @@ export default {
         <div id="logo">
           <img src="@/assets/images/logo.png" class="nav-item-icon" />
         </div>
+        
         <div class="nav-item" to="/" @click="$router.push('/')">
           <img
-            src="@/assets/icons/web-technology/display.svg"
+            src="@/assets/icons/dashboard.svg"
             class="nav-item-icon"
           />
-          <router-link to="/">Home</router-link>
+          <router-link to="/"> Home</router-link>
         </div>
+        
         <div class="nav-item" @click="$router.push('/contracts')">
           <img
             class="nav-item-icon"
@@ -65,8 +67,13 @@ export default {
           />
           <router-link to="/settings">Settings</router-link>
         </div>
+        
         <div class="profile-icon" @click="login">
-          <ProfilePicture :address="accounts" />
+          <ProfilePicture :address="accounts.address" />
+        </div>
+        <div class="nav-item">
+          {{accounts.balance}} 
+          <span>tokens</span>
         </div>
         <AccountDetails v-if="viewAccount"/>
       </div>
@@ -188,7 +195,6 @@ body {
 .nav-item-icon {
   width: 24px;
   height: 24px;
-  margin-right: 10px;
   padding: 10px;
   fill: #f4f9ff;
   color: #f4f9ff;
