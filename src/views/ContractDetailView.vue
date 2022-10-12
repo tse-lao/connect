@@ -242,6 +242,7 @@ export default {
   width: 24px;
   filter: invert(1);
 }
+
 .left-two-layer-template {
   display: flex;
   flex-direction: column;
