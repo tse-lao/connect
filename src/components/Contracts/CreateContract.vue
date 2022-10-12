@@ -2,20 +2,20 @@
   <div class="contract_create">
     <!--  What information do we need to add here?  -->
     <div class="first-section">
-      <div class="class-form">
-        <FormKit type="form" @submit="onSubmit" v-model="data">
-          <FormKitSchema :schema="form" />
+      <div class="class-form panel">
+        <FormKit type="form" v-model="data">
+          <FormKitSchema :schema="form" :data="data" />
         </FormKit>
       </div>
 
-      <div class="createForm">
-        <div class="enterForm">
+      <div class="create-form">
+        <div class="enterForm panel">
           <FormKit type="form" @submit="onAddSubmit" v-model="inputFormat">
-            <FormKitSchema :schema="inputForm" />
+            <FormKitSchema :schema="inputForm" :data="inputFormat" />
           </FormKit>
         </div>
 
-        <div class="previewForm">
+        <div class="previewForm panel">
           <FormKit
             v-for="(value, key) in dataCode"
             v-bind:key="key"
@@ -132,7 +132,6 @@ export default {
 .contract_create {
   padding: 24px;
   margin: 24px;
-  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -140,13 +139,16 @@ export default {
 .first-section {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
 }
 .two_section_form {
   display: flex;
   flex-direction: row;
   gap: 24px;
   justify-content: center;
+  align-items:center;
 }
 .form_input {
   display: flex;
@@ -167,6 +169,19 @@ input {
   color: white !important;
 }
 
+.create-form{
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.second-section{
+  display: flex;
+  margin-right: 3em;
+  flex-direction: row-reverse;
+}
+
 textarea {
   border-radius: 6px;
   padding: 8px;
@@ -177,5 +192,21 @@ textarea {
   display: flex;
   flex-direction: row;
   gap: 12px;
+}
+.formkit-help{
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+.panel{
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+  align-content: center;
+  align-items: center;
+}
+.class-form .formkit-actions{
+  display: none;
 }
 </style>

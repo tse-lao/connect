@@ -2,7 +2,7 @@
     {
         "$formkit": "select",
         "name": "type",
-        "label": "formkit",
+        "label": "Select option.",
         "help": "What kind of form do you want",
         "validation": "required", 
         "options":["text", "textarea", "date", "checkbox", "select"]
@@ -24,19 +24,13 @@
     {
         "$formkit": "text",
         "name": "placeholder",
-        "label": "placeholder",
-        "help": "Please select placeholder here."
+        "label": "Placeholder",
+        "help": "Type here what you want as default in the input."
       },
       {
         "$formkit": "text",
         "name": "validation",
-        "label": "validation",
+        "label": "Validation",
         "help": "Examples of validations: required|number|length:5 "
-      },
-    {
-      "$formkit": "checkbox",
-      "name": "open",
-      "id": "open",
-      "label": "Is this open?"
-    }
+      }
   ]

@@ -1,9 +1,5 @@
 [
     {
-      "$el": "h1",
-      "children": "Create new Contract. "
-    },
-    {
       "$formkit": "text",
       "name": "title",
       "label": "Title",
@@ -13,27 +9,21 @@
     {
       "$formkit": "textarea",
       "name": "description",
-      "label": "description",
+      "label": "Description",
       "help": "Please describe the usage of your contract. eail.",
       "validation": "required|length:5"
     },
     {
         "$formkit": "text",
         "name": "fee",
-        "label": "fee",
+        "label": "Fee",
         "help": "Please add the fee here.",
         "validation": "required|number"
       },
       {
         "$formkit": "date",
         "name": "endDate",
-        "label": "endDate",
+        "label": "Ending Date",
         "help": "When would you like the contract to end?"
-      },
-    {
-      "$formkit": "checkbox",
-      "name": "codedData",
-      "id": "codedData",
-      "label": "Will there be a precoded form?"
-    }
+      }
   ]
