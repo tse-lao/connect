@@ -51,6 +51,14 @@ export default {
           />
           <router-link to="/contracts">Contracts</router-link>
         </div>
+        <div class="nav-item" @click="$router.push('/bounties')">
+          <img
+            class="nav-item-icon"
+            src="./assets/icons/cog.svg"
+            alt="Dashboard"
+          />
+          <router-link to="/bounties">Bounties</router-link>
+        </div>
         <div class="nav-item" @click="$router.push('/files')">
           <img
             class="nav-item-icon"
