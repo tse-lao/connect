@@ -49,11 +49,9 @@ export default {
             //this is probably not correct and we need to find the correct one for the proposal and stuff pleace investigsate whcih contract we ned to use. 
             
             const bountyAddress = await PoolContract.methods.pool(i).call();
-            console.log(bountyAddress);
             const taskContract = new web3.eth.Contract(PoolContractABI, bountyAddress);
             const balance = await taskContract.methods.contractBalance().call();
             
-            console.log(balance);
             await taskContract.methods.proposal().call().then(
                 (res:string) => {
                         bounties.push({ address: bountyAddress, proposal: res, balance: balance });
@@ -66,15 +64,44 @@ export default {
     }, 
     
     async readBounty(address:string){
-        const taskContract = new web3.eth.Contract(PoolContractABI, bountyAddress);
+        const taskContract = new web3.eth.Contract(PoolContractABI, address);
         const balance = await taskContract.methods.contractBalance().call();
         
-        console.log(balance);
-        await taskContract.methods.proposal().call().then(
-            (res:string) => {
-                    return({ address: address, proposal: res, balance: balance });
+        const newProp = await taskContract.methods.proposal().call().then()
+     
+      
+        
+        return({ address: address, proposal: newProp, balance: balance });
+    }, 
+    
+    async createBounty(address:string, link:string, account:string){
+        const PoolContract = new web3.eth.Contract(contractPoolABI, address);
+        
+        //make sure there is a valid string in here. 
+        if(link !== undefined && link !== ""){
+            
+            const tokenAddress = "0x53ED56F9AaDF3AADE8e8C7CB730AF4e6BDa90815"
+            
+            try{
+                await PoolContract.methods.createNewPool(tokenAddress, link).send({from:account})
+                .on('confirmation', function(confirmationNumber:any, receipt:any){
+                    console.log(receipt);
+                    
+                    if(confirmationNumber === 24){
+                        console.log("succesfully uploaded the contract. ")
+                    }
+                })
+                .on('receipt', function(receipt:any){
+                    console.log("succesfully created the follwoing contract:")
+                    console.log(receipt)
+                })
+            }catch(error:unknown){
+                console.log(error);
             }
-        );
+           
+        }
+        
+        console.log("error occured in creating the link. ")
     }
 
 }

@@ -26,13 +26,7 @@ export const bounties = {
             return state.bountyPools;
           },
           getBountyDetail:(state) => (address:string) => {
-            for(var i = 0; i< state.totalBountyPools ;i++){
-                    for(var j = 0; j < state.bountyPools[i].bounties.length; j++){
-                      return state.bountyPools[i].bounties.find(bounty => bounty.address === address);
-                    }
-                   
-
-            }
+            
             
             return null;
           }
@@ -70,9 +64,17 @@ export const bounties = {
             }
         }, 
         
-        getBounty({state, commit}, address:string){
-            api.readBounty(address).then((result) => {
-                //read the files. (
+       async getBounty({state, commit}, address:string){
+      
+            let  result = await api.readBounty(address);
+
+            
+            return result
+        }, 
+        
+        createBounty({state, commit}, data:object){
+            api.createBounty(data.address, data.proposal, data.account).then((result) => {
+                console.log(result);
             })
         }
         

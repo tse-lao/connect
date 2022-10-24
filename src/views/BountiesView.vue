@@ -28,8 +28,11 @@ export default {
       this.loading = false;
     },
     
-    async selectedBounties(address){
+    async selectedBounties(address:any){
+      
         this.selectedAddress = address;
+        
+        
     }, 
    
   },

@@ -37,45 +37,29 @@ export default {
         
         <div class="nav-item" to="/" @click="$router.push('/')">
           <img
-            src="@/assets/icons/dashboard.svg"
-            class="nav-item-icon"
+            src="@/assets/icons/dashboard.png"
+            class="nav-item-bounty"
           />
           <router-link to="/"> Home</router-link>
         </div>
         
         <div class="nav-item" @click="$router.push('/contracts')">
           <img
-            class="nav-item-icon"
-            src="@/assets/icons/file-1.svg"
+            class="nav-item-bounty"
+            src="@/assets/icons/smart-contract.png"
             alt="Dashboard"
           />
           <router-link to="/contracts">Contracts</router-link>
         </div>
         <div class="nav-item" @click="$router.push('/bounties')">
           <img
-            class="nav-item-icon"
-            src="./assets/icons/cog.svg"
+            class="nav-item-bounty"
+            src="./assets/icons/bounty.png"
             alt="Dashboard"
           />
           <router-link to="/bounties">Bounties</router-link>
         </div>
-        <div class="nav-item" @click="$router.push('/files')">
-          <img
-            class="nav-item-icon"
-            src="./assets/icons/files.svg"
-            alt="Files"
-          />
-          <router-link to="/files">Files</router-link>
-        </div>
-        <div class="nav-item" @click="$router.push('/settings')">
-          <img
-            class="nav-item-icon"
-            src="./assets/icons/cog.svg"
-            alt="Dashboard"
-          />
-          <router-link to="/settings">Settings</router-link>
-        </div>
-        
+
         <div class="profile-icon" @click="login">
           <ProfilePicture ref="profilePic" :address="accounts.address" />
         </div>
@@ -204,9 +188,12 @@ body {
   width: 24px;
   height: 24px;
   padding: 10px;
-  fill: #f4f9ff;
-  color: #f4f9ff;
   filter: brightness(3) invert(1);
+}
+.nav-item-bounty{
+  width: 42px;
+  height: 42px;
+  padding: 10px;
 }
 
 .bottom-settings {

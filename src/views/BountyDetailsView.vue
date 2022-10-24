@@ -3,24 +3,42 @@ import { mapGetters, mapState } from 'vuex';
 import ContractAdmin from "../components/Contracts/ContractAdmin.vue";
 import ContractData from "../components/Contracts/ContractData.vue";
 import EditContract from "../components/Contracts/EditContract.vue";
+import DepositToContact from "../components/Elements/DepositToContact.vue";
+import ListEvents from "../components/Elements/ListEvents.vue";
 import Title from "../components/Elements/Title.vue";
+import Proposal from "../components/Pools/Proposal.vue";
+import files from "../store/api/files";
 
 
 export default {
   name: "ContractDetail",
-  components: { EditContract, ContractAdmin, ContractData, Title },
+  components: { EditContract, ContractAdmin, ContractData, Title, DepositToContact, ListEvents, Proposal },
   data() {
     return {
       bountryAddress: null,
+      amount: 0, 
       details: {
-        owner: "",
-        parentContract: "",
-        link: "",
-        fee: "",
-        title: "DefaultTitle",
-        status: true,
-        balance: 0
-      },
+                title: "", 
+                pool:"",
+                poolDetails: {
+                  address: "0x", 
+                  balance: 0, 
+                  name: "not found"
+                },
+                status: true,
+                estimatedFee: " ", 
+                tags:[], 
+                description: "",
+                type: "", 
+                experience: 0, 
+                timeCommitment: 0, 
+                deadline: null,
+                acceptanceCriteria: "", 
+                resources: "", 
+                contactDetails: "", 
+                proposal: "", 
+                balance: 0
+            },
       data: {
         data: {
           fee: "undefined",
@@ -35,22 +53,36 @@ export default {
     account: (state:any) => state.account
   }),
   ...mapGetters({
-    getBountyDetail: "bounties/getBountyDetail"
+    getBountyByAddress: "bounties/getBountyByAddress"
+    
   })
 },
 
   mounted() {
     this.bountryAddress = this.$route.params.address as string;
-  this.getDetails();
+    this.getDetails();
     //now we want to call something that retireve the contrat.
   },
 
   methods: {
     //check if the proposal is there or not. 
-    getDetails(){
-        const result = this.getBountyDetail(this.bountryAddress);
+    async getDetails(){
+      console.log(this.bountryAddress)
+      
+       const result =  await this.$store.dispatch("bounties/getBounty", this.bountryAddress);
+        this.details.balance = result.balance;
+        const proposal = await files.readIPFS(result.proposal);
         
-        console.log(result);
+        this.details = proposal;
+        this.details.proposal = result.proposal;
+        
+        this.details.balance = result.balance;
+        
+        
+        const poolDetails = this.getBountyByAddress(proposal.pool);
+
+        this.details.poolDetails = poolDetails;
+
     }
   
   },
@@ -60,107 +92,71 @@ export default {
 <template>
   <div class="content">
     <Title>
-        <template #title>Bounty Details</template>    
+        <template #title>
+          <div class="row title">
+            <span class="badge">{{details.poolDetails.name}}</span>
+            <h4>{{details.title}}</h4>
+          </div>
+        </template>    
     </Title>
 
     <div class="two-layer-template">
       <div class="left-two-layer-template">
         <div class="panel contract-details">
-          <div class="row">
-            <h4>{{details.title}}</h4>
-          </div>
+        
           <div class="row">
             <h4>Contract Address</h4>
             <span> {{ bountryAddress }}</span>
           </div>
           <div class="row">
+            <h4>Contact Details</h4>
+            <span>Telegram: KS_94</span>
+            <span>Discord: #lao_tse</span>
+          </div>
+         
+          <div class="row">
             <h4>Proposal</h4>
-            <span> {{getBountyDetail.proposal }}</span>
+            <span> {{details.proposal }}</span>
           </div>
+          
           <div class="row">
-            <h4>Contract</h4>
-            <span>{{ contract }}</span>
+            <h4>Participants</h4>
+            <span>0 participants</span>
           </div>
-          <div class="row">
-            <h4>IPFS</h4>
-            <span>{{ details.link }}</span>
-          </div>
+        
+         
           <div class="row">
             <h4>Fee</h4>
-            <span>{{ details.fee }}</span>
+            <span> {{details.balance }} / {{ details.estimatedFee }}</span>
+          </div>
+          <div class="row">
+            <DepositToContact :address="bountryAddress"/>
           </div>
           
         </div>
-        <div class="panel contract-stats">
+        <div class="panel">
           <div class="row">
-            <h4>Balance</h4>
-            <span> {{details.balance}}</span>
+            <h4>Description</h4>
+            <span> {{details.description}}</span>
           </div>
           <div class="row">
-            <h4>Open status</h4>
-            <span v-if="details.status" class="open">OPEN</span>
-            <span v-else class="closed">Closed</span>
-          </div>
-          <div class="row">
-            <h4>Encryption Method</h4>
-            <span> ETHCKS</span>
-          </div>
-          <div class="row">
-            <button @click="openCloseContract" v-if="details.status">close</button>
-            <button @click="openCloseContract" v-else>open</button>
-          </div>
-          
-          <div class="row">
-            <input v-model="amount"/>
-            <button @click="deposit">Deposit</button>
+            <h3>Create Proposal</h3>
+            <Proposal />
+            
           </div>
           
           </div>
+          
       </div>
-      <div class="box-width">
-        <div class="submenu">
-          <div class="menu-item" @click="menuSelect = 'standard'">
-            FORM format
-          </div>
-          <div class="menu-item" @click="menuSelect = 'owner'" v-if="owner">
-            Owner options
-          </div>
-          <div class="menu-item" @click="menuSelect = 'data'">
-            Contract Data
-          </div>
-
-        </div>
-
-        <div class="panel" v-if="menuSelect === 'standard'">
-          <div>
-            <FormKit
-              type="form"
-              @submit="submitDataToContract"
-              v-model="inputData"
-              v-if="entryForm"
-            >
-              <FormKitSchema :schema="formData" />
-            </FormKit>
-          </div>
-        </div>
-        <div class="panel" v-if="menuSelect === 'owner'">
-          
-          <EditContract
-            :contractDetails="details"
-            :contractAddress="contract"
-            :dataDetails="formData"
-          />
-          
-        </div>
-        
-        <div class="panel" v-if="menuSelect === 'data'">
-          <ContractData :address="contract"/>
-        </div>
-       
-      </div>
+     
     </div>
     <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
+    
+    <div class="panel">
+      <ListEvents :contractAddress="bountryAddress" />
+    </div>
   </div>
+  
 </template>
 
 <style scoped>
@@ -181,6 +177,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  align-content: flex-start;
 }
 .back {
   padding: 24px;
@@ -200,12 +197,19 @@ table {
   margin: 2rem;
   flex: 1;
   gap: 16px;
+  align-self: flex-start;
 }
 .submenu{
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-bottom: 12px;
+}
+.title{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
 }
 .submenu .menu-item{
   padding: 12px;
@@ -218,6 +222,13 @@ table {
   flex-direction: row;
   gap: 2rem;
   margin: 2rem;
+}
+.badge{
+  background: #92e2a7;
+  color: rgba(0,0,0,0.8);
+  padding: 0.4rem;
+  border-radius: 2px;
+  font-weight: 600;
 }
 
 .row{
