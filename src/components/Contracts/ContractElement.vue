@@ -34,7 +34,7 @@ export default {
 </script>
 
 <template>
-  <main v-if="!loading">
+  <div v-if="!loading">
     <div class="box"  @click="$router.push({ path: `/contract/${data}`, params: { id: data } })" >
       <div class="element">
         <div >
@@ -57,7 +57,7 @@ export default {
         <span>{{contractData.fee}}</span>
       </div>
     </div>
-  </main>
+  </div>
 </template>
 <style>
 .box {
@@ -74,7 +74,7 @@ export default {
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   background: rgba(255, 255, 255, 0.2);
   margin: 12px;
-  width: 100%;
+
 }
 .small{
   font-size: 10px;

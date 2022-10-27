@@ -8,7 +8,8 @@ export default {
     return (
       {viewAccount: false,
         showNav: false, 
-        big:true
+        big:true, 
+        correctNetwork: false
       }
     )
     
@@ -24,12 +25,33 @@ export default {
       this.viewAccount = !this.viewAccount;
     }, 
     onResize(){
-      console.log(window.innerWidth)
       if(window.innerWidth > 700){
         this.big = true;
         return
       }
       this.big = false
+      return
+    }, 
+    
+    async networkCheck(){
+
+      const network =  await window.ethereum.networkVersion;
+      
+      console.log(network);
+      if(network == 80001){this.correctNetwork = true}
+      
+    }, 
+    async changeNetwork(){
+      console.log("we will change network")
+      
+      await window.ethereum.request({
+        method:'wallet_switchEthereumChain', 
+        params: [
+         { chainId: '0x13881'}
+        ]
+      })
+      
+      this.networkCheck();
     }
   },
   computed: mapState({
@@ -38,8 +60,10 @@ export default {
   mounted(){
     this.$nextTick(() => {
       window.addEventListener('resize', this.onResize);
-    })
-  }
+    }), 
+    
+    this.networkCheck();
+  }, 
 };
 </script>
 
@@ -92,7 +116,11 @@ export default {
       </div>
     </div>
     <div id="content">
-      <RouterView />
+      
+      <RouterView v-if="correctNetwork" />
+      <div v-else>
+        <button @click="changeNetwork">Change Network</button>
+      </div>
     </div>
   
   </div>
@@ -289,7 +317,6 @@ body {
   margin-top: 100px;
   z-index: -100;
   margin-left: 0px;
-  border: 1px solid white;
   width: auto;
   
   }

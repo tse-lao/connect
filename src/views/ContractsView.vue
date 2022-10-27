@@ -60,7 +60,6 @@ export default {
 </template>
 
 <style>
-
 .grid-container {
   display:flex;
   flex-direction: column;
