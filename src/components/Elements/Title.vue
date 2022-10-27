@@ -25,7 +25,6 @@
   gap: 24px;
   align-items: center;
   justify-content: space-around;
-  margin-top: 4rem;
 }
 .back-icon {
   height: 24px;

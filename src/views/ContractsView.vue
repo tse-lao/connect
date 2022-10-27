@@ -38,7 +38,7 @@ export default {
 </script>
 
 <template>
-  <div class="contract-view">
+  <div>
     <div class="actions">
       <h3>Contracts ({{contracts.totalContracts}})</h3>
       <button class="success" @click="showCreate">Create Contract</button>
@@ -60,12 +60,7 @@ export default {
 </template>
 
 <style>
-.contract-view{
-  display: flex;
-  flex-direction: column;
-  margin: 4rem 8rem;
-  
-}
+
 .grid-container {
   display:flex;
   flex-direction: column;

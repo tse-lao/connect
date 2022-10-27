@@ -6,7 +6,10 @@ export default {
   components:{ AccountDetails, ProfilePicture },
   data(){
     return (
-      {viewAccount: false,}
+      {viewAccount: false,
+        showNav: false, 
+        big:true
+      }
     )
     
   },
@@ -19,22 +22,40 @@ export default {
     },
     detailsShow() {
       this.viewAccount = !this.viewAccount;
+    }, 
+    onResize(){
+      console.log(window.innerWidth)
+      if(window.innerWidth > 700){
+        this.big = true;
+        return
+      }
+      this.big = false
     }
   },
   computed: mapState({
     accounts: (state:any) => state.account
   }),
+  mounted(){
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    })
+  }
 };
 </script>
 
 <template>
   <div class="app">
     <div id="leftSide">
-      <div id="nav">
-        <div id="logo">
-          <img src="@/assets/images/logo.png" class="nav-item-icon" />
+      <div class="menu-icon">
+          <img v-if="showNav" @click="showNav=!showNav" class="menu-icon"  src="@/assets/icons/menu-close.png" />
+          <img v-else @click="showNav=!showNav" class='menu-icon' src="@/assets/icons/menu.png" />
+            
         </div>
-        
+        <div id="logo">
+          <img src="@/assets/images/logo.png" />
+        </div>
+      <div id="nav" @click="showNav=!showNav" v-if="showNav || big">
+       
         <div class="nav-item" to="/" @click="$router.push('/')">
           <img
             src="@/assets/icons/dashboard.png"
@@ -106,6 +127,9 @@ body {
 .profile-pic:hover {
   opacity: 0.5;
 }
+.menu-icon{
+  display:none;
+}
 .profile-icon{
   margin: auto;
   padding: 8px;
@@ -127,6 +151,7 @@ body {
   position: fixed;
   top: 0;
   bottom: 0;
+  overflow:scroll;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -139,8 +164,6 @@ body {
 }
 #logo {
   display: block;
-  width: 50%;
-  height: 50%;
   margin: auto;
   padding: 10% 0 0;
   background-position: center;
@@ -209,10 +232,12 @@ body {
 }
 
 #content {
-  padding: 12px;
-  margin-left: 100px;
-  width: calc(100vw - 150px);
+  margin: 24px;
+  margin-left: 124px;
+  width: 100vw ;
   max-width: 1200px;
+  overflow-x: scroll;
+  
 }
 
 @media (min-width: 1024px) {
@@ -246,5 +271,63 @@ body {
   .app{
     flex-direction: column;
   }
+  #leftSide{
+    height: 60px;
+    top: 0;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    overflow-y: auto;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+
+  }
+  
+  #content {
+  padding: 6px;
+  margin-top: 100px;
+  z-index: -100;
+  margin-left: 0px;
+  border: 1px solid white;
+  width: auto;
+  
+  }
+  
+  /* Hide the menu and only display when the button is clicked. */
+  .menu-icon{
+    height: 32px;
+    width: 32px;
+    padding: 6px;
+    filter: brightness(0) invert(0.8);
+    display:block;
+    
+    
+  }
+  .menu-icon:hover{
+    opacity: 0.8;
+  }
+  
+  #nav{
+    top: 60px;
+    width: 100vw;
+    background: #21212a;
+    left: 0;
+    flex-direction: column;
+    height: auto;
+    position: fixed;
+    z-index: 1000;
+    overflow-y: scroll; 
+    height: 100%;
+   }
+   
+   #logo{
+    padding:0;
+    margin: 0;
+    padding-left: calc(50% - 24px);
+    width: auto;
+   }
+  
+
 }
 </style>
