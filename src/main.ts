@@ -25,7 +25,6 @@ app.mount("#app");
 
 }else{
     const app = createApp(Landing);
-        app.use(plugin, defaultConfig({ theme: 'genesis' }))
     app.use(router);
     app.use(store);
 

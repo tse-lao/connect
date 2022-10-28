@@ -125,10 +125,10 @@ export default {
   
   </div>
 </template>
-<style scoped>
+<style>
 :root {
   text-align: center;
-  color: white;
+  color: white;  
 }
 
 body {
@@ -136,6 +136,7 @@ body {
   margin: 0;
   color: #c2c2c2;
   font-family: monospace;
+  background: #18141d !important;
   /*  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif; */
@@ -144,6 +145,7 @@ body {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  background: #18141d !important;
 }
 .profile-pic {
   height: 64px;
