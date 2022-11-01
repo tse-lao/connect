@@ -2,8 +2,7 @@
 import ContractElementVue from "@/components/Contracts/ContractElement.vue";
 import CreateContractVue from "@/components/Contracts/CreateContract.vue";
 import LoadingVue from "@/components/Elements/Loading.vue";
-import { mapState } from "vuex";
-
+import { useContractStore } from "../stores/contracts";
 
 export default {
   name: "ContractView",
@@ -19,7 +18,7 @@ export default {
   methods: {
     async getContracts() {
       //TODO: PINIA INTEGRATION CONTRACTS NEEDED. 
-      this.$store.dispatch("contracts/getTotalContracts");
+      this.contracts.getTotalContracts();
       //we need an account for this.
       this.loading = false;
      
@@ -28,13 +27,16 @@ export default {
       this.createOn = !this.createOn;
     },
   },
+  setup(){
+    const contracts = useContractStore()
+    
+    return {
+      contracts
+    }
+  },
   mounted() {
     this.getContracts();
-  },
-  computed: mapState({
-    contracts: (state) => state.contracts
-  })
- 
+  }
 };
 </script>
 

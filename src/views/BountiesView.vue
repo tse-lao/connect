@@ -93,11 +93,9 @@ export default {
   flex-direction: column;
   gap: 1rem;
 }
-
 .filter span{
     font-weight: 400;   
 }
-
 .filter span:hover{
     color: #92e2a7;
     cursor: pointer;
