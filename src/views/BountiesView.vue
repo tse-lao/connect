@@ -1,5 +1,5 @@
 <script lang="ts">
-import { mapGetters, mapState } from "vuex";
+import { useBountyStore } from '@/stores/bounties';
 import type PoolDetail from "../common/types";
 import Title from "../components/Elements/Title.vue";
 import CreateBounty from "../components/Pools/CreateBounty.vue";
@@ -19,13 +19,15 @@ export default {
   },
   methods: {
     async readPools() {
-        //here put in the bounties 
-        this.$store.dispatch("bounties/getAllBounties");
+        //TODO: PINIA INTEGRATION ENEDED.
+        
+        this.bounty.getAllBounties();
+        
         
         //now this is read correctly and we can read it from the store. 
         
         //but for this we need some more inforamtion, like the name of the contract etc. 
-      this.loading = false;
+        this.loading = false;
     },
     
     async selectedBounties(address:any){
@@ -38,16 +40,15 @@ export default {
   },
   mounted(){
         this.readPools();
-    }
-    ,
-  computed: 
-{...mapState({
-    bounties: (state) => state.bounties
-  }),
-  ...mapGetters({
-      getBounties: 'bounties/getBountyByAddress'
-    }),
-}
+    },
+    
+    setup(){
+      const bounty = useBountyStore();
+      
+      return{
+        bounty, bountyAddress: bounty.getBountyByAddress
+      }
+    },
 };
 </script>
 <template>
@@ -68,13 +69,12 @@ export default {
     </div>
     <div v-else class="content-with-filter">
       <div class="filter" >
-        
-            <span @click="selectedBounties(item.address)" v-for="(item, key) in bounties.bountyPools" :key="key">{{item.name}} ({{item.totalBounties}})</span>
+            <span @click="selectedBounties(item.address)" v-for="(item, key) in bounty.bounties" :key="key">{{item.name}} ({{item.totalBounties}})</span>
       </div>
-      <div class="content">
+      <div class="content" v-if="selectedAddress != null">
         <!--List make sure we get it based on the listing -->
-        <PoolItem  v-for="(item, key) in getBounties(selectedAddress).bounties" :key="key" :v-bind="item" :data="item" />
-      </div>
+         <PoolItem  v-for="(item, key) in bountyAddress(selectedAddress).bounties" :key="key" :v-bind="item" :data="item" />
+     </div>
     </div>
   </main>
 </template>

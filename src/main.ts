@@ -1,6 +1,7 @@
 import { store } from "@/store/index";
 import { defaultConfig, plugin } from "@formkit/vue";
 import { Buffer } from 'buffer';
+import { createPinia } from "pinia";
 import { createApp } from "vue";
 import App from "./App.vue";
 import "./assets/main.css";
@@ -18,6 +19,8 @@ if (arr.length > 0) {
     const app = createApp(App)
     app.use(plugin, defaultConfig({ theme: 'genesis' }))
 app.use(router);
+
+app.use(createPinia());
 app.use(store);
 
 app.mount("#app");

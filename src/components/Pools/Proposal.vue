@@ -33,20 +33,22 @@ export default {
     return {
       proposalDescription: "",
       attachments: [],
+      links: [],
       file: null,
     };
   },
   methods: {
     async createProposal() {
       //we need to upload all the attachments to the right column and attach those in the list.
-      const reader = new window.FileReader();
+     
 
       for (var i = 0; i < this.attachments.length; i++) {
+        const reader = new window.FileReader();
         reader.readAsArrayBuffer(this.attachments[i]);
         reader.onloadend = async () => {
           console.log("File: ", Buffer(reader.result));
-          const link = await files.uploadToIPFS(Buffer(reader.result));
-          this.attachments[i].push({ ipfs: link });
+          const link:any = await files.uploadToIPFS(Buffer(reader.result));
+          this.links.push(link)
         }
       }
 

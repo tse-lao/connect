@@ -49,6 +49,7 @@ export default {
       default: "nothing found",
     },
   },
+  //TODO: Pinia Account interactions make it better. 
   computed: mapState({
     account: (state:any) => state.account
   }),

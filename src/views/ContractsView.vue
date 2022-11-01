@@ -18,6 +18,7 @@ export default {
 
   methods: {
     async getContracts() {
+      //TODO: PINIA INTEGRATION CONTRACTS NEEDED. 
       this.$store.dispatch("contracts/getTotalContracts");
       //we need an account for this.
       this.loading = false;

@@ -8,6 +8,7 @@ import ListEvents from "../components/Elements/ListEvents.vue";
 import Title from "../components/Elements/Title.vue";
 import Proposal from "../components/Pools/Proposal.vue";
 import files from "../store/api/files";
+import { useBountyStore } from '../stores/bounties';
 
 
 export default {
@@ -15,7 +16,7 @@ export default {
   components: { EditContract, ContractAdmin, ContractData, Title, DepositToContact, ListEvents, Proposal },
   data() {
     return {
-      bountryAddress: null,
+      bountyAddress: '',
       amount: 0, 
       details: {
                 title: "", 
@@ -49,6 +50,15 @@ export default {
       formData: [],
     };
   },
+  //PINIA integration
+  setup(){
+    const bounty = useBountyStore();
+
+    return {
+      // you can return the whole store instance to use it in the template
+      bounty,
+    };
+  },
   computed: {...mapState({
     account: (state:any) => state.account
   }),
@@ -59,7 +69,7 @@ export default {
 },
 
   mounted() {
-    this.bountryAddress = this.$route.params.address as string;
+    this.bountyAddress = this.$route.params.address as string;
     this.getDetails();
     //now we want to call something that retireve the contrat.
   },
@@ -67,9 +77,13 @@ export default {
   methods: {
     //check if the proposal is there or not. 
     async getDetails(){
-      console.log(this.bountryAddress)
+      console.log(this.bountyAddress)
       
-       const result =  await this.$store.dispatch("bounties/getBounty", this.bountryAddress);
+      //TODO: get bounty need to be called from ponia. 
+      
+       const result = await this.bounty.getBounty(this.bountyAddress)
+       
+       //const result =  await this.$store.dispatch("bounties/getBounty", this.bountyAddress);
         this.details.balance = result.balance;
         const proposal = await files.readIPFS(result.proposal);
         
@@ -78,7 +92,7 @@ export default {
         
         this.details.balance = result.balance;
         
-        
+        //TODO: PINIA update needed here. 
         const poolDetails = this.getBountyByAddress(proposal.pool);
 
         this.details.poolDetails = poolDetails;
@@ -106,7 +120,7 @@ export default {
         
           <div class="row">
             <h4>Contract Address</h4>
-            <span> {{ bountryAddress }}</span>
+            <span> {{ bountyAddress }}</span>
           </div>
           <div class="row">
             <h4>Contact Details</h4>
@@ -130,7 +144,7 @@ export default {
             <span> {{details.balance }} / {{ details.estimatedFee }}</span>
           </div>
           <div class="row">
-            <DepositToContact :address="bountryAddress"/>
+            <DepositToContact :address="bountyAddress"/>
           </div>
           
         </div>
@@ -153,7 +167,7 @@ export default {
     <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
     
     <div class="panel">
-      <ListEvents :contractAddress="bountryAddress" />
+      <ListEvents :contractAddress="bountyAddress" />
     </div>
   </div>
   
