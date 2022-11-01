@@ -14,6 +14,11 @@
 					},
 					{
 						"internalType": "string",
+						"name": "_title",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
 						"name": "_metadata",
 						"type": "string"
 					},
@@ -40,6 +45,31 @@
 				],
 				"stateMutability": "payable",
 				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "action",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "value",
+						"type": "string"
+					}
+				],
+				"name": "ContractInteraction",
+				"type": "event"
 			},
 			{
 				"anonymous": false,
@@ -89,6 +119,25 @@
 					}
 				],
 				"name": "Transfer",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "action",
+						"type": "string"
+					}
+				],
+				"name": "UserInteraction",
 				"type": "event"
 			},
 			{
@@ -354,6 +403,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "title",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "totalUsers",
 				"outputs": [
 					{
@@ -363,6 +425,19 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_url",
+						"type": "string"
+					}
+				],
+				"name": "updateLink",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -461,7 +536,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"frontend/src/assets/contracts/CreateProfile.sol": "ShareContract"
+			"src/assets/contracts/CreateProfile.sol": "ShareContract"
 		},
 		"evmVersion": "berlin",
 		"libraries": {},
@@ -475,12 +550,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"frontend/src/assets/contracts/CreateProfile.sol": {
-			"keccak256": "0xcdca3e29d256341f26e7782d8c04edb500aec7cca61aa004b55d3525cff897dc",
+		"src/assets/contracts/CreateProfile.sol": {
+			"keccak256": "0x9417125c993b6f916b0e0c5132e95ddbdce5a1ff5d948d276c2b39d567fcae26",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://b632148ef000cdcb4d664d6a1b0e10370339ca692284888b4d140859acbb88b4",
-				"dweb:/ipfs/QmUQKNhFbkGJTaPS5DnNDfdZtmA7brug7MHvhsHQHtvfZK"
+				"bzz-raw://3bdd782e6730ac7b55cf416bfd35a39c4cbeec09d97cdc7551cc3d1a3a4b6fc4",
+				"dweb:/ipfs/QmTa38Pr3478UnLp4RQhrTKcuYTGtsnKkucvahmJ7wJ3WT"
 			]
 		}
 	},
