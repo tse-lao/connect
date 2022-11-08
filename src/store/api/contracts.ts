@@ -1,13 +1,14 @@
 import contractInterface from "@/assets/contracts/artifacts/Contracts.json";
 import Web3 from "web3";
-
+const mainContract = "0x57Eb4beD18FBAD5e405bAF606b1936a4E1754EAc";
+const abi:any = contractInterface.abi;
 export default {
     async getTotalContract(){
         const web3 = new Web3(window.ethereum);
     
-        const mainContract = "0xF5268BbBf2D33E99c63F9056dA853dB46C8018A8";
+
         const factoryContract = new web3.eth.Contract(
-            contractInterface.abi,
+            abi,
             mainContract
           );
     
@@ -25,18 +26,15 @@ export default {
       
       const web3 = new Web3(window.ethereum);
     
-      const mainContract = "0xF5268BbBf2D33E99c63F9056dA853dB46C8018A8";
+      
       const factoryContract = new web3.eth.Contract(
-          contractInterface.abi,
+          abi,
           mainContract
         );
   
         const address = await factoryContract.methods
           .pool(inter)
           .call();
-  
-        
-        
         return address;
     }
 }

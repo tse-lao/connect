@@ -8,7 +8,12 @@ export default {
     components: {ProfilePicture},
     data(){
       return {
-        contractdata: null,
+        contractData: {
+          title: "undefined", 
+          fee: 0, 
+          owner: "owner"
+          
+        },
         loading: true,
       }
     },
@@ -20,7 +25,10 @@ export default {
     methods:{
       async readContract(){
         //TODO: implement the contract. 
+         console.log(this.data);
+        
          const result = await api.readShareContracts(this.data);
+         console.log(result);
          this.contractData = result;
          this.loading= false; 
       }
@@ -29,6 +37,7 @@ export default {
     mounted(){
         this.loading = true;
         this.readContract(this.data);
+      
     }
 }
 </script>

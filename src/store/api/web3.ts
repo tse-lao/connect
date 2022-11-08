@@ -1,16 +1,19 @@
 // import shareContract from "@/assets/contracts/JSON/ShareContract.json";
 import shareContract from "@/assets/contracts/artifacts/ShareContract.json";
-import { store } from '@/store/index';
 import Web3 from 'web3';
 
-const abi:any = shareContract.abi;
+import { useToast } from "vue-toastification";
+
+
+const toast = useToast();
+const abi: any = shareContract.abi;
 
 export default {
-  
+
   async readShareContracts(address: string) {
     //import here the contract abi. 
 
-  
+
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
       abi,
@@ -42,25 +45,24 @@ export default {
       abi,
       address
     );
-    //TODO: make sure that we check if the contract exists. 
-    let sender = store.state.account.address;
+    //TODO: make sure that we check if the contract exists
     const changeFee = web3.utils.toWei(newFee);
 
     const approve = await contract.methods
       .changeFee(changeFee)
-      .send({ from: sender })
-      .then((receipt:Object) => {
+      .send({ from: account.address })
+      .on((receipt: Object) => {
         console.log("approved");
         console.log(receipt);
-
+        toast.success('succesfully approved the contract', receipt)
         //on success we can update the allownace.
       })
-      .catch((error:Error) => {
+      .catch((error: Error) => {
         console.log(error);
       });
   },
-  
-  
+
+
   async openCloseContract(address: string) {
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
@@ -68,24 +70,25 @@ export default {
       address
     );
     //TODO: make sure that we check if the contract exists. 
-    let sender = store.state.account.address;
 
     const approve = await contract.methods
       .closeOrOpen()
-      .send({ from: sender })
-      .then((receipt:Object) => {
-        console.log("approved");
-        console.log(receipt);
-
-        //on success we can update the allownace.
+      .send({ from: account.address })
+      .on('transactionHash', function (transactionHash:any) { 
+        toast.success('starting with this transactionHash', transactionHash.message)
+       })
+      .on('receipt', function (receipt:any) {
+        console.log(receipt.contractAddress)
+        toast.success('updated contract with', receipt.contractAddress) // contains the new contract address
+        
       })
-      .catch((error:any) => {
-        console.log(error);
+      .catch((error: any) => {
+        toast.error(error.message)
       });
-      
-      console.log(approve)
+
+    console.log(approve)
   },
-  
+
 
   async depositToShareContract(address: string, amount: string) {
     const web3 = new Web3(window.ethereum);
@@ -99,57 +102,56 @@ export default {
 
     await contract.methods
       .deposit()
-      .send({ from: sender , value: newAmount})
-      .then((receipt:Object) => {
+      .send({ from: account.address, value: newAmount })
+      .then((receipt: Object) => {
         console.log("approved");
         console.log(receipt);
 
         //on success we can update the allownace.
       })
-      .catch((error:Error) => {
-        console.log(error)
-       
+      .catch((error: Error) => {
+        toast.error(error.message)
+
       });
-      
+
   },
 
   async submitToShareContract(address: string, link: string) {
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
-    abi,
+      abi,
       address
     );
-    
-    let sender = store.state.account.address;
-    
+
+
+
     await contract.methods
       .userSubmission(link, true)
-      .send({ from: sender })
-      .then((receipt:Object) => {
+      .send({ from: account.address })
+      .then((receipt: Object) => {
         console.log("approved");
         console.log(receipt);
 
         //on success we can update the allownace.
       })
-      .catch((error:Error) => {
+      .catch((error: Error) => {
         console.log(error);
       });
-    
-  }, 
-  
-  async AllFromShareContract(address:string){
+
+  },
+
+  async AllFromShareContract(address: string) {
     const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
-      abi ,
+      abi,
       address
     );
-    
-    let sender = store.state.account.address;
-    
+
+
     const result = await contract.methods.getProfiles().call();
     console.log(result);
-    
+
     return result;
-  }, 
-  
+  },
+
 }

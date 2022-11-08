@@ -1,0 +1,47 @@
+import { defineStore } from "pinia";
+
+
+export const useAccountStore = defineStore('account', {
+    
+    state: () => ({
+        loggedIn: false, 
+        address: "", 
+        network: "", 
+        balance: 0
+      }),
+      
+      //GETTERS
+      getters:{
+        
+      },
+
+    //ACTIONS
+ actions: {
+     async getAccount(){
+        if (window.ethereum) {
+            //write a function and update  for now we do it raw
+            
+            const accounts = await window.ethereum.request({method: 'eth_requestAccounts'})
+            
+            if(accounts.length === 0){
+                console.log("please connect to MetaMAsk.")
+            }else{
+                this.address = accounts[0]
+                this.loggedIn = true;
+                
+                const network = await window.ethereum.request({method: 'eth_chainId'})
+                
+                this.network = network;
+            }
+           
+            
+            //now get geth the nethwork
+        }else{
+            alert("make sure that web3 is installed in the browser");
+        }
+
+    },
+    
+ }
+    
+})

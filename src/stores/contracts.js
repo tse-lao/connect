@@ -7,6 +7,7 @@ export const useContractStore = defineStore('contracts', {
     state: () => ({
         totalContracts: 0,
         contracts: [],
+        mainContract: "0x57Eb4beD18FBAD5e405bAF606b1936a4E1754EAc",
       }),
       
       //GETTERS
@@ -17,6 +18,7 @@ export const useContractStore = defineStore('contracts', {
     //ACTIONS
  actions: {
     getTotalContracts(){
+        console.log("check if we doing here something.")
         const result = api.getTotalContract().then((result) => {
          if(result != this.totalContracts){
              this.totalContracts = result

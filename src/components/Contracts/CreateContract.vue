@@ -69,7 +69,7 @@ export default {
   methods: {
     async createContract(link) {
       //find something smarter for thi
-      const mainContract = "0xF5268BbBf2D33E99c63F9056dA853dB46C8018A8";
+      const mainContract = "0x57Eb4beD18FBAD5e405bAF606b1936a4E1754EAc";
       const web3 = new Web3(window.ethereum);
       const contract = new web3.eth.Contract(
         contractInterface.abi,
@@ -82,7 +82,7 @@ export default {
       console.log(this.accounts);
 
       const approve = await contract.methods
-        .CreateNewContract(link, "", web3.utils.toWei("0.05"), true)
+        .createNewContract(link, this.title, "", web3.utils.toWei("0"), true)
         .send({ from: this.accounts })
         .then((receipt) => {
           console.log("approved");

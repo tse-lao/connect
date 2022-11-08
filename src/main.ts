@@ -3,8 +3,11 @@ import { defaultConfig, plugin } from "@formkit/vue";
 import { Buffer } from 'buffer';
 import { createPinia } from "pinia";
 import { createApp } from "vue";
+
+import Toast from "vue-toastification";
+
+import "vue-toastification/dist/index.css";
 import App from "./App.vue";
-import "./assets/main.css";
 import Landing from "./Landing.vue";
 import router from "./router";
 
@@ -18,12 +21,18 @@ if (arr.length > 0) {
   if (arr[0] === 'app'){
     const app = createApp(App)
     app.use(plugin, defaultConfig({ theme: 'genesis' }))
-app.use(router);
+    app.use(router);
 
-app.use(createPinia());
-app.use(store);
+    app.use(createPinia());
+    app.use(store);
 
-app.mount("#app");
+
+    app.use(Toast,{
+      transition: "Vue-Toastification__fade",
+      maxToasts: 1,
+      newestOnTop: true,
+      });
+    app.mount("#app");
   }
 
 }else{

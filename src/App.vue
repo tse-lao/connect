@@ -1,7 +1,10 @@
 <script lang="ts">
-import { mapState } from "vuex";
+import "./assets/main.css";
 import AccountDetails from "./components/Account/AccountDetails.vue";
 import ProfilePicture from "./components/Account/ProfilePicture.vue";
+import { useAccountStore } from "./stores/account";
+
+
 export default {
   components:{ AccountDetails, ProfilePicture },
   data(){
@@ -14,10 +17,16 @@ export default {
     )
     
   },
+  setup(){
+    const account = useAccountStore();
+    
+    return {account}
+  },
   methods: {
     login() {
       
-        this.$store.dispatch("account/loginAccount");
+      this.account.getAccount()
+      console.log("account getting.")
         //we call the child component to rerender; 
       
     },
@@ -54,16 +63,20 @@ export default {
       this.networkCheck();
     }
   },
-  computed: mapState({
-    accounts: (state:any) => state.account
-  }),
+
   mounted(){
     this.$nextTick(() => {
       window.addEventListener('resize', this.onResize);
     }), 
-    
-    this.networkCheck();
+    this.login();
   }, 
+  created() {
+      window.ethereum.on('accountsChanged', this.login)
+      window.ethereum.on('chainChanged', this.login)
+      window.ethereum.on('message', (message:any)=> {
+        console.log(message);
+      })
+  }
 };
 </script>
 
@@ -83,22 +96,22 @@ export default {
         <div class="nav-item" to="/" @click="$router.push('/')">
           <img
             src="@/assets/icons/dashboard.png"
-            class="nav-item-bounty"
+            class="nav-item-icon"
           />
           <router-link to="/"> Home</router-link>
         </div>
         
         <div class="nav-item" @click="$router.push('/contracts')">
           <img
-            class="nav-item-bounty"
-            src="@/assets/icons/smart-contract.png"
-            alt="Dashboard"
+            class="nav-item-icon"
+            src="@/assets/icons/smart-contracts.png"
+            alt="Contracts"
           />
           <router-link to="/contracts">Contracts</router-link>
         </div>
         <div class="nav-item" @click="$router.push('/bounties')">
           <img
-            class="nav-item-bounty"
+            class="nav-item-icon"
             src="./assets/icons/bounty.png"
             alt="Dashboard"
           />
@@ -106,10 +119,10 @@ export default {
         </div>
 
         <div class="profile-icon" @click="login">
-          <ProfilePicture ref="profilePic" :address="accounts.address" />
+          <ProfilePicture ref="profilePic" :address="account.address" />
         </div>
         <div class="nav-item">
-          {{accounts.balance}} 
+          {{account.balance}} 
           <span>tokens</span>
         </div>
         <AccountDetails v-if="viewAccount"/>
@@ -117,15 +130,15 @@ export default {
     </div>
     <div id="content">
       
-      <RouterView v-if="correctNetwork" />
+      <RouterView v-if="account.network === '0x13881'" />
       <div v-else>
         <button @click="changeNetwork">Change Network</button>
       </div>
     </div>
-  
+
   </div>
 </template>
-<style>
+<style scoped>
 :root {
   text-align: center;
   color: white;  

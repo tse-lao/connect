@@ -1,5 +1,5 @@
 <script lang="ts">
-import { mapState } from 'vuex';
+import { useAccountStore } from '@/stores/account';
 import ContractAdmin from "../components/Contracts/ContractAdmin.vue";
 import ContractData from "../components/Contracts/ContractData.vue";
 import EditContract from "../components/Contracts/EditContract.vue";
@@ -50,9 +50,10 @@ export default {
     },
   },
   //TODO: Pinia Account interactions make it better. 
-  computed: mapState({
-    account: (state:any) => state.account
-  }),
+ setup(){
+    const account = useAccountStore()
+    return {account}
+ },
 
   mounted() {
     this.contract = this.$route.params.id as string;
@@ -110,18 +111,18 @@ export default {
       this.details = result as any;
       this.retrieveIPFS(this.details.link);
       
-      console.log(this.account.address)
-      
     },
     async retrieveIPFS(link:string) {
       const result = await functions.readIPFS(link);
+      
+      console.log("important to check this..")
+      console.log(result);
       this.formData = result.form;
+      this.entryForm = true;
     },
     async submitDataToContract() {
-      console.log(this.inputData);
 
       const stringedJSON = JSON.stringify(this.inputData);
-      console.log(stringedJSON);
 
       const encrypted = false;
 
@@ -154,9 +155,6 @@ export default {
         link
       );
       
-      
-
-      console.log(result);
     },
     
     async deposit(){
@@ -166,7 +164,6 @@ export default {
     
     async openCloseContract(){
       const result = await web3Functions.openCloseContract(this.contract);
-      console.log(result);
     }
   },
 };

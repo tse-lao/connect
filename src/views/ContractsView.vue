@@ -21,6 +21,7 @@ export default {
       this.contracts.getTotalContracts();
       //we need an account for this.
       this.loading = false;
+      console.log(this.contracts.contracts)
      
     },
     showCreate() {
@@ -52,7 +53,7 @@ export default {
     </div>
     <LoadingVue v-if="loading" />
 
-    <div class="grid-container" v-else>
+    <div class="grid-container" v-else> 
       <ContractElementVue
         v-for="(item, index) in contracts.contracts"
         :data="item"
