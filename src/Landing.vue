@@ -1,5 +1,7 @@
 <script lang="ts">
-export default {};
+export default {
+  name:"Landing"
+};
 </script>
 
 <template>
@@ -134,7 +136,7 @@ export default {};
        
       <div class="footer-body">
         <div class="white-bow">
-          <img src="{logo}" alt="connect_logo" />
+          <img src="@/assets/icons/landing/discord.svg" alt="connect_logo" />
           <h1>Connect Fast</h1>
         </div>
         <div class="footer_menu">

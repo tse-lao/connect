@@ -6,16 +6,15 @@ import { createApp } from "vue";
 
 import Toast from "vue-toastification";
 
+import App from "@/App.vue";
+import Landing from "@/Landing.vue";
 import "vue-toastification/dist/index.css";
-import App from "./App.vue";
-import Landing from "./Landing.vue";
 import router from "./router";
 
 globalThis.Buffer = Buffer
 
 //check for domain and change the APP.vue
 const host = window.location.host;
-
 const arr = host.split(".").slice(0, host.includes("localhost") ? -1 : -2);
 if (arr.length > 0) {
   if (arr[0] === 'app'){
@@ -32,6 +31,12 @@ if (arr.length > 0) {
       maxToasts: 1,
       newestOnTop: true,
       });
+    app.mount("#app");
+  }else{
+    const app = createApp(Landing);
+    app.use(router);
+    app.use(store);
+
     app.mount("#app");
   }
 
