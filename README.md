@@ -12,3 +12,5 @@ There will be a guided listing for all the elements below.
 4. Feel free to serve around and make any suggestion where necessary. 
 
 
+We now have something runnning on https://connect-fast-vue.web.app/
+Please check it out if you are interested in helping us develop this application. 
