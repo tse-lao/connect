@@ -1,8 +1,8 @@
 <script lang="ts">
-import { useAccountStore } from "@/stores/account";
 import "./assets/main.css";
 import AccountDetails from "./components/Account/AccountDetails.vue";
 import ProfilePicture from "./components/Account/ProfilePicture.vue";
+import { useAccountStore } from "./stores/account.js";
 
 
 export default {
