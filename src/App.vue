@@ -303,9 +303,8 @@ body {
 #content {
   margin: 24px;
   margin-left: 124px;
-  width: 100vw;
+  width: calc(100vw - 200px);
   max-width: 1200px;
-  overflow-x: scroll;
 
 }
 
