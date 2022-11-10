@@ -2,7 +2,15 @@
 
 
 export default {
-  name:"Landing"
+  name:"Landing", 
+  methods:{
+    goToApp(){
+        console.log(window.location.host);
+
+        window.location.replace('http://app.'+ window.location.host)
+
+    }
+  }
 };
 </script>
 
@@ -16,10 +24,10 @@ export default {
 
           <div class="top_right">
             
-              <a href='http://app.connect-fast.com'>
-                <button>
+          
+                <button @click="goToApp">
                   Open App
-                </button></a>
+                </button>
 
           </div>
         </div>
