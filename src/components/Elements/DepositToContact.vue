@@ -6,7 +6,7 @@
     </div>
 </template>
 <script lang="ts">
-import { mapState } from 'vuex';
+import {useAccountStore} from '@/stores/account';
 import token from "../../store/api/token";
 
 export default {
@@ -32,10 +32,11 @@ export default {
             type:String, 
             default: ""
         }
-    }, computed: {
-        ...mapState({
-    account: (state:any) => state.account
-  }),
-}
+    }, 
+    setup(){
+        const account = useAccountStore()
+
+        return {account}
+    },
 }
 </script>
