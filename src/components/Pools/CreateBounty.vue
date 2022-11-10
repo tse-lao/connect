@@ -208,13 +208,5 @@ textarea {
     outline: none;
 }
 
-.ql-container.ql-snow {
-    border: none;
-}
 
-.ql-toolbar.ql-snow {
-    border: 1px solid black;
-    border-radius: 8px 8px 0px 0px;
-    background: rgba(255, 255, 255, 0.6)
-}
 </style>

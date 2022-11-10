@@ -6,7 +6,7 @@ import EditContract from "../components/Contracts/EditContract.vue";
 import DepositToContact from "../components/Elements/DepositToContact.vue";
 import ListEvents from "../components/Elements/ListEvents.vue";
 import Title from "../components/Elements/Title.vue";
-import Proposal from "../components/Pools/Proposal.vue";
+import Proposal from "../components/Pools/CreateProposal.vue";
 import files from "../store/api/files";
 import { useBountyStore } from '../stores/bounties';
 
@@ -143,23 +143,20 @@ export default {
             <h4>Fee</h4>
             <span> {{details.balance }} / {{ details.estimatedFee }}</span>
           </div>
+
+          <div class="row">
+            <h4>Description</h4>
+            <span> {{details.description}}</span>
+          </div>
           <div class="row">
             <DepositToContact :address="bountyAddress"/>
           </div>
           
         </div>
         <div class="panel">
-          <div class="row">
-            <h4>Description</h4>
-            <span> {{details.description}}</span>
-          </div>
-          <div class="row">
             <h3>Create Proposal</h3>
-            <Proposal />
-            
-          </div>
-          
-          </div>
+            <Proposal :address="bountyAddress"/>
+    </div>
           
       </div>
      

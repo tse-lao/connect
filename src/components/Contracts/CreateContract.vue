@@ -196,16 +196,7 @@ textarea {
 .formkit-help{
   color: rgba(255, 255, 255, 0.4) !important;
 }
-.panel{
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2rem;
-  border-radius: 8px;
-  flex: 1;
-  min-width: 300px;
-  max-width: 400px;
-  align-content: center;
-  align-items: center;
-}
+
 .class-form .formkit-actions{
   display: none;
 }

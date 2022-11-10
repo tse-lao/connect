@@ -34,7 +34,7 @@ export default {
         
         console.log("busssyyy...")
         let result = ''
-        await TokenContract.getPastEvents('Approval', {// Using an array means OR: e.g. 20 or 23
+        await TokenContract.getPastEvents('allEvents', {// Using an array means OR: e.g. 20 or 23
             fromBlock: 28717382,
             toBlock: 'latest',
             to: address

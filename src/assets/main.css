@@ -40,3 +40,21 @@ button,
 @media(max-width: 700px){
 
 }
+
+
+/* FONTS */
+h3{
+  margin: 1rem 0rem;
+  color: white;
+
+}
+
+/* SPACING AND MARGINS*/
+.mtb-2{
+  margin: 2rem 0rem;
+}
+
+.right{
+  display: flex;
+  flex-direction: row-reverse;
+}

@@ -102,6 +102,14 @@ export default {
         }
         
         console.log("error occured in creating the link. ")
+    }, 
+
+    async createProposal(address:string, proposal:string, account:string){
+        const taskContract = new web3.eth.Contract(PoolContractABI, address);
+
+       const result = await taskContract.methods.submitProposal(proposal).send({from:account})
+
+
     }
 
 }
