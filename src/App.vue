@@ -4,6 +4,9 @@ import AccountDetails from "./components/Account/AccountDetails.vue";
 import ProfilePicture from "./components/Account/ProfilePicture.vue";
 import { useAccountStore } from "./stores/account.js";
 
+import '@/assets/base.css'
+
+
 
 export default {
   name: "App",
@@ -150,10 +153,6 @@ export default {
   </div>
 </template>
 <style scoped>
-:root {
-  text-align: center;
-  color: white;
-}
 
 body {
   background-color: #18141d;

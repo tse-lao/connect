@@ -50,10 +50,8 @@ export const useBountyStore = defineStore('bounties', {
                         "name": result.contractName
                     }
                     
-                    console.log(pushObject);
                     this.bounties.push(pushObject)
                     
-                    console.log(this.bounties);
                 })
             })
         }
