@@ -23,18 +23,19 @@
         <div class="form-input">
             <label> Tags</label>
             <vue3-tags-input :tags="form.tags" placeholder="input tags" />
-            <span>Seperate the tags with a [SPACE] or [ENTER]  </span>
+            <span>Seperate the tags with a [SPACE] or [ENTER] </span>
         </div>
 
         <div class="form-input">
             <label> Description</label>
-            <QuillEditor theme="snow" class="editor" v-model:content="form.description" />
+            <QuillEditor ref="description" theme="snow" class="editor" v-model:content="form.description" />
         </div>
-      
+
         <div class="form-input">
             <label> Acceptance Criteria </label>
 
-            <QuillEditor theme="snow" class="editor" v-model:content="form.acceptanceCriteria" content-type="html" />
+            <QuillEditor ref="acceptance_criteria" theme="snow" class="editor" v-model:content="form.acceptanceCriteria"
+                content-type="html" />
         </div>
         <div class="form-input">
             <label> Contract Details </label>
@@ -44,16 +45,16 @@
                     <option>Discord</option>
                     <option>Email</option>
                 </select>
-                <input v-model="form.username" placeholder="enter username.."/>
+                <input v-model="form.username" placeholder="enter username.." />
                 <button @click="addContact">Add</button>
             </div>
 
             <div class="form-display" v-for="item, key in form.contacts" :key="key">
                 <span>
-                    {{item.medium}}
+                    {{ item.medium }}
                 </span>
                 <span>
-                    {{item.username}}
+                    {{ item.username }}
                 </span>
                 <button class="danger sm" @click="deleteContact(key)">Delete</button>
             </div>
@@ -78,7 +79,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 export default {
     name: "CreateBounty",
-    components: { QuillEditor, Vue3TagsInput},
+    components: { QuillEditor, Vue3TagsInput },
     setup() {
         const account = useAccountStore();
         const bounties = useBountyStore();
@@ -99,7 +100,7 @@ export default {
                 deadline: null,
                 acceptanceCriteria: '',
                 resources: "",
-                medium: "Telegram", 
+                medium: "Telegram",
                 username: "",
                 contacts: [] as any,
             }
@@ -107,23 +108,23 @@ export default {
     },
     methods: {
         async submitBounty() {
-
-            let stringified = JSON.stringify(this.form)
-            const result: any = await files.uploadToIPFS(stringified);
-
-            //gives me back a link that can be used. 
-            console.log(result);
-
             //now lets go. 
             if (this.account.address != null) {
+                this.form.acceptanceCriteria = this.$refs.acceptance_criteria.getHTML();
+                this.form.description = this.$refs.description.getHTML();
+                let stringified = JSON.stringify(this.form)
+
+                //now 
+                const result: any = await files.uploadToIPFS(stringified);
+
                 this.$store.dispatch("bounties/createBounty", { address: this.form.pool, proposal: result, account: this.account.address })
             } else {
                 console.log('please login first')
             }
 
-        }, 
-        addContact(){
-            if(this.form.medium != "" && this.form.username != ""){
+        },
+        addContact() {
+            if (this.form.medium != "" && this.form.username != "") {
                 this.form.contacts.push({
                     "medium": this.form.medium,
                     "username": this.form.username
@@ -133,8 +134,8 @@ export default {
             console.log("testing if it works ")
 
             console.log(this.form.contacts)
-        }, 
-        deleteContact(id:number){
+        },
+        deleteContact(id: number) {
             this.form.contacts.splice(id, 1);
         }
     }
@@ -151,9 +152,10 @@ export default {
     margin: auto;
     gap: 2rem;
 }
-.two-form-input{
+
+.two-form-input {
     display: flex;
-    justify-content:space-evenly;
+    justify-content: space-evenly;
     width: 100%;
 }
 
@@ -178,16 +180,17 @@ textarea {
     padding: 0.4rem;
     background-color: rgba(255, 255, 255, 0.2);
 }
-.form-display{
+
+.form-display {
     display: flex;
     gap: 2rem;
     margin: 1rem;
 }
 
-.form-display span{
-   font-weight: 400;
-   text-align: left;
-   align-self: left;
+.form-display span {
+    font-weight: 400;
+    text-align: left;
+    align-self: left;
 }
 
 .form-input-select {
@@ -207,6 +210,4 @@ textarea {
     border: 1px solid black;
     outline: none;
 }
-
-
 </style>

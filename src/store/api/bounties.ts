@@ -106,9 +106,34 @@ export default {
 
     async createProposal(address:string, proposal:string, account:string){
         const taskContract = new web3.eth.Contract(PoolContractABI, address);
-
        const result = await taskContract.methods.submitProposal(proposal).send({from:account})
+    },
 
+    async getAllProposals(address:string){
+        const taskContract = new web3.eth.Contract(PoolContractABI, address);
+
+        //this is the amount of the proposals there are. 
+        const totalProposals = await taskContract.methods.devCount().call();
+
+        console.log(totalProposals)
+
+        let developersList = [];
+
+        for(var i=1; i <= totalProposals.length; i++){
+            let item = await taskContract.methods.developer(i).call();
+            console.log(item)
+            developersList.push(item);
+        }
+
+        let results = []
+        for(var j=0; j < developersList.length; j++){
+            console.log(developersList[j])
+            let resultItem = await taskContract.methods.devWorks(developersList[j]).call()
+            console.log(resultItem)
+            results.push(resultItem)
+        }
+
+        return results;
 
     }
 

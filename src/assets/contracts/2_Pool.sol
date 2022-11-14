@@ -3,6 +3,11 @@
 pragma solidity ^0.8.6;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract contractPool{
+    event ContractCreation(address indexed _from, address indexed _to, string _name);
+    event NewProposal(address indexed _from, string _name, string _link);
+    event PoolCreation(address indexed _contract, address indexed _newPool, string _name);
+    event VoteProposal(address indexed _from, address indexed _to, string action);
+
     address[] public pool;
     address tokenAddress;
     string public name;
@@ -16,18 +21,23 @@ contract contractPool{
         name = _name;
         link = _link;
         //we would like it to have a IPFS link.  
+        emit ContractCreation(owner, address(this), _name);
     }
     
     function updateInfo(string memory _name, string memory _link) public {
         require(msg.sender == owner, "Only owner can update info");
         name = _name;
         link = _link;
+
+        emit ContractUpdate(owner, _name, _link);
     }
 
     //this needs to be changed for now. 
-    function createNewPool(string memory _link, address  _tokenAddress) public returns(address){
-         PoolContract a = new PoolContract(_link, _tokenAddress, msg.sender);
+    function createNewPool(string memory _name, string memory _link,  address  _tokenAddress) public returns(address){
+         PoolContract a = new PoolContract(_name, _link, _tokenAddress, msg.sender);
          pool.push(address(a));
+
+         emit PoolCreation(address(this), address(a), _name);
          return address(a);
     }
     
@@ -39,11 +49,17 @@ contract contractPool{
     
 }
 contract PoolContract {
+    //EVENTS
+    event ContractCreation(address indexed _from, address indexed _to, string _name);
+    event PropsalCreation(address indexed _from, string _name, string _link);
+    event PoolCreation(address indexed _contract, address indexed _newPool, string _name);
+
     //public variables.
     address public tokenAddress;
     address payable public owner;
     address payable public contracted;
     string public proposal;
+    string public name;
     bool public locked;
     uint256 public contractBalance;
     uint256 public userCount;
@@ -76,8 +92,9 @@ contract PoolContract {
     mapping(address => string) public devWorks;
 
     //constructor
-    constructor(string memory _proposal, address _tokenAddress, address sender) payable {
+    constructor(string memory _name, string memory _proposal, address _tokenAddress, address sender) payable {
         owner = payable(sender);
+        name = _name;
         contracted = payable(msg.sender);
         tokenAddress = _tokenAddress;
         proposal = _proposal;
@@ -93,6 +110,8 @@ contract PoolContract {
                 proofWork: false
             })
         );
+
+        emit ContractCreation(_owner, address(this), _name);
     }
 
     modifier checkUser() {
@@ -108,30 +127,34 @@ contract PoolContract {
     }
 
     //NEED TO BE TESTED.
-    function submitProposal(string memory _proposal) public {
-        require(locked == false, "Already finished.");
+    function submitProposal(string memory _name, string memory _proposal) public {
+        require(locked == false, "This contract is locked not possible to propose.");
+        require(devIndex[msg.sender] === 0, "you already have a proposal in place");
+
         votes[msg.sender] = 0;
-        
-        if(devIndex[msg.sender] > 0){ 
-            devCount++;
-            developer[devCount] = msg.sender;
-        }
+        devCount++;
+        developer[devCount] = msg.sender;
         
         devWorks[msg.sender] = _proposal;
-       
+
+        emit PropsalCreation(msg.sender, _name, _proposal);
     }
 
     function voteProposal(address _developer) public {
-        //apparently we have two different ones. 
         require(devIndex[_developer] > 0, "Developer does not exist.");
-        //get balance of the msg.sender.
+
         uint256 index = indexUser[msg.sender];
         uint256 balance = users[index].balance;
         require(balance > 0, "You don't have enough voting power.");
         require(users[index].voted == true, "You have already voted.");
         users[index].votedFor = _developer;
         votes[_developer] += balance;
+
+        emit VoteProposal(msg.sender, _developer, "up");
     }
+
+    //function to update a proposal, should also be there.. 
+
 
     //functions underneath here are working correctly.
     function deposit(uint256 amount) public payable {

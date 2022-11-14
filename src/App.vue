@@ -169,7 +169,6 @@ body {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  background: #18141d !important;
 }
 
 .profile-pic {

@@ -39,6 +39,17 @@ export default {
     }
   },
 
+  async readIPFSList(list:any){
+
+    let objectList = [];
+    for(var i=0; i < list.length; i++){
+        const item = await this.readIPFS(list[i]);
+        objectList.push(item);
+    }
+
+    return objectList;
+  },
+
   async createRepo(username: string) {
     //this creates a cid of the user_address which we should be able to retrieve at any time. 
     const result = await client.dag.put({ "user_address": username })

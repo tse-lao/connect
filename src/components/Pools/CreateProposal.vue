@@ -1,8 +1,7 @@
 <template>
   <main>
     <div>
-      <QuillEditor theme="snow" v-model:content="proposalDescription" />
-      
+      <QuillEditor theme="snow" v-model:content="proposalDescription" ref="editor" />
       
       <div class="column mtb-2">
         <h3>Attachments:</h3>
@@ -57,16 +56,22 @@ export default {
         const reader = new window.FileReader();
         reader.readAsArrayBuffer(this.attachments[i]);
         reader.onloadend = async () => {
-          console.log("File: ", Buffer(reader.result));
-          const link:any = await files.uploadToIPFS(Buffer(reader.result));
+
+         const link:any = await files.uploadToIPFS(Buffer(reader.result));
 
           console.log(link)
           this.links.push(link)
         }
       }
 
+      const content = this.$refs.editor.getHTML() 
+
+      console.log(content)
+
+
+
       let jsonFormat = JSON.stringify({
-        description: this.proposalDescription,
+        description: content,
         attachments: this.attachments,
       });
       
