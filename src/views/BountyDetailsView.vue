@@ -156,7 +156,9 @@ export default {
 
         </div>
         <div class="panel">
-          <h1></h1>
+          <div class="tags" v-for="item, key in details.tags" :key="key">
+              <div class="tag">item</div>
+          </div>
           <span v-html="details.description"></span>
         </div>
 
@@ -225,6 +227,17 @@ export default {
 .medium-icon {
   height: 24px;
   width: 24px;
+}
+
+.tags{
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.tag{
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
 }
 
 .two-layer-template {

@@ -114,4 +114,9 @@ export default ({
 .voting h3{
     margin: 0;
 }
+
+.proposal-content{
+    max-height: 250px;
+    overflow-y: scroll;
+}
 </style>
