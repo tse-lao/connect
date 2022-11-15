@@ -135,8 +135,10 @@ export default {
         <div class="profile-icon" @click="login">
           <ProfilePicture ref="profilePic" :address="account.address" />
         </div>
-        <div class="nav-item">
-          {{ account.balance }}
+        <div class="nav-item" @click="viewAccount = !viewAccount">
+          <span class="account-balance">
+            {{ account.balance }}
+          </span>
           <span class="account-trunc">{{account.address}}</span>
         </div>
         <AccountDetails v-if="viewAccount" />
@@ -293,6 +295,9 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.account-balance{
+  font-weight: 500;
 }
 
 .bottom-settings {

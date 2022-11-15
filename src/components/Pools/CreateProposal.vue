@@ -1,16 +1,19 @@
 <template>
   <main>
     <div>
-      <div class="form-control">
-        <label>Proposal Title</label>
+      <div class="label">
+        <h4>Title</h4>
         <input v-model="title" />
       </div>
       <QuillEditor theme="snow" v-model:content="proposalDescription" ref="editor" />
       
       <div class="column mtb-2">
-        <h3>Attachments:</h3>
+        <h3>Attachments: 
+          <input id="file" class="custom-file-input" type="file" @change="uploadFile" multiple />
+        <label for="file">Upload</label>
+        </h3>
        
-        <input type="file" @change="uploadFile" multiple />
+       
         <ul v-if="attachments.length > 0">
           <li v-for="(attachment, key) in attachments" :key="key">
             {{ attachment.name }}
@@ -110,5 +113,38 @@ textarea {
   border-radius: 4px;
   padding: 12px;
   margin: 12px;
+}
+
+[type="file"] {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
+}
+input[type="file"] + label {
+  /* File upload button styles */
+  background-color:  rgba(0,189,126,1);
+  border-radius: 6px;
+  color: rgba(0,0,0,1);
+  text-transform: uppercase;
+  font-size: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 0.5rem;
+  transition: background-color 0.3s;
+}
+[type="file"]:focus + label,
+[type="file"] + label:hover {
+  /* File upload hover state button styles */
+  background-color: rgba(0,189,126,0.5);
+
+}
+[type="file"]:focus + label {
+  /* File upload focus state button styles */
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
 }
 </style>

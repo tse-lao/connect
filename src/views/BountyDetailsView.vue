@@ -20,29 +20,29 @@ export default {
   data() {
     return {
       bountyAddress: '',
-      amount: 0, 
+      amount: 0,
       details: {
-                title: "", 
-                pool:"",
-                poolDetails: {
-                  address: "0x", 
-                  balance: 0, 
-                  name: "not found"
-                },
-                status: true,
-                estimatedFee: " ", 
-                tags:[], 
-                description: "",
-                type: "", 
-                experience: 0, 
-                timeCommitment: 0, 
-                deadline: null,
-                acceptanceCriteria: "", 
-                resources: "", 
-                contactDetails: "", 
-                proposal: "", 
-                balance: 0
-            },
+        title: "",
+        pool: "",
+        poolDetails: {
+          address: "0x",
+          balance: 0,
+          name: "not found"
+        },
+        status: true,
+        estimatedFee: " ",
+        tags: [],
+        description: "",
+        type: "",
+        experience: 0,
+        timeCommitment: 0,
+        deadline: null,
+        acceptanceCriteria: "",
+        resources: "",
+        contactDetails: "",
+        proposal: "",
+        balance: 0
+      },
       data: {
         data: {
           fee: "undefined",
@@ -54,7 +54,7 @@ export default {
     };
   },
   //PINIA integration
-  setup(){
+  setup() {
     const bounty = useBountyStore();
     const account = useAccountStore();
 
@@ -73,21 +73,26 @@ export default {
 
   methods: {
     //check if the proposal is there or not. 
-    async getDetails(){
-      
+    async getDetails() {
+
       //TODO: get bounty need to be called from ponia. 
-       const result = await this.bounty.getBounty(this.bountyAddress)
-       
-        this.details.balance = result.balance;
-        const proposal = await files.readIPFS(result.proposal);
-        
-        this.details = proposal;
-        this.details.proposal = result.proposal;
-        
-        this.details.balance = result.balance;
+      const result = await this.bounty.getBounty(this.bountyAddress)
+
+
+      this.details.balance = result.balance;
+      const proposal = await files.readIPFS(result.proposal);
+
+      console.log(result);
+
+      this.details.title = result.name;
+
+      this.details = proposal;
+      this.details.proposal = result.proposal;
+
+      this.details.balance = result.balance;
 
     }
-  
+
   },
 };
 </script>
@@ -95,78 +100,75 @@ export default {
 <template>
   <div class="content">
     <Title>
-        <template #title>
-          <div class="row title">
-            <span class="badge">{{details.poolDetails.name}}</span>
-            <h4>{{details.title}}</h4>
-          </div>
-        </template>    
+      <template #title>
+        <div class="row title">
+          <span class="badge">{{ details.poolDetails.name }}</span>
+          <h4>{{ details.title }}</h4>
+        </div>
+      </template>
     </Title>
 
     <div class="two-layer-template">
       <div class="left-two-layer-template">
         <div class="panel contract-details">
-        
-          <div class="row">
+
+          <div class="label">
             <h4>Contract Address</h4>
             <span> {{ bountyAddress }}</span>
           </div>
-          <div class="row">
+          <div class="label">
             <h4>Contact Details</h4>
             <span>Telegram: KS_94</span>
             <span>Discord: #lao_tse</span>
           </div>
-         
-          <div class="row">
+
+          <div class="label">
             <h4>Proposal</h4>
-            <span> {{details.proposal }}</span>
+            <span> {{ details.proposal }}</span>
           </div>
-          
-          <div class="row">
+
+          <div class="label">
             <h4>Participants</h4>
             <span>0 participants</span>
           </div>
-        
-         
-          <div class="row">
+
+
+          <div class="label">
             <h4>Fee</h4>
-            <span> {{details.balance }} / {{ details.estimatedFee }}</span>
+            <span> {{ details.balance }} / {{ details.estimatedFee }}</span>
           </div>
 
-          
-          <div class="row">
-            <DepositToContact :address="bountyAddress"/>
+
+          <div class="label">
+            <DepositToContact :address="bountyAddress" />
           </div>
-          
+
         </div>
         <div class="panel">
           <h1></h1>
-            <span v-html="details.description"></span>
+          <span v-html="details.description"></span>
+        </div>
+
       </div>
-          
-      </div>
-     
+
     </div>
     <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
-    <div class="column">
+    <div class="row">
       <div class="panel">
         <h3>Create Proposal</h3>
-            <Proposal :address="bountyAddress"/>
-    </div>
+        <Proposal :address="bountyAddress" />
+      </div>
+      <div class="panel scroll-list">
+        <ListProposals :contract="bountyAddress" />
+      </div>
+
       <div class="panel">
-      <ListProposals :contract="bountyAddress" />
-      
-     
-
+        <ListEvents :contractAddress="bountyAddress" />
+      </div>
     </div>
 
-    <div class="panel">
-      <ListEvents :contractAddress="bountyAddress" />
-    </div>
-    </div>
-   
   </div>
-  
+
 </template>
 
 <style scoped>
@@ -175,30 +177,41 @@ export default {
   width: 24px;
   filter: invert(1);
 }
-.open{
+
+.open {
   color: #92e2a7;
   font-weight: 900;
 }
-.closed{
+
+.closed {
   color: #DB8D85;
   font-weight: 900;
 }
+
 .left-two-layer-template {
   display: flex;
   flex-direction: column;
   gap: 6px;
   align-content: flex-start;
 }
+
 .back {
   padding: 24px;
   cursor: pointer;
 }
+
 .two-layer-template {
   display: flex;
   flex-direction: column;
 }
+
 table {
   text-align: left;
+}
+
+.column{
+  display: flex;
+  flex-direction: column;
 }
 .panel {
   background: #21212a;
@@ -207,51 +220,67 @@ table {
   margin: 2rem;
   flex: 1;
   gap: 16px;
-  align-self: flex-start;
 }
-.submenu{
+.scroll-list{
+  overflow-y: scroll;
+}
+.submenu {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-bottom: 12px;
 }
-.title{
+
+.title {
   display: flex;
   flex-direction: row;
   gap: 1rem;
   align-items: center;
 }
-.submenu .menu-item{
+
+.submenu .menu-item {
   padding: 12px;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   cursor: pointer;
 }
-.box-width{
+
+.box-width {
   display: flex;
   flex-direction: row;
   gap: 2rem;
   margin: 2rem;
 }
-.badge{
+
+.badge {
   background: #92e2a7;
-  color: rgba(0,0,0,0.8);
+  color: rgba(0, 0, 0, 0.8);
   padding: 0.4rem;
   border-radius: 2px;
   font-weight: 600;
 }
 
-.row{
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   margin-bottom: 1rem;
 }
-.submenu .menu-item:hover {
-  border: 1px solid rgba(255,255,255,0.8);
-  background: rgba(0,0,0,0.4)
+
+.label{
+  margin-bottom: 1rem;
 }
+
+.submenu .menu-item:hover {
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.4)
+}
+
 @media (min-width: 1024px) {
   .two-layer-template {
     display: flex;
   }
+
   .left-two-layer-template {
     flex-direction: row;
   }

@@ -67,13 +67,18 @@ export default {
         const taskContract = new web3.eth.Contract(PoolContractABI, address);
         const balance = await taskContract.methods.contractBalance().call();
         
-        const newProp = await taskContract.methods.proposal().call().then()
+        const newProp = await taskContract.methods.proposal().call();
      
-      
+        const name = await taskContract.methods.name().call();
+
+        const devCount = await taskContract.methods.devCount().call();
+        const userCount = await taskContract.methods.userCount().call();
+        const locked = await taskContract.methods.locked().call();
+
         
-        return({ address: address, proposal: newProp, balance: balance });
+        return({ address: address, proposal: newProp, balance: balance, name: name, locked: locked, devCount: devCount, userCount:userCount });
     }, 
-    
+
     async createBounty(name:string, address:string, link:string, account:string){
         const PoolContract = new web3.eth.Contract(contractPoolABI, address);
         
