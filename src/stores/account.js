@@ -30,8 +30,11 @@ export const useAccountStore = defineStore('account', {
                 this.loggedIn = true;
                 
                 const network = await window.ethereum.request({method: 'eth_chainId'})
-                
                 this.network = network;
+
+                const balance = await window.ethereum.request({method: 'eth_getBalance', params: [accounts[0]]});
+
+                this.balance = Math.round(parseInt(balance) / (10**18) *10000) / 10000;
             }
            
             
