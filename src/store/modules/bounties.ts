@@ -72,11 +72,7 @@ export const bounties = {
             return result
         }, 
         
-        createBounty({state, commit}, data:object){
-            api.createBounty(data.address, data.proposal, data.account).then((result) => {
-                console.log(result);
-            })
-        }
+     
         
     },
 };

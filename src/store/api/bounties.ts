@@ -1,7 +1,7 @@
 // import shareContract from "@/assets/contracts/JSON/ShareContract.json";
-import contractPool from "@/assets/contracts/artifacts/contractPool.json";
-import PoolContract from "@/assets/contracts/artifacts/PoolContract.json";
-import PoolFactory from "@/assets/contracts/artifacts/PoolFactory.json";
+import contractPool from "@/assets/smartContract/artifacts/contracts/Pool.sol/contractPool.json";
+import PoolContract from "@/assets/smartContract/artifacts/contracts/Pool.sol/PoolContract.json";
+import PoolFactory from "@/assets/smartContract/artifacts/contracts/PoolFactory.sol/PoolFactory.json";
 import Web3 from 'web3';
 
 const PoolFactoryABI: any = PoolFactory.abi;
@@ -74,7 +74,7 @@ export default {
         return({ address: address, proposal: newProp, balance: balance });
     }, 
     
-    async createBounty(address:string, link:string, account:string){
+    async createBounty(name:string, address:string, link:string, account:string){
         const PoolContract = new web3.eth.Contract(contractPoolABI, address);
         
         //make sure there is a valid string in here. 
@@ -83,7 +83,7 @@ export default {
             const tokenAddress = "0x53ED56F9AaDF3AADE8e8C7CB730AF4e6BDa90815"
             
             try{
-                await PoolContract.methods.createNewPool(tokenAddress, link).send({from:account})
+                await PoolContract.methods.createNewPool(name, link, tokenAddress).send({from:account})
                 .on('confirmation', function(confirmationNumber:any, receipt:any){
                     console.log(receipt);
                     
@@ -104,9 +104,9 @@ export default {
         console.log("error occured in creating the link. ")
     }, 
 
-    async createProposal(address:string, proposal:string, account:string){
+    async createProposal(title: string, address:string, proposal:string, account:string){
         const taskContract = new web3.eth.Contract(PoolContractABI, address);
-       const result = await taskContract.methods.submitProposal(proposal).send({from:account})
+       const result = await taskContract.methods.submitProposal(title, proposal).send({from:account})
     },
 
     async getAllProposals(address:string){

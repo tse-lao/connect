@@ -133,31 +133,33 @@ export default {
             <span> {{details.balance }} / {{ details.estimatedFee }}</span>
           </div>
 
-          <div class="row">
-            <h4>Description</h4>
-            <span> {{details.description}}</span>
-          </div>
+          
           <div class="row">
             <DepositToContact :address="bountyAddress"/>
           </div>
           
         </div>
         <div class="panel">
-            <h3>Create Proposal</h3>
-            <Proposal :address="bountyAddress"/>
+          <h1></h1>
+            <span v-html="details.description"></span>
       </div>
           
       </div>
      
     </div>
     <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
-    <div class="row">
+    <div class="column">
+      <div class="panel">
+        <h3>Create Proposal</h3>
+            <Proposal :address="bountyAddress"/>
+    </div>
       <div class="panel">
       <ListProposals :contract="bountyAddress" />
       
      
 
     </div>
+
     <div class="panel">
       <ListEvents :contractAddress="bountyAddress" />
     </div>

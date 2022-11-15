@@ -117,7 +117,7 @@ export default {
                 //now 
                 const result: any = await files.uploadToIPFS(stringified);
 
-                this.$store.dispatch("bounties/createBounty", { address: this.form.pool, proposal: result, account: this.account.address })
+                this.bounties.createBounty({ name: this.form.title, address: this.form.pool, proposal: result, account: this.account.address })
             } else {
                 console.log('please login first')
             }

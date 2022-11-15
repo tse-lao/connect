@@ -7,7 +7,7 @@ export const useBountyStore = defineStore('bounties', {
     state: () => ({
     
             totalBountyPools: 0,
-            factoryAddress: "0x62243cf153962dc0919103CaBc24b0fF56f04105",
+            factoryAddress: import.meta.env.VITE_POOL_FACTORY,
             bounties: []
       }),
       
@@ -66,7 +66,7 @@ export const useBountyStore = defineStore('bounties', {
     },
     
      createBounty(data){
-        api.createBounty(data.address, data.proposal, data.account).then((result) => {
+        api.createBounty(data.name, data.address, data.proposal, data.account).then((result) => {
             console.log(result);
         })
     }

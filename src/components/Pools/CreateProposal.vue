@@ -1,10 +1,15 @@
 <template>
   <main>
     <div>
+      <div class="form-control">
+        <label>Proposal Title</label>
+        <input v-model="title" />
+      </div>
       <QuillEditor theme="snow" v-model:content="proposalDescription" ref="editor" />
       
       <div class="column mtb-2">
         <h3>Attachments:</h3>
+       
         <input type="file" @change="uploadFile" multiple />
         <ul v-if="attachments.length > 0">
           <li v-for="(attachment, key) in attachments" :key="key">
@@ -31,6 +36,7 @@ export default {
   components: {QuillEditor},
   data() {
     return {
+      title: "", 
       proposalDescription: "",
       attachments: [],
       links: [],
@@ -82,7 +88,7 @@ export default {
       console.log(proposalLink);
 
       //THIS IS WORKING NOW WE NEED THE INTERACTION WITH
-      const result = await bounties.createProposal(this.address, proposalLink, this.account.address)
+      const result = await bounties.createProposal(this.title, this.address, proposalLink, this.account.address)
       console.log(result)
 
     },
