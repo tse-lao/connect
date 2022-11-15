@@ -137,7 +137,7 @@ export default {
         </div>
         <div class="nav-item">
           {{ account.balance }}
-          <span>tokens</span>
+          <span class="account-trunc">{{account.address}}</span>
         </div>
         <AccountDetails v-if="viewAccount" />
       </div>
@@ -285,6 +285,14 @@ body {
   width: 42px;
   height: 42px;
   padding: 10px;
+}
+
+.account-trunc{
+  width: 80px;
+  direction: rtl;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bottom-settings {
