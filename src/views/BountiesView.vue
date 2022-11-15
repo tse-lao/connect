@@ -56,8 +56,13 @@ export default {
     <Title>
       <template #title> Bounties System </template>
       <template #actions>
-        <img
+        <img v-if="!startCreate"
             src="../assets/icons/web-technology/add-files.svg"
+            alt="add_files"
+            @click="startCreate = !startCreate"
+          />
+          <img v-else 
+          src="../assets/icons/interface-sign/close.svg"
             alt="add_files"
             @click="startCreate = !startCreate"
           />
