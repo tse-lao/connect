@@ -124,21 +124,16 @@ export default {
 
         let developersList = [];
 
-        for(var i=1; i <= totalProposals.length; i++){
-            let item = await taskContract.methods.developer(i).call();
-            console.log(item)
-            developersList.push(item);
+        for(var i=1; i <= totalProposals; i++){
+            console.log(i);
+            let developer = await taskContract.methods.developer(i).call();
+            //now we have the address so we can do 
+            let proposal = await taskContract.methods.devWorks(developer).call();
+
+            developersList.push({developer: developer, proposal:proposal});
         }
 
-        let results = []
-        for(var j=0; j < developersList.length; j++){
-            console.log(developersList[j])
-            let resultItem = await taskContract.methods.devWorks(developersList[j]).call()
-            console.log(resultItem)
-            results.push(resultItem)
-        }
-
-        return results;
+        return developersList;
 
     }
 

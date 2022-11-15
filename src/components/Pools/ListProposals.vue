@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="proposal-content">
-                    <div v-html="item.description">
+                    <div v-html="item.proposal.description">
                     </div>
                     <div>
                         <span>
@@ -47,12 +47,17 @@ export default ({
             //we get an array of links here, we need to convert it to something else, namely files.
             const result:any[] = await bounties.getAllProposals(this.contract)
 
+            console.log(result);
          
             //now we need a list to read from files. 
             if(result.length > 0){
-                const proposalsDetails = await files.readIPFSList(result);
-                this.proposals = proposalsDetails;
-                console.log(proposalsDetails)
+                for(var i = 0; i < result.length; i++){
+                     console.log(result[i].proposal)
+                    const proposalsDetails = await files.readIPFS(result[i].proposal);
+                    this.proposals.push({developer: result[i].developer, proposal: proposalsDetails});
+                    console.log(proposalsDetails)
+                }
+             
             }
 
             
@@ -77,6 +82,7 @@ export default ({
     display: flex;
     flex-direction: row;
     gap: 2rem;
+    margin-bottom: 2rem;
 }
 .voting{
     display: flex;

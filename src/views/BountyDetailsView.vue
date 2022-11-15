@@ -143,6 +143,11 @@ export default {
             <span>{{details.users}} participants</span>
           </div>
 
+          <div class="label">
+            <h4>Devs</h4>
+            <span>{{details.developers}} devs</span>
+          </div>
+
 
           <div class="label">
             <h4>Fee</h4>
@@ -156,9 +161,12 @@ export default {
 
         </div>
         <div class="panel">
-          <div class="tags" v-for="item, key in details.tags" :key="key">
-              <div class="tag">item</div>
+          <div class="tags">
+            <div class="tag" v-for="item, key in details.tags" :key="key">
+              {{item}}
+              </div>
           </div>
+        
           <span v-html="details.description"></span>
         </div>
 
@@ -232,12 +240,16 @@ export default {
 .tags{
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem;
 }
 
 .tag{
-  background: rgba(255, 255, 255, 0.3);
+  background: #62B1BD;
+  color:#21212a;
   border-radius: 6px;
+  padding: 0.5rem;
 }
 
 .two-layer-template {
