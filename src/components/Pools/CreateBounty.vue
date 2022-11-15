@@ -22,7 +22,7 @@
         </div>
         <div class="form-input">
             <label> Tags</label>
-            <vue3-tags-input :tags="form.tags" placeholder="input tags" />
+            <vue3-tags-input :tags="tag" @on-tags-changed="handleChangeTag" />
             <span>Seperate the tags with a [SPACE] or [ENTER] </span>
         </div>
 
@@ -133,7 +133,13 @@ export default {
 
             console.log("testing if it works ")
 
+            console.log(this.form.tags)
+
             console.log(this.form.contacts)
+        },
+        handleChangeTag(tags) {
+            console.log()
+            this.form.tags = tags;
         },
         deleteContact(id: number) {
             this.form.contacts.splice(id, 1);

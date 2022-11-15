@@ -24,22 +24,15 @@ export default {
       details: {
         title: "",
         pool: "",
-        poolDetails: {
-          address: "0x",
-          balance: 0,
-          name: "not found"
-        },
         status: true,
         estimatedFee: " ",
         tags: [],
         description: "",
+        developers: 0, 
+        users: 0, 
         type: "",
-        experience: 0,
-        timeCommitment: 0,
-        deadline: null,
         acceptanceCriteria: "",
-        resources: "",
-        contactDetails: "",
+        contactDetails: [],
         proposal: "",
         balance: 0
       },
@@ -84,10 +77,17 @@ export default {
 
       console.log(result);
 
+      console.log(proposal);
+
       this.details.title = result.name;
+
+ 
 
       this.details = proposal;
       this.details.proposal = result.proposal;
+
+      this.details.users = result.userCount;
+      this.details.developers = result.devCount;
 
       this.details.balance = result.balance;
 
@@ -102,7 +102,7 @@ export default {
     <Title>
       <template #title>
         <div class="row title">
-          <span class="badge">{{ details.poolDetails.name }}</span>
+          <span class="badge">PARENT</span>
           <h4>{{ details.title }}</h4>
         </div>
       </template>
@@ -118,8 +118,19 @@ export default {
           </div>
           <div class="label">
             <h4>Contact Details</h4>
-            <span>Telegram: KS_94</span>
-            <span>Discord: #lao_tse</span>
+            <div class="contact-list" v-for="item, key in details.contacts" :key="key">
+              <img v-if="item.medium == 'Telegram'" src="https://www.freepnglogos.com/uploads/telegram-logo-png-0.png" alt="medium"
+                class="medium-icon" />
+                <a v-if="item.medium == 'Telegram'" :href="'//t.me/' + item.username" target="_blank">
+                  {{ item.username }}
+                </a>
+
+                <img v-if="item.medium == 'Discord'" src="https://www.freepnglogos.com/uploads/discord-logo-png/discord-logo-logodownload-download-logotipos-1.png" alt="medium"
+                class="medium-icon" />
+                <a v-if="item.medium == 'Discord'" :href="'//t.me/' + item.username" target="_blank">
+                  {{ item.username }}
+                </a>
+            </div>
           </div>
 
           <div class="label">
@@ -129,7 +140,7 @@ export default {
 
           <div class="label">
             <h4>Participants</h4>
-            <span>0 participants</span>
+            <span>{{details.users}} participants</span>
           </div>
 
 
@@ -200,6 +211,22 @@ export default {
   cursor: pointer;
 }
 
+.contact-list {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem;
+}
+
+.contact-list span {
+  font-weight: 600;
+}
+
+.medium-icon {
+  height: 24px;
+  width: 24px;
+}
+
 .two-layer-template {
   display: flex;
   flex-direction: column;
@@ -209,10 +236,11 @@ table {
   text-align: left;
 }
 
-.column{
+.column {
   display: flex;
   flex-direction: column;
 }
+
 .panel {
   background: #21212a;
   padding: 2rem;
@@ -221,9 +249,11 @@ table {
   flex: 1;
   gap: 16px;
 }
-.scroll-list{
+
+.scroll-list {
   overflow-y: scroll;
 }
+
 .submenu {
   display: flex;
   flex-direction: column;
@@ -267,7 +297,7 @@ table {
   margin-bottom: 1rem;
 }
 
-.label{
+.label {
   margin-bottom: 1rem;
 }
 
