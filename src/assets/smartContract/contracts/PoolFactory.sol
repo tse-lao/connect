@@ -33,8 +33,7 @@ contract PoolFactory{
          return address(a);
     }
 
-    
-    
+
     function countContracts() public view returns(uint){
         return pool.length;
     }

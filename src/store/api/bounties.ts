@@ -135,6 +135,12 @@ export default {
 
         return developersList;
 
+    }, 
+    async voteProposalUp(address:string, user:string, account:string){
+        const taskContact = new web3.eth.Contract(PoolContractABI, address)
+        const vote = await taskContact.methods.voteProposal(user).send({from: account})
+
+        console.log(vote);
     }
 
 }

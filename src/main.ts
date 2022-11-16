@@ -11,12 +11,16 @@ import Landing from "@/Landing.vue";
 import "vue-toastification/dist/index.css";
 import router from "./router";
 
+import '@/assets/base.css'
+
+
 globalThis.Buffer = Buffer
 
 //check for domain and change the APP.vue
 const host = window.location.host;
 
 const arr = host.split(".").slice(0, host.includes("localhost") ? -1 : -2);
+
 if (arr.length > 0) {
   if (arr[0] === 'app'){
     const app = createApp(App)
@@ -26,6 +30,8 @@ if (arr.length > 0) {
     app.use(createPinia());
     app.use(store);
 
+    //here we want the dark theme
+
 
     app.use(Toast,{
       transition: "Vue-Toastification__fade",
@@ -34,6 +40,9 @@ if (arr.length > 0) {
       });
     app.mount("#app");
   }else{
+
+    //here we want the light theme. 
+
     const app = createApp(Landing);
     app.use(router);
     app.use(store);

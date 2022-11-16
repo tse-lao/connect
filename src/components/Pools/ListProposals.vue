@@ -3,7 +3,7 @@
         <div class="proposals" v-for="item, key in proposals" :key="key">
             <div class="proposal-item">
                 <div class="voting">
-                    <i class="arrow up"></i>
+                    <i class="arrow up" @click="voteProposalUp(item.developer)"></i>
                     <h3>0 </h3>
                     <i class="arrow down"></i>
                 
@@ -16,6 +16,7 @@
                         <span>
                             Attachments 1
                         </span>
+                        <span>{{item.developer}}</span>
                     </div>
                 </div>
             </div>
@@ -26,6 +27,8 @@
 <script lang="ts">
 import bounties from "@/store/api/bounties"
 import files from "@/store/api/files"
+import bountyApi from "@/store/api/bounties"
+import {useAccountStore} from "@/stores/account"
 
 export default ({
     name: "ListProposals",
@@ -35,12 +38,11 @@ export default ({
             contract:""
         }
     },
-    props: {
-        contract: {
-            type: String,
-            default: "0xB93bf6A96C4fe06f6F3BBa3e93690AE66E810fDe",
-        },
-    },
+    setup(){
+        const account = useAccountStore();
+
+        return {account}
+    }, 
     methods: {
         async readAllProposals() {
             console.log(this.contract);
@@ -68,7 +70,16 @@ export default ({
                 let parser = new DOMParser();
                 let doc = parser.parseFromString(text, 'text/html');
                 return doc.body.outerHTML;
-        }
+        }, 
+        async voteProposalUp(developer:string){
+            console.log(developer);
+            console.log(this.contract);
+
+           // const result = await bountyApi.voteProposalUp(this.contract, developer, this.account.address)
+
+            window.alert("not yet implemented")
+
+        }, 
     },
     mounted() {
         this.contract = this.$route.params.address as string;

@@ -9,12 +9,19 @@ export default {
 
         window.location.replace('http://app.'+ window.location.host)
 
+    }, 
+    goLightMode(){
+      document.body.style.backgroundColor = "white";
+
     }
+  },
+  mounted(){
+    this.goLightMode();
   }
 };
 </script>
 
-<template>
+<template color-scheme="light">
     <div class="homepage">
         <div class="top_header">
           <div class="logo">

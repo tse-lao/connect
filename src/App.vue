@@ -4,10 +4,6 @@ import AccountDetails from "./components/Account/AccountDetails.vue";
 import ProfilePicture from "./components/Account/ProfilePicture.vue";
 import { useAccountStore } from "./stores/account.js";
 
-import '@/assets/base.css'
-
-
-
 export default {
   name: "App",
   components: { AccountDetails, ProfilePicture },
@@ -29,7 +25,6 @@ export default {
   },
   methods: {
     login() {
-
       this.account.getAccount()
       console.log("account getting.")
       //we call the child component to rerender; 
@@ -105,7 +100,7 @@ export default {
 };
 </script>
 
-<template>
+<template color-scheme="dark">
   <div class="app">
     <div id="leftSide">
       <div class="menu-icon">
