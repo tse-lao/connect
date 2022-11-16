@@ -60,7 +60,7 @@ export const useBountyStore = defineStore('bounties', {
      async getBounty(address){
         let result = await api.readBounty(address);
         //here we can get the bounty name and bounty devCount 
-        
+    
 
         return result
     },
@@ -69,8 +69,6 @@ export const useBountyStore = defineStore('bounties', {
         api.createBounty(data.name, data.address, data.proposal, data.account).then((result) => {
             console.log(result);
         })
-    }
-    
+    }  
  }
-    
 })

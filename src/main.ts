@@ -26,7 +26,6 @@ if (arr.length > 0) {
     const app = createApp(App)
     app.use(plugin, defaultConfig({ theme: 'genesis' }))
     app.use(router);
-
     app.use(createPinia());
     app.use(store);
 

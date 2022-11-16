@@ -9,8 +9,8 @@
                 
                 </div>
 
-                <div class="proposal-content">
-                    <div v-html="item.proposal.description">
+                <div>
+                    <div  class="proposal-content" v-html="item.proposal.description">
                     </div>
                     <div>
                         <span>
@@ -94,6 +94,8 @@ export default ({
     flex-direction: row;
     gap: 2rem;
     margin-bottom: 2rem;
+    flex: 1;
+    background: rgba(255,255,255 0.65);
 }
 .voting{
     display: flex;

@@ -148,12 +148,14 @@ button.danger{
 /* TEXT EDITOr*/
 .ql-container.ql-snow {
   border: none;
+  border: 1px solid black !important;
+  min-height: 200px;
 }
 
 .ql-toolbar.ql-snow {
-  border: 1px solid black;
+  border: 1px solid black !important;
   border-radius: 8px 8px 0px 0px;
-  background: rgba(255, 255, 255, 0.6)
+  background: rgba(255, 255, 255, 0);
 }
 
 /* SKELETON OPTIONS*/

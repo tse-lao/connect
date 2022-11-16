@@ -179,7 +179,7 @@ export default {
         <h3>Create Proposal</h3>
         <Proposal :address="bountyAddress" />
       </div>
-      <div class="panel scroll-list">
+      <div class="panel no-bg scroll-list">
         <ListProposals :contract="bountyAddress" />
       </div>
 
@@ -277,6 +277,9 @@ table {
 
 .scroll-list {
   overflow-y: scroll;
+}
+.no-bg{
+  background: none;
 }
 
 .submenu {

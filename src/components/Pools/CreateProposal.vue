@@ -1,10 +1,6 @@
 <template>
   <main>
     <div>
-      <div class="label">
-        <h4>Title</h4>
-        <input v-model="title" />
-      </div>
       <QuillEditor theme="snow" v-model:content="proposalDescription" ref="editor" />
       
       <div class="column mtb-2">
@@ -39,7 +35,7 @@ export default {
   components: {QuillEditor},
   data() {
     return {
-      title: "", 
+      title: "notimportantnow", 
       proposalDescription: "",
       attachments: [],
       links: [],

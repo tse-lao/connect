@@ -227,7 +227,7 @@ contract PoolContract {
             votes[_dev] -= amount;
         }
 
-        emit Deposit(address(this), amount);
+        emit Withdraw(address(this), amount);
     }
 
     function myBalance() public view returns (uint256) {
