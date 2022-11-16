@@ -9,6 +9,11 @@ const web3:any = new Web3(window.ethereum);
 const tokenContract = "0x53ED56F9AaDF3AADE8e8C7CB730AF4e6BDa90815";
 const TokenContract = new web3.eth.Contract(TokenABI, tokenContract);
 
+import { useToast } from 'vue-toastification'
+import { ethers } from "ethers";
+
+const toast = useToast()
+
 export default {
 
     showAll(){
@@ -46,8 +51,35 @@ export default {
         return result
     
     }, 
-    
-   exportTokenContract(){
-    
-   }
+
+
+    async transfer(sender:string, receiver: string, amount: string){
+        //change to way
+       
+        try{
+            await TokenContract.methods.transfer(receiver, amount).send({from:sender})
+            .on('confirmation', function(confirmationNumber:any, receipt:any){
+                console.log(receipt);
+                
+                if(confirmationNumber === 24){
+                    toast.success("Succesfully finished the transaction ")
+                }
+            })
+            .on('receipt', function(receipt:any){
+                console.log("succesfully created the follwoing contract:")
+                toast.success("uploaded the contract to:", receipt)
+                console.log(receipt)
+            })
+        }catch(error:any){
+            console.log(error);
+            toast.error("error occured");
+        }
+    }, 
+
+    async getBalance(account:string){
+        const balance =  await TokenContract.methods.balanceOf(account).call().then();
+
+        return balance;
+    }
+
 }

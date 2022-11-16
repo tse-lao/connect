@@ -68,6 +68,7 @@ export const useBountyStore = defineStore('bounties', {
      createBounty(data){
         api.createBounty(data.name, data.address, data.proposal, data.account).then((result) => {
             console.log(result);
+            this.$toast("Succesfully created the contract...!")
         })
     }  
  }

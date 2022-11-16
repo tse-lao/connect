@@ -137,10 +137,40 @@ export default {
 
     }, 
     async voteProposalUp(address:string, user:string, account:string){
-        const taskContact = new web3.eth.Contract(PoolContractABI, address)
-        const vote = await taskContact.methods.voteProposal(user).send({from: account})
+        console.log("address:  ", address)
+        console.log("users: ", user)
+        console.log("account: ", account)
+
+        //now we check if it is corresponding to everythign. 
+        const taskContract = new web3.eth.Contract(PoolContractABI, address)
+
+        const vote = await taskContract.methods.voteProposal(user).send({from:account})
 
         console.log(vote);
+    }, 
+
+
+    async depositToContract(contract:string, account:string, amount: string){
+        //so we need to have amount. 
+
+        const taskContract = new web3.eth.Contract(PoolContractABI, contract); 
+
+        try{
+            await taskContract.methods.deposit(amount).send({from:account})
+            .on('confirmation', function(confirmationNumber:any, receipt:any){
+                console.log(receipt);
+                
+                if(confirmationNumber === 24){
+                    console.log("succesfully uploaded the contract. ")
+                }
+            })
+            .on('receipt', function(receipt:any){
+                console.log("succesfully created the follwoing contract:")
+                console.log(receipt)
+            })
+        }catch(error:unknown){
+            console.log(error);
+        }
     }
 
 }

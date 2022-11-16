@@ -4,7 +4,7 @@
             <div class="row align-content gap3">
                 <img class="icon-token" src="@/assets/images/cf_logo_Logo.png" />
                 <span class="balance">
-                    100000
+                    {{account.tokenBalance}}
                 </span>
                 <h4>
                     CFT
@@ -13,7 +13,7 @@
             <div class="row align-content gap3">
                 <img class="icon-token" src="https://cryptologos.cc/logos/polygon-matic-logo.png?v=023" />
                 <span class="balance">
-                    100000
+                    {{account.balance}}
                 </span>
                 <h4>
                     MATIC
@@ -23,10 +23,18 @@
 
     </main>
 </template>
-<script>
+<script lang="ts">
+import {useAccountStore} from "@/stores/account"
+
 export default {
     name: "TokenBalances",
+    setup(){
+        const account = useAccountStore()
+
+        return {account}
+    }
 }
+
 </script>
 
 <style>

@@ -1,7 +1,7 @@
 <template>
     <main>
         <div class="column list gap3">
-            <div  v-for="result, key in results" :key="key">
+            <div  v-for="result, key in results" :key="key" >
                 <h3 class="event">
                     {{result.event}}
                 </h3>

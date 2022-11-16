@@ -202,7 +202,7 @@ export default {
 .open {
   color: #92e2a7;
   font-weight: 900;
-}
+} 
 
 .closed {
   color: #DB8D85;

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-
+import token from "@/store/api/token"
 
 export const useAccountStore = defineStore('account', {
     
@@ -7,7 +7,8 @@ export const useAccountStore = defineStore('account', {
         loggedIn: false, 
         address: "", 
         network: "", 
-        balance: 0
+        balance: 0, 
+        tokenBalance: 0
       }),
       
       //GETTERS
@@ -35,6 +36,9 @@ export const useAccountStore = defineStore('account', {
                 const balance = await window.ethereum.request({method: 'eth_getBalance', params: [accounts[0]]});
 
                 this.balance = Math.round(parseInt(balance) / (10**18) *10000) / 10000;
+
+                const tokens = await token.getBalance(accounts[0]);
+                this.tokenBalance = Math.round(parseInt(tokens) / (10**18) *10000) / 10000;
             }
            
             

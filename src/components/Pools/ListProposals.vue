@@ -8,7 +8,6 @@
                     <i class="arrow down"></i>
                 
                 </div>
-
                 <div>
                     <div  class="proposal-content" v-html="item.proposal.description">
                     </div>
@@ -74,10 +73,7 @@ export default ({
         async voteProposalUp(developer:string){
             console.log(developer);
             console.log(this.contract);
-
-           // const result = await bountyApi.voteProposalUp(this.contract, developer, this.account.address)
-
-            window.alert("not yet implemented")
+            const result = await bountyApi.voteProposalUp(this.contract, developer, this.account.address); 
 
         }, 
     },

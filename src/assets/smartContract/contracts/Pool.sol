@@ -162,7 +162,6 @@ contract PoolContract {
 
     function voteProposal(address _developer) public {
         require(devIndex[_developer] > 0, "Developer does not exist.");
-
         uint256 index = indexUser[msg.sender];
         uint256 balance = users[index].balance;
         require(balance > 0, "You don't have enough voting power.");
@@ -173,7 +172,8 @@ contract PoolContract {
         emit VoteProposal(msg.sender, _developer, "up");
     }
 
-    //function to update a proposal, should also be there.. 
+
+    //vote for winning proposal. 
 
 
     //functions underneath here are working correctly.
@@ -216,7 +216,9 @@ contract PoolContract {
         );
         uint256 index = indexUser[payable(msg.sender)];
         users[index].balance -= amount;
-        //check if the users balance is high enough.
+        //check if the users balance is high enough
+
+
 
         IERC20(tokenAddress).transfer(msg.sender, amount);
         //check if the user is voted for, if this is the case withdraw the vote.

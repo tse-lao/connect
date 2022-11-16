@@ -13,6 +13,8 @@
 
       <div class="panel fill">
         Smart contract interactions
+        <Transfer />
+        
       </div>
     </div>
 
@@ -23,10 +25,11 @@
 <script lang="ts">
 import TokenBalances from "@/components/Dashboard/TokenBalances.vue"
 import TokenTransfers from "@/components/Dashboard/TokenTransfers.vue";
+import Transfer from "@/components/Dashboard/Transfer.vue";
 
 export default {
   name: "Dashboard",
-  components: {TokenBalances, TokenTransfers}
+  components: {TokenBalances, TokenTransfers, Transfer}
 };
 </script>
 
