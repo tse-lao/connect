@@ -180,7 +180,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"src/contracts/3_Airdrop.sol": "Airdrop"
+			"src/assets/contracts/3_Airdrop.sol": "Airdrop"
 		},
 		"evmVersion": "berlin",
 		"libraries": {},
@@ -195,27 +195,27 @@
 	},
 	"sources": {
 		"@openzeppelin/contracts/token/ERC20/ERC20.sol": {
-			"keccak256": "0xd1d8caaeb45f78e0b0715664d56c220c283c89bf8b8c02954af86404d6b367f8",
+			"keccak256": "0x4ffc0547c02ad22925310c585c0f166f8759e2648a09e9b489100c42f15dd98d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://300a0cc7be3b26c96c22a47ffa9530a585e1c4f2dba3021d9bf309dc63007487",
-				"dweb:/ipfs/QmQmxsvxK6CaJmQ4D8vDCYPLHMqcMmZLcBqedG4GFAbzu9"
+				"bzz-raw://15f52f51413a9de1ff191e2f6367c62178e1df7806d7880fe857a98b0b66253d",
+				"dweb:/ipfs/QmaQG1fwfgUt5E9nu2cccFiV47B2V78MM1tCy1qB7n4MsH"
 			]
 		},
 		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
-			"keccak256": "0x61437cb513a887a1bbad006e7b1c8b414478427d33de47c5600af3c748f108da",
+			"keccak256": "0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2c3d0973630ed74f2b5ce3944677a885dc70ec32fc83b35f55045a10224da32b",
-				"dweb:/ipfs/QmbefZ5RoEZKNHXCALfh683PnaNYzKPcKMFjyY1DVAgq8A"
+				"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34",
+				"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"
 			]
 		},
 		"@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol": {
-			"keccak256": "0x0707ddb033e6bbb36546b9d58bb6f043076ceac7a10792a71dfd957583acde09",
+			"keccak256": "0x0d19410453cda55960a818e02bd7c18952a5c8fe7a3036e81f0d599f34487a7b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8f16258ce35ab9409430a2213b3a76845c06f01cbf2e6c2f5229d5efad1367b2",
-				"dweb:/ipfs/QmTKeY9WgozRyDAQuX3zgLRbS1maWGuA5VJZL6n3GcptJo"
+				"bzz-raw://4c0f62d3d5bef22b5ca00cc3903e7de6152cb68d2d22401a463f373cda54c00f",
+				"dweb:/ipfs/QmSfzjZux7LC7NW2f7rjCXTHeFMUCWERqDkhpCTBy7kxTe"
 			]
 		},
 		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
@@ -235,19 +235,19 @@
 			]
 		},
 		"@openzeppelin/contracts/utils/math/SafeMath.sol": {
-			"keccak256": "0xa2f576be637946f767aa56601c26d717f48a0aff44f82e46f13807eea1009a21",
+			"keccak256": "0x0f633a0223d9a1dcccfcf38a64c9de0874dfcbfac0c6941ccf074d63a2ce0e1e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://973868f808e88e21a1a0a01d4839314515ee337ad096286c88e41b74dcc11fc2",
-				"dweb:/ipfs/QmfYuZxRfx2J2xdk4EXN7jKg4bUYEMTaYk9BAw9Bqn4o2Y"
+				"bzz-raw://864a40efcffdf408044c332a5aa38ec5618ed7b4eecb8f65faf45671bd6cdc65",
+				"dweb:/ipfs/QmQJquTMtc6fgm5JQzGdsGpA2fqBe3MHWEdt2qzaLySMdN"
 			]
 		},
-		"src/contracts/3_Airdrop.sol": {
-			"keccak256": "0x302e44136f9d699d9193fec7a732d5d1d82f27ce2ce04fc18394baac32d1d504",
+		"src/assets/contracts/3_Airdrop.sol": {
+			"keccak256": "0x37d6a88e144e6c33032740c5c977d3efdfcc1d6921226ecfc203811fb44a7cdc",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://1aae4f1635c9bee9f162794d69b1f475a3a63daeb78554890d40864a4b379113",
-				"dweb:/ipfs/QmZrVEsCHys4tN1feN1Kz2qEUKs4SXi9eth7JrFgAydzxL"
+				"bzz-raw://632eb30af1768866cf0624595bdf0fed6c5cd6e744d0ad9ec4fd446bba842845",
+				"dweb:/ipfs/QmS3C2aXH31dgkXYBegWRNbNjT6iQrCGYfjyKtWZLhPVo9"
 			]
 		}
 	},

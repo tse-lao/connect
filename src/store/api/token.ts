@@ -55,9 +55,11 @@ export default {
 
     async transfer(sender:string, receiver: string, amount: string){
         //change to way
+
+        const etherAmount =  ethers.utils.parseEther(amount);
        
         try{
-            await TokenContract.methods.transfer(receiver, amount).send({from:sender})
+            await TokenContract.methods.transfer(receiver, etherAmount).send({from:sender})
             .on('confirmation', function(confirmationNumber:any, receipt:any){
                 console.log(receipt);
                 

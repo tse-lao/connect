@@ -155,9 +155,16 @@ export default {
               <img src="@/assets/images/cf_logo_Logo.png" />
             </div>
             <div class="links">
-              <img @click="" src="@/assets/icons/brand/telegram.svg" />
-              <img src="@/assets/icons/brand/twitter.svg" />
-              <img src="@/assets/icons/brand/discord.svg" />
+              <a href="https://t.me/+Lx-kwEmObs43Njc0">
+                <img src="@/assets/icons/brand/telegram.svg" />
+              </a>
+              <a href="https://twitter.com/ConnectFastv1">
+                <img src="@/assets/icons/brand/twitter.svg" />
+              </a>
+              <a href="https://discord.gg/ShRxCuZQ">
+                <img src="@/assets/icons/brand/discord.svg" />
+              </a>
+              
             </div>
             <div class="copyright">
               2021 - 2023, All Rights Reserved

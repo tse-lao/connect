@@ -5,7 +5,7 @@ const {
   const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
   const { expect } = require("chai");
   
-  describe("BountyPool", function () {
+  describe("PoolContract", function () {
     // We define a fixture to reuse the same setup in every test.
     // We use loadFixture to run this setup once, snapshot that state,
     // and reset Hardhat Network to that snapshot in every test.
@@ -19,7 +19,7 @@ const {
   
       const PoolContract = await ethers.getContractFactory("PoolContract");
       const contractPool = await PoolContract.deploy(
-       name, link, tokenAddress, name
+       name, link, tokenAddress, owner.address
       );
 
 
@@ -40,19 +40,18 @@ const {
         expect(await contractPool.owner()).to.equal(owner.address);
       });
   
-      it("Should receive and store the funds to lock", async function () {
+      it("Get the link from address", async function () {
         const { contractPool, link } = await loadFixture(
             deployContract
         );
   
-        expect(await contractPool.link()).to.equal(link)
+        expect(await contractPool.proposal()).to.equal(link)
       });
     });
 
 
     //Testing the create pool functionalitiies
     describe("Proposals", function () {
-
       describe("Interactions", function () {
             it("Count contracts", async function (){
                 const { contractPool } = await loadFixture(
@@ -60,55 +59,31 @@ const {
                 );
 
 
-                expect(await contractPool.countContracts()).to.equal("0");
+                expect(await contractPool.devCount()).to.equal("0");
             });
 
 
             it("It should add to the contract pool", async function (){
-                const { contractPool, tokenAddress, owner } = await loadFixture(
+                const { contractPool, tokenAddress, owner, name, link } = await loadFixture(
                     deployContract
                 );
-                await contractPool.createNewPool("name", "link", tokenAddress);
+                await contractPool.submitProposal(name, link);
 
-                expect(await contractPool.countContracts()).to.equal("1");
+                expect(await contractPool.devCount()).to.equal("1");
 
             });
 
             it("Check if it outside the length", async function (){
-                const { contractPool, tokenAddress, owner } = await loadFixture(
+                const { contractPool, link, owner, otherAccount, name } = await loadFixture(
                     deployContract
                 );
-                await contractPool.createNewPool("name", "link", tokenAddress);
+                await contractPool.connect(owner).submitProposal(name, link);
+                await contractPool.connect(otherAccount).submitProposal(name, link);
 
                 //revert the message with not the owner
-                await expect(contractPool.removeContract("10")).to.be.revertedWith(
-                    'not in the pool length'
-                );
+                expect(await contractPool.devCount()).to.equal("2")
             });
 
-            it("Check if only owner can delete", async function (){
-                const { contractPool, tokenAddress, otherAccount } = await loadFixture(
-                    deployContract
-                );
-                await contractPool.createNewPool("name", "link", tokenAddress);
-
-                //revert the message with not the owner
-                await expect(contractPool.connect(otherAccount).removeContract("0")).to.be.revertedWith(
-                    'not the owner of address'
-                );
-            });
-
-            it("Should be working aswell ", async function (){
-                const { contractPool, tokenAddress } = await loadFixture(
-                    deployContract
-                );
-                await contractPool.createNewPool("name", "link", tokenAddress);
-
-                //revert the message with not the owner
-                await contractPool.removeContract("0");
-
-                expect(await contractPool.countContracts()).to.equal("0");
-            });
 
         //end of describe creation
         });

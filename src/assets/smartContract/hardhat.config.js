@@ -2,6 +2,8 @@
 
 require('dotenv').config();
 require("@nomiclabs/hardhat-ethers");
+require("ethereum-waffle");
+require("@nomiclabs/hardhat-waffle")
 require("./scripts/deploy.js");
 
 

@@ -23,6 +23,8 @@ contract Airdrop is Ownable{
     uint public dropAmount; 
     uint public CONVERSION_RATE; 
     mapping(address => bool) public registered; 
+    uint public totalRegistered; 
+    mapping(uint => address) public registerList;
 
     constructor(address _distributionToken, uint _dropAmount) payable{
         //is the value of the contract where it is distributed. 
@@ -44,6 +46,12 @@ contract Airdrop is Ownable{
         //check if address is true 
         //now we need to make that the user is not already register. 
         require(registered[msg.sender] == false, "you have already been registered");
+
+        totalRegistered = totalRegistered +1;
+
+        registerList[totalRegistered] = msg.sender;
+
+
         
         distributionToken.transferFrom(address(this), msg.sender, dropAmount);
         registered[msg.sender] = true;
@@ -60,8 +68,8 @@ contract Airdrop is Ownable{
         emit WithdrawFromContract(msg.sender, address(this), _amount);
     }
 
-    function depositTokens(uint _amount) public onlyOwner{
-        distributionToken.transferFrom(msg.sender, address(this), _amount);
+    function depositTokens(uint _amount) public{
+        distributionToken.transfer(msg.sender, _amount);
 
         emit DepositToContract(msg.sender, address(this), _amount);
     }
@@ -71,7 +79,8 @@ contract Airdrop is Ownable{
     }
 
     function getTokenBalance()public view returns (uint){
-       return distributionToken.balanceOf(address(this));
+        uint balance = distributionToken.balanceOf(address(this));
+       return balance;
     }
 
 }

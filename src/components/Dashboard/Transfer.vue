@@ -3,6 +3,7 @@
         <input v-model="amount" placeholder="Enter the amount..."/>
         <input v-model="receiver" placeholder="Receivers address."/>
         <button @click="transferToken">Transfer</button>
+        <button @click="giveAllowance">Allowance</button>
     </div>
 </template>
 
@@ -31,6 +32,10 @@ export default {
               const result = await  token.transfer(this.account.address, this.receiver, this.amount)
 
               console.log(result)
+        }, 
+        async giveAllowance(){
+            const result = await token.approve(this.amount , this.receiver, this.account.address);
+            console.log(result);
         }
     }, 
 }
