@@ -70,6 +70,6 @@ export const useBountyStore = defineStore('bounties', {
             console.log(result);
             this.$toast("Succesfully created the contract...!")
         })
-    }  
+    }
  }
 })

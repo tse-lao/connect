@@ -6,7 +6,7 @@ const TokenABI:any = token.abi;
 const web3:any = new Web3(window.ethereum);
 
 //TODO: UPDATE TOKEN CONTRACt
-const tokenContract = "0x53ED56F9AaDF3AADE8e8C7CB730AF4e6BDa90815";
+const tokenContract = import.meta.env.VITE_TOKEN_ADDRESS;
 const TokenContract = new web3.eth.Contract(TokenABI, tokenContract);
 
 import { useToast } from 'vue-toastification'

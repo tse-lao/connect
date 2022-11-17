@@ -147,7 +147,7 @@ export default {
               <a href="">Press</a>
               <a href="">Contact</a>
               <a href="">Privacy Policy</a>
-              <a href="">Open Source</a>
+              <a href="https://github.com/tse-lao/connect" target="_blank">Open Source</a>
               <a href="">Terms of Conditions</a>
           </div>
           <div class="socials">
@@ -155,7 +155,7 @@ export default {
               <img src="@/assets/images/cf_logo_Logo.png" />
             </div>
             <div class="links">
-              <img src="@/assets/icons/brand/telegram.svg" />
+              <img @click="" src="@/assets/icons/brand/telegram.svg" />
               <img src="@/assets/icons/brand/twitter.svg" />
               <img src="@/assets/icons/brand/discord.svg" />
             </div>

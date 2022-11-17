@@ -3,6 +3,11 @@
 pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+/// @title contract Pool for managing the PoolContracts
+/// @author Tse Lao
+/// @notice You can use this contract for all purposes. 
+/// @dev All function calls are currently implemented without side effects
+
 contract contractPool{
     event ContractCreation(address indexed _from, address indexed _to, string _name);
     event ContractUpdate(address indexed _from, string _name, string _link);
@@ -34,7 +39,13 @@ contract contractPool{
         emit ContractUpdate(owner, _name, _link);
     }
 
-    //this needs to be changed for now. 
+
+    /// @notice Create new bounty
+    /// @dev This create a new bounty
+    /// @param _name takes in the name of the contract
+    /// @param _link takes in the IPFS link to the details. 
+    /// @param _tokenAddress should take in the right token address where this contract is linked to. 
+    /// @return Address of the created contract. 
     function createNewPool(string memory _name, string memory _link,  address  _tokenAddress) public returns(address){
         //TODO: check if name have certain amount of characters.
          PoolContract a = new PoolContract(_name, _link, _tokenAddress, msg.sender);
@@ -46,6 +57,10 @@ contract contractPool{
          return address(a);
     }
 
+     /// @notice Remove the bounty from the contract Pool
+    /// @dev Notes that this does not delete the contract
+    /// @param _index takes the index in the array of pool where it should be delete from. 
+
     function removeContract(uint _index) public{
         require(_index <= pool.length, "not in the pool length");
             address contractAddress = poolAddress(_index);
@@ -56,11 +71,17 @@ contract contractPool{
         emit PoolRemove(contractAddress, _index);
     }
 
+    /// @notice takes the poolAddress from the array number. 
+    /// @dev Just fives back the address of a particular number in the pool array. 
+    /// @return address of the contract . 
     function poolAddress(uint _array) public view returns (address){
         require(_array <= pool.length, "not in the pool length");
         return pool[_array];
     }
     
+    /// @notice Counts the length of all the pools. 
+    /// @dev This can be used to loop over all the addresses. Since they are always 0 --> the pool.length - 1 
+    /// @return uint of the length of all the pools. 
     function countContracts() public view returns(uint){
         return pool.length;
     }
@@ -208,6 +229,7 @@ contract PoolContract {
         //balance is done automatically, you can use the function balanceOf.
         emit Deposit(msg.sender, amount);
     }
+
 
     function withdraw(uint256 amount) public payable {
         require(

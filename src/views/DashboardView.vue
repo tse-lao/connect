@@ -12,6 +12,8 @@
       </div>
 
       <div class="panel fill">
+        <Airdrop />
+        <hr />
         Smart contract interactions
         <Transfer />
         
@@ -23,13 +25,14 @@
 </template>
 
 <script lang="ts">
+import Airdrop from "@/components/Dashboard/Airdrop.vue";
 import TokenBalances from "@/components/Dashboard/TokenBalances.vue"
 import TokenTransfers from "@/components/Dashboard/TokenTransfers.vue";
 import Transfer from "@/components/Dashboard/Transfer.vue";
 
 export default {
   name: "Dashboard",
-  components: {TokenBalances, TokenTransfers, Transfer}
+  components: { TokenBalances, TokenTransfers, Transfer, Airdrop }
 };
 </script>
 

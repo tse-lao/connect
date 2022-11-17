@@ -32,9 +32,15 @@ function getContract(contractName, hre) {
     return getContractAt(hre, contractName, getEnvVariable("POOL_CONTRACT"), account);
 }
 
+function getTokenContract(contractName, hre) {
+    const account = getAccount();
+    return getContractAt(hre, contractName, getEnvVariable("TOKEN_ADDRESS"), account);
+}
+
 module.exports = {
     getEnvVariable,
     getProvider,
     getAccount,
-    getContract
+    getContract,
+    getTokenContract
 }
