@@ -65,9 +65,12 @@ contract Airdrop is Ownable{
         emit WithdrawFromContract(msg.sender, address(this), _amount);
     }
 
+    //@dev - need to call approve first before we can continue with this function. 
     function depositTokens(uint _amount) public{
-        distributionToken.transfer(msg.sender, _amount);
-
+        //this will not work but we can alwaus call the approval first before 
+        uint allowance = distributionToken.allowance(msg.sender, address(this));
+        require(allowance > _amount, "allowance not enough");
+        distributionToken.transferFrom(msg.sender, address(this), _amount);
         emit DepositToContract(msg.sender, address(this), _amount);
     }
 
