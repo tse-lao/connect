@@ -10,6 +10,7 @@ import App from "@/App.vue";
 import Landing from "@/Landing.vue";
 import "vue-toastification/dist/index.css";
 import router from "./router";
+import VueGtag from "vue-gtag";
 
 import '@/assets/base.css'
 
@@ -27,6 +28,11 @@ if (arr.length > 0) {
     app.use(plugin, defaultConfig({ theme: 'genesis' }))
     app.use(router);
     app.use(createPinia());
+    app.use(VueGtag, {
+      config: { 
+        id: "G-Y9B2FVYNV2",
+      },
+    }, router)
     app.use(store);
 
     //here we want the dark theme
@@ -45,6 +51,11 @@ if (arr.length > 0) {
     const app = createApp(Landing);
     app.use(router);
     app.use(store);
+    app.use(VueGtag, {
+      config: { 
+        id: "G-Y9B2FVYNV2",
+      },
+    }, router)
 
     app.mount("#app");
   }
@@ -53,6 +64,9 @@ if (arr.length > 0) {
     const app = createApp(Landing);
     app.use(router);
     app.use(store);
+    app.use(VueGtag, {
+      config: { id: "G-Y9B2FVYNV2" }
+    })
 
     app.mount("#app");
 }

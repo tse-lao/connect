@@ -61,7 +61,6 @@ export default {
         
         let payAmount = ethers.utils.parseEther(cost);
  
-        console.log('pay amount', payAmount);
  
         try{
             await AirDropContract.methods.claimToken().send({from: account.address, value: payAmount})
@@ -81,18 +80,55 @@ export default {
             toast.error("Encountered an error while performing the claiming the token.");
           }
     }, 
-    withdrawToken(_amount:string){},
+  
     
     async getConverstion(){
         const dropAmount = await AirDropContract.methods.dropAmount().call().then();
         const conversionRate = await AirDropContract.methods.CONVERSION_RATE().call().then();
         const cost = dropAmount / conversionRate;
-
-        toast.success("You succesfully got the conversion rate.")
         return {dropAmount: dropAmount, conversionRate:conversionRate, cost: cost}
     }, 
     
-    withdraw(_amount:string){},
+   async withdraw(_amount:string){
+        try{
+            await AirDropContract.methods.withdraw(_amount).send({from: account.address})
+            .on('confirmation', function(confirmationNumber:any, receipt:any){
+               console.log(receipt);
+               
+               if(confirmationNumber === 24){
+                   console.log("succesfully uploaded the contract. ")
+               }
+           })
+           .on('receipt', function(receipt:any){
+               console.log("Succesfully withdraw the money:")
+               toast.success("Succesfully withdraw the money ")
+               console.log(receipt)
+           })
+          }catch(error:any){
+            toast.error("An error occureced when withdrawing the money. ");
+          }
+
+    },
+    async withdrawTokens(_amount:string){
+        try{
+            await AirDropContract.methods.withdrawTokens(_amount).send({from: account.address})
+            .on('confirmation', function(confirmationNumber:any, receipt:any){
+               console.log(receipt);
+               
+               if(confirmationNumber === 24){
+                   console.log("succesfully uploaded the contract. ")
+
+               }
+           })
+           .on('receipt', function(receipt:any){
+               toast.success("Succesfully withdraw the money ")
+               console.log(receipt)
+           })
+          }catch(error:any){
+            toast.error("An error occureced when withdrawing the tokens from contract. ");
+          }
+
+    },
 
     depositTokens(_amount:string){},
 

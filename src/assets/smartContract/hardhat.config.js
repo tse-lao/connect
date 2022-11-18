@@ -15,7 +15,7 @@ module.exports = {
   networks: {
    hardhat: {},
    maticmum: {
-     url: `https://polygon-mumbai.g.alchemy.com/v2/V8Abnz6O9VozTQUgaPli81HxUBLp2IcM`,
+     url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_KEY}`,
      accounts: [`0x${ACCOUNT_PRIVATE_KEY}`]
    },
    ethereum: {

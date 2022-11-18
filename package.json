@@ -26,6 +26,7 @@
     "node": "^18.10.0",
     "pinia": "^2.0.23",
     "vue": "^3.2.38",
+    "vue-gtag": "^2.0.1",
     "vue-router": "^4.1.5",
     "vue-toastification": "^2.0.0-rc.5",
     "vue3-tags-input": "^1.0.2",

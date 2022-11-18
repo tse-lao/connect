@@ -13,7 +13,13 @@
         <div>
             Total Claimable Tokens {{data.dropAmount}}
         </div>
-
+        <div>
+            <span>Airdrop Address:</span>
+            <a href="https://mumbai.polygonscan.com/address/0x38621BFD63b7CBF998dc79213ebAc5C88b96Af0e">
+                {{airdrop}}
+            </a>
+        </div>
+        
         <div class="form">
             <button @click="claimToken">Claim Token</button>
         </div>
@@ -30,6 +36,7 @@ export default{
             balance: 0, 
             amount: "",
             tokenBalance: 0,
+            airdrop: "",
             data: {
                 conversionRate: 0, 
                 dropAmount: 0, 
@@ -40,7 +47,7 @@ export default{
     },
     methods:{
         async startUp(){
-
+            this.airdrop = import.meta.env.VITE_AIRDROP_ADDRESS;
             const result = airdrop.readAccount();
             this.account = result;
 
