@@ -58,3 +58,17 @@ h3{
   display: flex;
   flex-direction: row-reverse;
 }
+
+
+button.inline{
+  background: none;
+  text-transform: capitalize;
+  border: 1px solid hsla(160, 100%, 37%, 1);
+  cursor:copy;
+   color: hsla(160, 100%, 37%, 1);;
+  margin-top: 1rem;
+}
+span.error{
+  color: red;
+  font-weight: 400;
+}

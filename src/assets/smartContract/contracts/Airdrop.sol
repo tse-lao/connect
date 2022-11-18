@@ -29,8 +29,8 @@ contract Airdrop is Ownable{
     constructor(address _distributionToken, uint _dropAmount) payable{
         //is the value of the contract where it is distributed. 
         distributionToken = IERC20(_distributionToken);
-        dropAmount = _dropAmount;
-        CONVERSION_RATE = 1000;
+        dropAmount = _dropAmount ;
+        CONVERSION_RATE = 1000 ;
     }
 
     function changeDropAmount(uint _amount) public onlyOwner {
@@ -49,8 +49,10 @@ contract Airdrop is Ownable{
 
         totalRegistered = totalRegistered +1;
 
+       uint dropAmountConverted = dropAmount * 10**18;
+
         registerList[totalRegistered] = msg.sender;
-        distributionToken.transfer(msg.sender, dropAmount);
+        distributionToken.transfer(msg.sender, dropAmountConverted);
         registered[msg.sender] = true;
         emit DepositToContract(msg.sender, address(this) , msg.value);
     }  
@@ -80,6 +82,10 @@ contract Airdrop is Ownable{
 
     function getTokenBalance()public view returns (uint){
         return distributionToken.balanceOf(address(this));
+    }
+
+    function checkRegister(address user) public view returns(bool){
+        return registered[user];
     }
 
 }

@@ -16,9 +16,10 @@ const AirDropContract = new web3.eth.Contract(AirdropABI, airdropAddress);
 export default {
     //first of all we want to get the account we are using from store. 
     async readBalances(){
-        const balance = await AirDropContract.methods.getBalance().call().then();
-        const tokenBalance = await AirDropContract.methods.getTokenBalance().call().then();
-
+        let balance = await AirDropContract.methods.getBalance().call().then();
+        let  tokenBalance = await AirDropContract.methods.getTokenBalance().call().then();
+        balance = ethers.utils.formatEther(balance);
+        tokenBalance = ethers.utils.formatEther(tokenBalance)
         return {matic: balance, token: tokenBalance}
     },
 
@@ -77,7 +78,7 @@ export default {
                console.log(receipt)
            })
           }catch(error:any){
-            toast.error("Encountered an error while performing the claiming the token.");
+            toast.error(error.message);
           }
     }, 
   
@@ -85,13 +86,17 @@ export default {
     async getConverstion(){
         const dropAmount = await AirDropContract.methods.dropAmount().call().then();
         const conversionRate = await AirDropContract.methods.CONVERSION_RATE().call().then();
+
         const cost = dropAmount / conversionRate;
         return {dropAmount: dropAmount, conversionRate:conversionRate, cost: cost}
     }, 
     
-   async withdraw(_amount:string){
+   async withdraw(amount:string){
+        console.log(AirDropContract.methods.withdraw(amount))
+        console.log()
+        console.log(account.address)
         try{
-            await AirDropContract.methods.withdraw(_amount).send({from: account.address})
+            await AirDropContract.methods.withdraw(amount).send({from: account.address})
             .on('confirmation', function(confirmationNumber:any, receipt:any){
                console.log(receipt);
                
@@ -105,13 +110,14 @@ export default {
                console.log(receipt)
            })
           }catch(error:any){
-            toast.error("An error occureced when withdrawing the money. ");
+            console.log(error)
+            toast.error(error.message);
           }
 
     },
     async withdrawTokens(_amount:string){
         try{
-            await AirDropContract.methods.withdrawTokens(_amount).send({from: account.address})
+            await AirDropContract.methods.withdrawToken(_amount).send({from: account.address})
             .on('confirmation', function(confirmationNumber:any, receipt:any){
                console.log(receipt);
                
@@ -125,9 +131,16 @@ export default {
                console.log(receipt)
            })
           }catch(error:any){
-            toast.error("An error occureced when withdrawing the tokens from contract. ");
+            console.log(error)
+            toast.error(error.message);
           }
 
+    },
+
+    async checkRegisted(){
+        const registered = await AirDropContract.methods.registered(account.address).call().then() ;
+
+        return registered;
     },
 
     depositTokens(_amount:string){},
@@ -135,4 +148,4 @@ export default {
     readAccount(){
         return account.address;
     }
-}
+}  

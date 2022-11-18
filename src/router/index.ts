@@ -4,7 +4,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
+      path: "/dashboard",
       name: "",
       component: () => import("../views/DashboardView.vue"),
     },
@@ -51,7 +51,12 @@ const router = createRouter({
       path: "/bounties/:address",
       name: "BountyDetails",
       component: () => import("../views/BountyDetailsView.vue")
-    }
+    }, 
+    {
+      path: "/",
+      name: "Airdrop", 
+      component: () => import("../views/AirdropView.vue"),
+    },
   ],
 });
 

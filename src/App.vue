@@ -2,11 +2,13 @@
 import "./assets/main.css";
 import AccountDetails from "./components/Account/AccountDetails.vue";
 import ProfilePicture from "./components/Account/ProfilePicture.vue";
+import SetupView from "./components/Setup/SetupView.vue";
 import { useAccountStore } from "./stores/account.js";
+
 
 export default {
   name: "App",
-  components: { AccountDetails, ProfilePicture },
+  components: { AccountDetails, ProfilePicture, SetupView },
   data() {
     return (
       {
@@ -46,42 +48,6 @@ export default {
       const network = await window.ethereum.networkVersion;
       if (network == 80001) { this.correctNetwork = true }
     },
-
-    async changeNetwork() {
-      await this.addChainToMetaMask();
-
-      try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [
-            { chainId: '0x13881' }
-          ]
-        })
-        this.networkCheck();
-      } catch (e) {
-        console.log(e)
-        this.addChainToMetaMask();
-      }
-    },
-
-    async addChainToMetaMask() {
-      //here we just add it instead of switch it 
-      const params = [{
-        chainId: '0x13881', // 8001
-        chainName: 'Mumbai',
-        nativeCurrency: {
-          name: 'MATIC Token',
-          symbol: 'MATIC',
-          decimals: 18,
-        },
-        rpcUrls: ['https://matic-mumbai.chainstacklabs.com/'],
-        blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
-    }]
-
-      await window.ethereum.request({
-        method: 'wallet_addEthereumChain', params
-      }).then(() => {console.log('addded succesfully')})
-    }
   },
 
   mounted() {
@@ -91,11 +57,16 @@ export default {
       this.login();
   },
   created() {
-    window.ethereum.on('accountsChanged', this.login)
-    window.ethereum.on('chainChanged', this.login)
-    window.ethereum.on('message', (message: any) => {
-      console.log(message);
-    })
+    if (typeof window.ethereum != 'undefined'){
+      window.ethereum.on('accountsChanged', this.login)
+      window.ethereum.on('chainChanged', this.login)
+      window.ethereum.on('message', (message: any) => {
+        console.log(message);
+      })
+
+    }
+     
+
   }
 };
 </script>
@@ -134,7 +105,7 @@ export default {
           <span class="account-balance">
             {{ account.balance }}
           </span>
-          <span class="account-trunc">{{account.address}}</span>
+          <span class="account-trunc">{{ account.address }}</span>
         </div>
         <AccountDetails v-if="viewAccount" />
       </div>
@@ -143,14 +114,13 @@ export default {
 
       <RouterView v-if="account.network === '0x13881'" />
       <div v-else>
-        <button @click="changeNetwork">Change Network</button>
+        <SetupView />
       </div>
     </div>
 
   </div>
 </template>
 <style scoped>
-
 body {
   background-color: #18141d;
   margin: 0;
@@ -284,14 +254,15 @@ body {
   padding: 10px;
 }
 
-.account-trunc{
+.account-trunc {
   width: 80px;
   direction: rtl;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.account-balance{
+
+.account-balance {
   font-weight: 500;
 }
 
