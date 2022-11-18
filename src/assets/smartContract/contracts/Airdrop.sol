@@ -50,16 +50,13 @@ contract Airdrop is Ownable{
         totalRegistered = totalRegistered +1;
 
         registerList[totalRegistered] = msg.sender;
-
-
-        
-        distributionToken.transferFrom(address(this), msg.sender, dropAmount);
+        distributionToken.transfer(msg.sender, dropAmount);
         registered[msg.sender] = true;
         emit DepositToContract(msg.sender, address(this) , msg.value);
     }  
 
     function withdrawToken(uint _amount) public onlyOwner{
-        distributionToken.transferFrom(address(this), msg.sender, _amount);
+        distributionToken.transfer(msg.sender, _amount);
         emit WithdrawFromContract(msg.sender, address(distributionToken), _amount);
     }
 
@@ -79,8 +76,7 @@ contract Airdrop is Ownable{
     }
 
     function getTokenBalance()public view returns (uint){
-        uint balance = distributionToken.balanceOf(address(this));
-       return balance;
+        return distributionToken.balanceOf(address(this));
     }
 
 }
