@@ -496,9 +496,13 @@ span {
 .links{
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: center;
   flex-wrap: wrap;
+  color:white;
+}
+.links a{
+  color: white;
 }
 
 

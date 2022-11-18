@@ -1,13 +1,8 @@
-# Sample Hardhat Project
+# Welcome by Connect Fast. 
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This repository is the development version for the production site: [https://connect-fast.com](connectfast)
+Everyone is able to help and contribute to the development of connect-fast. 
 
-Try running some of the following tasks:
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+Please feel free to join the following groups to ask more questions or help us build connect-fast.
+[![Discord](https://img.shields.io/badge/discord-join%20chat-blue.svg)](https://discord.gg/3hE2pmEP)
