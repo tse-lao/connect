@@ -36,6 +36,7 @@ export default {
 
         return { account }
     },
+
     methods: {
         async changeNetwork() {
             await this.addChainToMetaMask();
@@ -71,6 +72,9 @@ export default {
                 method: 'wallet_addEthereumChain', params
             }).then(() => { console.log('addded succesfully') })
         }
-}
+}, 
+    mounted(){
+        this.changeNetwork();
+    },
 }
 </script>

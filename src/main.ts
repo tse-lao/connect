@@ -30,7 +30,7 @@ if (arr.length > 0) {
     app.use(createPinia());
     app.use(VueGtag, {
       config: { 
-        id: "G-Y9B2FVYNV2",
+        id: "GTM-WL5F7TP",
       },
     }, router)
     app.use(store);
@@ -53,7 +53,7 @@ if (arr.length > 0) {
     app.use(store);
     app.use(VueGtag, {
       config: { 
-        id: "G-Y9B2FVYNV2",
+        id: "GTM-WL5F7TP",
       },
     }, router)
 
@@ -65,7 +65,7 @@ if (arr.length > 0) {
     app.use(router);
     app.use(store);
     app.use(VueGtag, {
-      config: { id: "G-Y9B2FVYNV2" }
+      config: { id: "GTM-WL5F7TP", }
     })
 
     app.mount("#app");

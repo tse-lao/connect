@@ -44,7 +44,16 @@ export default {
     methods: {
         changeStep() {
             this.$emit("nextStep", "Setup3");
+        },
+        checkStep(){
+            if(this.account.address != ""){
+                this.changeStep();
+            }
         }
+    }, 
+    mounted(){
+        this.checkStep();
+        this.account.getAccount();
     }
 }
 </script>

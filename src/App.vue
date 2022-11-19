@@ -3,12 +3,14 @@ import "./assets/main.css";
 import AccountDetails from "./components/Account/AccountDetails.vue";
 import ProfilePicture from "./components/Account/ProfilePicture.vue";
 import SetupView from "./components/Setup/SetupView.vue";
+import Sidebar from "./components/Design/Sidebar.vue"
 import { useAccountStore } from "./stores/account.js";
+import Header from "./components/Design/Header.vue";
 
 
 export default {
   name: "App",
-  components: { AccountDetails, ProfilePicture, SetupView },
+  components: { AccountDetails, ProfilePicture, SetupView, Sidebar, Header },
   data() {
     return (
       {
@@ -70,48 +72,20 @@ export default {
   }
 };
 </script>
-
 <template color-scheme="dark">
+  <div class="header">
+     <div class="menu-icon" @click="showNav = !showNav" >
+        <div class=""></div>
+        <div class=""></div>
+        <div class=""></div>
+      </div>
+      <Header />
+  </div>
   <div class="app">
-    <div id="leftSide">
-      <div class="menu-icon">
-        <img v-if="showNav" @click="showNav = !showNav" class="menu-icon" src="@/assets/icons/menu-close.png" />
-        <img v-else @click="showNav = !showNav" class='menu-icon' src="@/assets/icons/menu.png" />
-
-      </div>
-      <div id="logo">
-        <img src="@/assets/images/logo.png" />
-      </div>
-      <div id="nav" @click="showNav = !showNav" v-if="showNav || big">
-
-        <div class="nav-item" to="/" @click="$router.push('/')">
-          <img src="@/assets/icons/dashboard.png" class="nav-item-icon" />
-          <router-link to="/"> Home</router-link>
-        </div>
-
-        <div class="nav-item" @click="$router.push('/contracts')">
-          <img class="nav-item-icon" src="@/assets/icons/smart-contracts.png" alt="Contracts" />
-          <router-link to="/contracts">Contracts</router-link>
-        </div>
-        <div class="nav-item" @click="$router.push('/bounties')">
-          <img class="nav-item-icon" src="./assets/icons/bounty.png" alt="Dashboard" />
-          <router-link to="/bounties">Bounties</router-link>
-        </div>
-
-        <div class="profile-icon" @click="login">
-          <ProfilePicture ref="profilePic" :address="account.address" />
-        </div>
-        <div class="nav-item" @click="viewAccount = !viewAccount">
-          <span class="account-balance">
-            {{ account.balance }}
-          </span>
-          <span class="account-trunc">{{ account.address }}</span>
-        </div>
-        <AccountDetails v-if="viewAccount" />
-      </div>
+    <div id="leftSide" v-if="showNav">
+      <Sidebar />
     </div>
     <div id="content">
-
       <RouterView v-if="account.network === '0x13881'" />
       <div v-else>
         <SetupView />
@@ -120,7 +94,7 @@ export default {
 
   </div>
 </template>
-<style scoped>
+<style scoped >
 body {
   background-color: #18141d;
   margin: 0;
@@ -131,39 +105,35 @@ body {
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif; */
 }
-
-.app {
+.header{
   display: flex;
   flex-direction: row;
-  gap: 10px;
-}
-
-.profile-pic {
+  align-items: center;
   height: 64px;
-  position: fixed;
-  width: 64px;
-  border-radius: 50%;
-  border: 1px solid #000;
+  background: rgba(255,255,255,0.1);
+  justify-content: space-between;
 }
 
-.profile-pic:hover {
-  opacity: 0.5;
-}
-
-.menu-icon {
-  display: none;
-}
-
-.profile-icon {
-  margin: auto;
-  padding: 8px;
-}
-
-.profile-icon:hover {
-  opacity: 0.5;
+.menu-icon{
+  padding: 1rem;
   cursor: pointer;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.4)
+  display: flex;
+  align-content:center;
+  flex-direction: column;
+  align-items: center;
+}
+.menu-icon div{
+  height: 2px;
+  width: 32px;
+  background-color: rgba(255,255,255,0.7);
+  margin-bottom: 6px;
+}
+.app {
+  display: flex;
+  flex-flow:row;
+  gap: 10px;
+  width: 100vw;
+  overflow: hidden;
 }
 
 .formkit-input {
@@ -171,210 +141,27 @@ body {
 }
 
 #leftSide {
-  width: 100px;
   height: 100vh;
   background-color: #21212a;
-  margin: 0;
-  position: fixed;
+  display: flex;
+  flex-direction: column;
   top: 0;
   bottom: 0;
-  overflow: scroll;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-#logo img {
-  filter: invert(0);
-  width: 32px;
-  height: 32px;
-  opacity: 100%;
-}
-
-#logo {
-  display: block;
-  margin: auto;
-  padding: 10% 0 0;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-
-  margin-bottom: 24px;
-  margin-top: 24px;
-}
-
-#nav {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  color: #cacacc;
-  font-weight: 600;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  font-size: 12px;
-  text-transform: uppercase;
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-item:hover {
-  filter: brightness(0) invert(1);
-  cursor: pointer;
-  border-right: solid 1px #fff;
-}
-
-.nav-item:hover a {
-  color: #fff !important;
-}
-
-.nav-item a {
-  color: #cacacc;
-  text-decoration: none;
-}
-
-.nav-item-icon {
-  width: 24px;
-  height: 24px;
-  padding: 10px;
-  filter: brightness(3) invert(1);
-}
-
-.nav-item-bounty {
-  width: 42px;
-  height: 42px;
-  padding: 10px;
-}
-
-.account-trunc {
-  width: 80px;
-  direction: rtl;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.account-balance {
-  font-weight: 500;
-}
-
-.bottom-settings {
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #cacacc;
-  gap: 12px;
-  margin: 20px;
-  padding: 8px 4px;
-  border-radius: 6px;
-  align-items: center;
+  position: relative;
+  overflow:hidden;
 }
 
 #content {
   margin: 24px;
-  margin-left: 124px;
-  width: calc(100vw - 200px);
-  max-width: 1200px;
-
+  height: calc(100vh - 63px);
+  justify-content: flex;
+  flex: 1 1 100%;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+#content::-webkit-scrollbar{
+  display: none;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-
-@media(max-width: 700px) {
-  .app {
-    flex-direction: column;
-  }
-
-  #leftSide {
-    height: 60px;
-    top: 0;
-    width: 100vw;
-    display: flex;
-    flex-direction: row;
-    overflow-y: auto;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
-
-  }
-
-  #content {
-    padding: 6px;
-    margin-top: 100px;
-    z-index: -100;
-    margin-left: 0px;
-    width: auto;
-
-  }
-
-  /* Hide the menu and only display when the button is clicked. */
-  .menu-icon {
-    height: 32px;
-    width: 32px;
-    padding: 6px;
-    filter: brightness(0) invert(0.8);
-    display: block;
-
-
-  }
-
-  .menu-icon:hover {
-    opacity: 0.8;
-  }
-
-  #nav {
-    top: 60px;
-    width: 100vw;
-    background: #21212a;
-    left: 0;
-    flex-direction: column;
-    height: auto;
-    position: fixed;
-    z-index: 1000;
-    overflow-y: scroll;
-    height: 100%;
-  }
-
-  #logo {
-    padding: 0;
-    margin: 0;
-    padding-left: calc(50% - 24px);
-    width: auto;
-  }
-
-
-}
 </style>

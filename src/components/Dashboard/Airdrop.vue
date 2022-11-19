@@ -29,7 +29,7 @@
 
         <div>
             <h3>Address:</h3>
-            <a href="https://mumbai.polygonscan.com/address/0x38621BFD63b7CBF998dc79213ebAc5C88b96Af0e" target="_blank">
+            <a v-bind:href="'https://mumbai.polygonscan.com/address/'+ airdrop" target="_blank">
                 {{ airdrop }}
             </a>
         </div>
