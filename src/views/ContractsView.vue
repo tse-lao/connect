@@ -1,12 +1,12 @@
 <script lang="ts">
 import ContractElementVue from "@/components/Contracts/ContractElement.vue";
-import CreateContractVue from "@/components/Contracts/CreateContract.vue";
 import LoadingVue from "@/components/Elements/Loading.vue";
+import Title from "@/components/Elements/Title.vue"
 import { useContractStore } from "../stores/contracts";
 
 export default {
   name: "ContractView",
-  components: { ContractElementVue, CreateContractVue, LoadingVue },
+  components: { ContractElementVue, LoadingVue, Title },
   data() {
     return {
       createOn: false,
@@ -43,14 +43,16 @@ export default {
 
 <template>
   <div>
-    <div class="actions">
-      <h3>Contracts ({{contracts.totalContracts}})</h3>
-      <button class="success" @click="showCreate">Create Contract</button>
-    </div>
-
-    <div v-if="createOn">
-      <CreateContractVue />
-    </div>
+    <Title>
+        <template #title>Contracts</template>
+        <template #actions>
+        <img v-if="!createOn"
+            src="../assets/icons/interface-sign/circle-plus.svg"
+            alt="add_files"
+            @click="$router.push('/contracts/create')"
+          />
+      </template>
+    </Title>
     <LoadingVue v-if="loading" />
 
     <div class="grid-container" v-else> 

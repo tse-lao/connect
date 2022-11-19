@@ -15,6 +15,8 @@ export default {
         data:{
             type:Object,
             default: {
+              name: "", 
+              tokenBalance: 0,
                 address: null, 
                 proposal: undefined, 
                 balance: 0,
@@ -46,8 +48,8 @@ export default {
         </div>
       </div>
       <div class="element bigger">
-          <h4>{{ data.address }}</h4>
-         <span class="small"> {{data.proposal}}</span>
+          <h4>{{ data.name }}</h4>
+         <span class="small"> {{data.address}}</span>
       </div>
       <div class="element">
         <div >
@@ -55,8 +57,8 @@ export default {
         </div>
       </div>
       <div class="element">
-        <span>Rewards</span>
-        <span>{{data.balance}}</span>
+        <span>Balance</span>
+        <span>{{data.tokenBalance}}</span>
       </div>
     </div>
   </main>

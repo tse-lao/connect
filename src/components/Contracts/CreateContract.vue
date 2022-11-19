@@ -1,21 +1,42 @@
 <template>
-  <div class="contract_create">
+  <Title>
+    <template #title>
+      {{data.title}}
+    </template>
+    <template #actions>
+      <button @click="startContract" class="succes">Submit</button>
+    </template>
+  </Title>
+  <div class="contract">
     <!--  What information do we need to add here?  -->
-    <div class="first-section">
-      <div class="class-form panel">
-        <FormKit type="form" v-model="data">
-          <FormKitSchema :schema="form" :data="data" />
-        </FormKit>
+      <div class="panel">
+          <div class="form-control">
+            <label>Title</label>
+            <input v-model="data.title" />
+          </div>
+          <div class="form-control">
+            <label>Fee</label>
+            <input type="number" v-model="data.reward" />
+          </div>
+          <div class="form-control">
+            <label>End date</label>
+            <input type="date" v-model="data.end_date" />
+          </div>
       </div>
+      <div class="panel no-bg">
+        <h3>Description</h3>
+        <QuillEditor />
+      </div>
+        <div class="panel flex-start">
+            <CreateInput />
 
-      <div class="create-form">
-        <div class="enterForm panel">
+
+
           <FormKit type="form" @submit="onAddSubmit" v-model="inputFormat">
             <FormKitSchema :schema="inputForm" :data="inputFormat" />
           </FormKit>
-        </div>
-
-        <div class="previewForm panel">
+      </div>
+      <div class="panel">
           <FormKit
             v-for="(value, key) in dataCode"
             v-bind:key="key"
@@ -34,32 +55,31 @@
           />
         </div>
       </div>
-    </div>
-    <div class="second-section">
-      <button @click="startContract" class="succes">Submit</button>
-    </div>
-  </div>
+    
 </template>
 <script lang="ts">
 import contractInterface from "@/assets/contracts/artifacts/Contracts.json";
+import Title from "@/components/Elements/Title.vue"
+import CreateInput from "../Elements/CreateInput.vue";
 import functions from "@/store/api/files";
+import { QuillEditor } from "@vueup/vue-quill";
 import { mapState } from "vuex";
 import Web3 from "web3";
 import createForm from "./forms/createContract.json";
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import createInput from "./forms/createInput.json";
 
 export default {
+  components: {Title, QuillEditor, CreateInput}, 
   data() {
     return {
-      data: {},
+      data: {
+        title: " ", 
+        description: " ",
+        reward: 0, 
+        end_data: "",
+      },
       inputFormat: {},
-      title: "",
-      total_reward: 0.0,
-      reward_per_account: 0.0,
-      min_people: 1,
-      data_format: "",
-      end_data: "",
-      country: "",
       description: "",
       form: "",
       inputForm: "",
@@ -77,8 +97,6 @@ export default {
       );
 
       //make sure that we extract the user address.
-
-
       console.log(this.accounts);
 
       const approve = await contract.methods
@@ -129,32 +147,21 @@ export default {
 };
 </script>
 <style>
-.contract_create {
-  padding: 24px;
-  margin: 24px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-}
-.first-section {
+.contract {
   display: flex;
   flex-direction: row;
   gap: 2rem;
   flex-wrap: wrap;
-  align-items: center;
-}
-.two_section_form {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-  justify-content: center;
-  align-items:center;
+  margin: 2rem;
 }
 .form_input {
   display: flex;
   flex-direction: column;
   border: none;
   margin-bottom: 8px;
+}
+.no-bg{
+  background:none;
 }
 input {
   margin: 12px;

@@ -3,7 +3,6 @@ import api from "../store/api/bounties";
 
 
 export const useBountyStore = defineStore('bounties', {
-    
     state: () => ({
     
             totalBountyPools: 0,
@@ -14,7 +13,6 @@ export const useBountyStore = defineStore('bounties', {
       //GETTERS
       getters:{
         getBountyByAddress: (state) => {
-            
             return (address) => state.bounties.find(bounty => bounty.address === address)
           },
       },

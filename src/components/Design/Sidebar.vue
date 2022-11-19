@@ -71,7 +71,6 @@ export default{
 .nav-item:hover {
   filter: brightness(0) invert(1);
   cursor: pointer;
-  border-right: solid 1px #fff;
 }
 
 .nav-item:hover a {

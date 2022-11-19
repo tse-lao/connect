@@ -1,5 +1,8 @@
 <template>
     <div class="account">
+        <div class="stats">
+            {{account.tokenBalance}}
+        </div>
         <div class="profile-icon" @click="account.getAccount()">
             <ProfilePicture ref="profilePic" :address="account.address" />
         </div>
@@ -31,12 +34,15 @@ export default {
 .account {
     display: flex;
     flex-direction: row;
+    margin-right: 2rem;
+    gap: 1rem;
 }
 
 .stats {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    align-items: center;
+    align-self: center;
 }
 
 .account-trunc {
@@ -72,7 +78,5 @@ export default {
 .profile-icon:hover {
     opacity: 0.5;
     cursor: pointer;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.4)
 }
 </style>

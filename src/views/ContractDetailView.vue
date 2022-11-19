@@ -1,4 +1,5 @@
 <script lang="ts">
+import Title from '@/components/Elements/Title.vue';
 import { useAccountStore } from '@/stores/account';
 import ContractAdmin from "../components/Contracts/ContractAdmin.vue";
 import ContractData from "../components/Contracts/ContractData.vue";
@@ -9,7 +10,7 @@ import web3Functions from "../store/api/web3";
 
 export default {
   name: "ContractDetail",
-  components: { EditContract, ContractAdmin, ContractData },
+  components: { EditContract, ContractAdmin, ContractData, Title  },
   data() {
     return {
       registered: false,
@@ -171,15 +172,22 @@ export default {
 
 <template>
   <div class="content">
-    <div class="top-content">
-      <div class="back" @click="$router.push('/contracts')">
-        <img
-          src="../assets/icons/backward.svg"
-          class="back-icon"
-          alt="go back"
-        />
-      </div>
-    </div>
+    <Title>
+        <template #title>
+          {{details.title}}  
+        </template>
+
+        <template #actions>
+          <img v-if="details.status"
+            src="../assets/icons/interface-sign/lock.svg"
+            alt="lock"
+            @click="openCloseContract"
+          />
+          <img v-else src="../assets/icons/interface-sign/unlock.svg"
+            alt="lock"
+            @click="openCloseContract"/>
+        </template>
+    </Title>
 
     <div class="two-layer-template">
       <div class="left-two-layer-template">

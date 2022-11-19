@@ -2,7 +2,7 @@
   <div class="top-content">
     <div class="back" @click="$router.go(-1)">
       <img
-        src="../../assets/icons/backward.svg"
+        src="../../assets/icons/direction/chevron-left.svg"
         class="back-icon"
         alt="go back"
       />
@@ -28,8 +28,8 @@
 }
 .back-icon {
   height: 24px;
-  width: 24px;
   filter: invert(1);
+  cursor:pointer;
 }
 .options {
   display: flex;
@@ -37,11 +37,12 @@
 }
 .options img {
   filter: invert(1);
-  opacity: 50%;
-  height: 2rem;
+  opacity: 100%;
+
+  height: 24px;
 }
 img:hover {
-  opacity: 100%;
-  cursor: pointer;
+  opacity: 0.5;
+  cursor:pointer;
 }
 </style>

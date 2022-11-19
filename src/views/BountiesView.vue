@@ -19,36 +19,21 @@ export default {
   },
   methods: {
     async readPools() {
-        //TODO: PINIA INTEGRATION ENEDED.
-        
         this.bounty.getAllBounties();
-        
-        
-        //now this is read correctly and we can read it from the store. 
-        
-        //but for this we need some more inforamtion, like the name of the contract etc. 
         this.loading = false;
     },
-    
     async selectedBounties(address:any){
-      
         this.selectedAddress = address;
-        
-        
     }, 
-   
   },
   mounted(){
         this.readPools();
     },
-    
-    setup(){
-      const bounty = useBountyStore();
+  setup(){
+    const bounty = useBountyStore();
       
-      return{
-        bounty, bountyAddress: bounty.getBountyByAddress
-      }
-    },
+    return{ bounty, bountyAddress: bounty.getBountyByAddress }
+  },
 };
 </script>
 <template>

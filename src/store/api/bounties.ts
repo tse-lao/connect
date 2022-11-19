@@ -2,7 +2,9 @@
 import contractPool from "@/assets/smartContract/artifacts/contracts/Pool.sol/contractPool.json";
 import PoolContract from "@/assets/smartContract/artifacts/contracts/Pool.sol/PoolContract.json";
 import PoolFactory from "@/assets/smartContract/artifacts/contracts/PoolFactory.sol/PoolFactory.json";
+import { pushScopeId } from "vue";
 import Web3 from 'web3';
+import token from "./token";
 
 const PoolFactoryABI: any = PoolFactory.abi;
 const contractPoolABI: any = contractPool.abi;
@@ -51,10 +53,15 @@ export default {
             const bountyAddress = await PoolContract.methods.pool(i).call();
             const taskContract = new web3.eth.Contract(PoolContractABI, bountyAddress);
             const balance = await taskContract.methods.contractBalance().call();
-            
+
+            //we can get the balance of the address by calling the token address. 
+            //we can get the name of the address by calling name 
+
+            const name = await taskContract.methods.name().call();
+            const tokenBalance = await token.getBalance(bountyAddress);
             await taskContract.methods.proposal().call().then(
                 (res:string) => {
-                        bounties.push({ address: bountyAddress, proposal: res, balance: balance });
+                        bounties.push({name: name,  address: bountyAddress, proposal: res, balance: balance, tokenBalance: tokenBalance});
                 }
             );
         }

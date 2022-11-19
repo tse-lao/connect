@@ -11,7 +11,6 @@ export default{
     methods:{
         async readProfiles(){
             const result = web3Functions.AllFromShareContract("0x9e051BF4e2DD6Cf3194A5c04Ec441124278eA9E3");
-            
             console.log(result);
             
         }

@@ -3,24 +3,24 @@
         <div class="stat">
             <div class="label">
                 Token balance
-                <span>{{ balance.token }}</span>
+                <span class="number">{{ balance.token }}</span>
             </div>
             <div class="label">
                 Matic balance:
-                <span>
+                <span class="number">
                     {{ balance.matic }}
                 </span>
             </div>
 
             <div class="label">
                 Cost for claiming:
-                <span>
+                <span class="number">
                     {{ data.cost }}
                 </span>
             </div>
             <div class="label">
                 Total Claimable Tokens
-                <span>
+                <span class="number">
                     {{ data.dropAmount }}
                 </span>
 
@@ -161,7 +161,7 @@ export default {
     gap: 0.5em;
 }
 
-.label span {
+.label .number {
     color: white;
     font-weight: 600;
     letter-spacing: 0.2rem;
