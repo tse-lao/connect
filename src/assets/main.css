@@ -72,3 +72,12 @@ span.error{
   color: red;
   font-weight: 400;
 }
+
+
+.inline-form{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  gap: 2rem;
+}

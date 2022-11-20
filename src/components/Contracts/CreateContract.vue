@@ -27,15 +27,14 @@
         <h3>Description</h3>
         <QuillEditor />
       </div>
-        <div class="panel flex-start">
+
+        <div class="panel no-bg flex-start column">
+        <Select />
+          <div class="inline-panel">  
             <CreateInput />
-
-
-
-          <FormKit type="form" @submit="onAddSubmit" v-model="inputFormat">
-            <FormKitSchema :schema="inputForm" :data="inputFormat" />
-          </FormKit>
-      </div>
+          </div>
+            
+       </div>
       <div class="panel">
           <FormKit
             v-for="(value, key) in dataCode"
@@ -68,9 +67,10 @@ import Web3 from "web3";
 import createForm from "./forms/createContract.json";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import createInput from "./forms/createInput.json";
+import Select from "../Elements/Select.vue";
 
 export default {
-  components: {Title, QuillEditor, CreateInput}, 
+  components: { Title, QuillEditor, CreateInput, Select }, 
   data() {
     return {
       data: {
@@ -162,6 +162,11 @@ export default {
 }
 .no-bg{
   background:none;
+  padding: 0px;
+}
+.panel{
+  align-self: flex-start;
+
 }
 input {
   margin: 12px;

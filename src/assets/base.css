@@ -1,4 +1,7 @@
 /* color palette from <https://github.com/vuejs/theme> */
+
+@import "input.css";
+
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
@@ -145,6 +148,14 @@ button.danger{
   align-self: center;
 }
 
+.inline-panel{
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  min-width: 300px;
+  max-width: 400px;
+  border-radius: 8px;
+}
 
 /* TEXT EDITOr*/
 .ql-container.ql-snow {
@@ -206,4 +217,25 @@ button.danger{
   align-content: flex-start;
   align-items: flex-start;
   align-self: flex-start;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* FLEX Settings*/
+.row{
+  display: flex;
+  flex-direction: row;
+}
+.column{
+  display: flex;
+  flex-direction: column;
 }
