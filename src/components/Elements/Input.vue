@@ -4,7 +4,7 @@
             {{data.label}}
         </div>
         <input class="input" type="input" :placeholder="data.placeholder" :value="data.value" />
-        <div class="helptext">{{data.helptext}}</div>
+        <div class="helptext-input">{{data.helptext}}</div>
     </div>
 </template>
 <script lang="ts">

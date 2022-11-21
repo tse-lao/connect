@@ -5,7 +5,7 @@
             <div class="select-item" @click="modal = !modal">
             {{selected}}
         </div>
-        <div class="helptext">{{data.helptext}}</div>
+        <div class="helptext-input">{{data.helptext}}</div>
         <div class="select-options" v-if="modal">
             <div @click="selectOption(item)" class="select-option" v-for="item, key in data.options" :key="key">
                 {{item}}
