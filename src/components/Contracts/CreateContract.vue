@@ -1,7 +1,7 @@
 <template>
   <Title>
     <template #title>
-      {{data.title}}
+      {{ data.title }}
     </template>
     <template #actions>
       <button @click="startContract" class="succes">Submit</button>
@@ -9,57 +9,43 @@
   </Title>
   <div class="contract">
     <!--  What information do we need to add here?  -->
-      <div class="panel">
-          <div class="form-control">
-            <label>Title</label>
-            <input v-model="data.title" />
-          </div>
-          <div class="form-control">
-            <label>Fee</label>
-            <input type="number" v-model="data.reward" />
-          </div>
-          <div class="form-control">
-            <label>End date</label>
-            <input type="date" v-model="data.end_date" />
-          </div>
+    <div class="panel">
+      <div class="form-control">
+        <label>Title</label>
+        <input v-model="data.title" />
       </div>
-      <div class="panel no-bg">
-        <h3>Description</h3>
-        <QuillEditor />
+      <div class="form-control">
+        <label>Fee</label>
+        <input type="number" v-model="data.reward" />
+      </div>
+      <div class="form-control">
+        <label>End date</label>
+        <input type="date" v-model="data.end_date" />
+      </div>
+    </div>
+    <div class="panel no-bg">
+      <h3>Description</h3>
+      <QuillEditor />
+    </div>
+
+    <div class="panel no-bg flex-start column">
+      <Select @selectType="selectType" />
+      <div class="inline-panel">
+        <component v-bind:is="createComponent" @add="addProperty" />
       </div>
 
-        <div class="panel no-bg flex-start column">
-        <Select />
-          <div class="inline-panel">  
-            <CreateInput />
-          </div>
-            
-       </div>
-      <div class="panel">
-          <FormKit
-            v-for="(value, key) in dataCode"
-            v-bind:key="key"
-            :type="value.$formkit"
-            :name="value.name"
-            :label="value.label"
-            :classes="{
-              outer: 'mb-5 color-white',
-              label: 'block mb-1 font-bold text-sm',
-              inner:
-                'max-w-md border border-gray-400 rounded-lg mb-1 overflow-hidden focus-within:border-blue-500',
-              input:
-                'w-full h-10 px-3 border-none text-base text-white-700 placeholder-gray-400',
-              help: 'text-xs text-gray-500',
-            }"
-          />
-        </div>
-      </div>
-    
+    </div>
+    <div class="panel">
+      <DisplayForm v-if="formPreview.length > 1" :formElements="formPreview" />
+    </div>
+  </div>
+
 </template>
 <script lang="ts">
 import contractInterface from "@/assets/contracts/artifacts/Contracts.json";
 import Title from "@/components/Elements/Title.vue"
 import CreateInput from "../Elements/CreateInput.vue";
+import CreateSelect from "../Elements/CreateSelect.vue";
 import functions from "@/store/api/files";
 import { QuillEditor } from "@vueup/vue-quill";
 import { mapState } from "vuex";
@@ -68,22 +54,26 @@ import createForm from "./forms/createContract.json";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import createInput from "./forms/createInput.json";
 import Select from "../Elements/Select.vue";
+import DisplayForm from "./DisplayForm.vue";
 
 export default {
-  components: { Title, QuillEditor, CreateInput, Select }, 
+  components: { Title, QuillEditor, CreateInput, Select, CreateSelect, DisplayForm },
   data() {
     return {
       data: {
-        title: " ", 
+        title: " ",
         description: " ",
-        reward: 0, 
+        reward: 0,
         end_data: "",
       },
       inputFormat: {},
       description: "",
       form: "",
       inputForm: "",
+      inputType: "input",
+      createComponent: "CreateInput",
       dataCode: [],
+      formPreview: [{}]
     };
   },
   methods: {
@@ -136,6 +126,19 @@ export default {
       this.dataCode.push(this.inputFormat);
       this.inputFormat = {};
     },
+
+    addProperty(data: any) {
+      console.log(data)
+      this.formPreview.push({ data: data, inputType: this.inputType })
+    },
+    selectType(type: string) {
+      this.inputType = type;
+      if (type === 'select') {
+        this.createComponent = 'CreateSelect';
+      } else
+        this.createComponent = 'CreateInput';
+
+    }
   },
   mounted() {
     this.form = createForm;
@@ -154,20 +157,24 @@ export default {
   flex-wrap: wrap;
   margin: 2rem;
 }
+
 .form_input {
   display: flex;
   flex-direction: column;
   border: none;
   margin-bottom: 8px;
 }
-.no-bg{
-  background:none;
+
+.no-bg {
+  background: none;
   padding: 0px;
 }
-.panel{
+
+.panel {
   align-self: flex-start;
 
 }
+
 input {
   margin: 12px;
   margin-left: 0;
@@ -177,18 +184,19 @@ input {
   border: none;
   color: white !important;
 }
+
 .formkit-input {
   color: white !important;
 }
 
-.create-form{
+.create-form {
   display: flex;
   flex-direction: row-reverse;
   gap: 3rem;
   flex-wrap: wrap;
 }
 
-.second-section{
+.second-section {
   display: flex;
   margin-right: 3em;
   flex-direction: row-reverse;
@@ -205,11 +213,12 @@ textarea {
   flex-direction: row;
   gap: 12px;
 }
-.formkit-help{
+
+.formkit-help {
   color: rgba(255, 255, 255, 0.4) !important;
 }
 
-.class-form .formkit-actions{
+.class-form .formkit-actions {
   display: none;
 }
 </style>

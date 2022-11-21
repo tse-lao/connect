@@ -3,8 +3,18 @@
         <div class="label-input">
             <input class="label-input" v-model="data.label" placeholder="Type here to create label" />
         </div>
-        <input class="placeholder-input" v-model="data.placeholder" placeholder="Type here for the placeholder" />
+        <select>
+            <option v-for="item, key in data.options" :key="key">
+                {{item}}
+            </option>
+        </select>
         <input class="helptext-input" v-model="data.helptext" placeholder="help text you can type here.." type="text">
+        <div class="options column">
+            <div class="option-add">
+                <input v-model="option" placeholder='type option here'/>
+                <button @click="addOption">Add</button>
+            </div>
+        </div>
         <div class="input-requirements">
             <table>
                 <tr>
@@ -16,16 +26,6 @@
                         </label>
                     </td>
                 </tr>
-                <tr>
-                    <td> 
-                        <label>Min length</label> 
-                        <input type="number" class="simple-input" v-model="data.min_length">
-                    </td>
-                    <td>
-                        <label> Max length</label>
-                        <input type="number" class="simple-input" v-model="data.max_length" />
-                    </td>
-                </tr>
             </table>
         </div>
         <div class="row-reverse">
@@ -35,18 +35,31 @@
 </template>
 <script lang="ts">
 import { checkbox } from '@formkit/inputs';
-import type {Input}  from '@/common/types';
+import type {Select}  from '@/common/types';
+
+type DefaultValues = Pick<Select, 'options'>;
+
+const defaultSelect:DefaultValues = {
+    options: [], 
+}
 
 export default {
-    name: "CreateInput",
+    name: "CreateSelect",
     data() {
         return {
-            data: {} as Input, 
+            option: "", 
+            data: {
+                ...defaultSelect,
+            } as Select, 
         };
     },
     methods:{
         addProperty(){
             this.$emit("add", this.data);
+        },
+        addOption(){
+            console.log(this.data)
+            this.data.options.push(this.option)
         }
     },
     mounted(){
@@ -115,4 +128,5 @@ table{
     flex-direction: row;
     gap: 1rem;
 }
+
 </style>

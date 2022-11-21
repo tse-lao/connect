@@ -239,3 +239,7 @@ button.danger{
   display: flex;
   flex-direction: column;
 }
+.row-reverse{
+  display: flex;
+  flex-direction: row-reverse;
+}

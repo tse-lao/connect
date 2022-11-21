@@ -6,6 +6,9 @@ import SetupView from "./components/Setup/SetupView.vue";
 import Sidebar from "./components/Design/Sidebar.vue"
 import { useAccountStore } from "./stores/account.js";
 import Header from "./components/Design/Header.vue";
+import { ref } from "vue";
+import { onClickOutside } from "@vueuse/core";
+
 
 
 export default {
@@ -24,8 +27,15 @@ export default {
   },
   setup() {
     const account = useAccountStore();
+    const accountModal = ref(false);
+    const accountTarget = ref(null)
+    //we do something with the outside. 
+    onClickOutside(accountTarget, (event) => {
+        accountModal.value = false;
+        
+    })
 
-    return { account }
+    return { account, accountModal, accountTarget }
   },
   methods: {
     login() {
@@ -79,8 +89,9 @@ export default {
         <div class=""></div>
         <div class=""></div>
       </div>
-      <Header />
+      <Header @click="accountModal = !accountModal" />
   </div>
+  <AccountDetails ref="accountTarget" v-if="accountModal"/>
   <div class="app">
     <div id="leftSide" v-if="showNav">
       <Sidebar />

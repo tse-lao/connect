@@ -9,15 +9,17 @@ export default {
 </script>
 
 <template>
-  <div id="account_details">Account: {{accounts}}</div>
+  <div class="account_details">Account: {{accounts}}</div>
 </template>
 <style>
-#account_details {
-  background: rgba(255,255,255,0.1);
-  position: relative;
-  bottom: 200;
-  left: 200;
-  width: 200px;
-  height: 200px;
+.account_details {
+  position: absolute;
+  background:#353442;
+  top:64px;
+  right: 1rem;
+  width: 300px;
+  height: 300px;
+  border-radius: 8px;
+  z-index: 100;
 }
 </style>
