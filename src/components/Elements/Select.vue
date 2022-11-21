@@ -69,7 +69,7 @@ export default{
     padding: 1rem;
     cursor: pointer;
     width: 300px;
-   background:rgb(36,32,41);
+    background:rgb(36,32,41);
     border: 1px solid #293236;
     border-radius: 8px;
     display: block;

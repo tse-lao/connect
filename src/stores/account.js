@@ -6,6 +6,7 @@ export const useAccountStore = defineStore('account', {
     state: () => ({
         loggedIn: false,
         address: "",
+        accounts: [], 
         network: "",
         balance: 0,
         tokenBalance: 0
@@ -27,17 +28,17 @@ export const useAccountStore = defineStore('account', {
                 if (accounts.length === 0) {
                     console.log("please connect to MetaMAsk.")
                 } else {
-                    this.address = accounts[0]
-                    this.loggedIn = true;
+                   
 
                     const network = await window.ethereum.request({ method: 'eth_chainId' })
-                    this.network = network;
-
                     const balance = await window.ethereum.request({ method: 'eth_getBalance', params: [accounts[0]] });
-
-                    this.balance = Math.round(parseInt(balance) / (10 ** 18) * 10000) / 10000;
-
                     const tokens = await token.getBalance(accounts[0]);
+                    
+                    this.network = network;
+                    this.accounts = accounts;
+                    this.balance = Math.round(parseInt(balance) / (10 ** 18) * 10000) / 10000;
+                    this.address = accounts[0]
+                    this.loggedIn = true;
                     this.tokenBalance = Math.round(parseInt(tokens) / (10 ** 18) * 10000) / 10000;
                 }
 
@@ -45,6 +46,9 @@ export const useAccountStore = defineStore('account', {
                 //now get geth the nethwork
             }
         },
+        changeAccounts(){
+            
+        }
 
     }
 

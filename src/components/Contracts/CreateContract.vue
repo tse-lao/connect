@@ -28,7 +28,7 @@
       <QuillEditor />
     </div>
 
-    <div class="panel no-bg flex-start column">
+    <div class="panel no-bg column">
       <Select @selectType="selectType" />
       <div class="inline-panel">
         <component v-bind:is="createComponent" @add="addProperty" />
@@ -55,16 +55,25 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import createInput from "./forms/createInput.json";
 import Select from "../Elements/Select.vue";
 import DisplayForm from "./DisplayForm.vue";
+import {useAccountStore} from "@/stores/account"
+import { date } from "@formkit/i18n";
+import { useToast } from "vue-toastification";
 
 export default {
   components: { Title, QuillEditor, CreateInput, Select, CreateSelect, DisplayForm },
+  setup(){
+    const account = useAccountStore();
+    const toast = useToast()
+
+    return {account, toast};
+  },
   data() {
     return {
       data: {
         title: " ",
         description: " ",
         reward: 0,
-        end_data: "",
+        end_date: "",
       },
       inputFormat: {},
       description: "",
@@ -87,28 +96,26 @@ export default {
       );
 
       //make sure that we extract the user address.
-      console.log(this.accounts);
-
-      const approve = await contract.methods
-        .createNewContract(link, this.title, "", web3.utils.toWei("0"), true)
-        .send({ from: this.accounts })
-        .then((receipt) => {
-          console.log("approved");
+      const createAccount = await contract.methods
+        .createNewContract(link, this.data.title, "", web3.utils.toWei("0"), true)
+        .send({ from: this.account.address })
+        .then((receipt:any) => {
           console.log(receipt);
-
+          this.toast.success("Creation is done. ")
           //on success we can update the allownace.
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((error:any) => {
+          console.error(error);
+          this.toast.error(error.message)
+
         });
 
-      console.log(approve);
     },
 
     async startContract() {
       var data = {
         data: this.data,
-        form: this.dataCode,
+        form: this.formPreview,
       };
 
       const stringedJSON = JSON.stringify(data);
@@ -121,11 +128,7 @@ export default {
     async onSubmit() {
       console.log(this.data);
     },
-    onAddSubmit() {
-      this.inputFormat.$formkit = this.inputFormat.type;
-      this.dataCode.push(this.inputFormat);
-      this.inputFormat = {};
-    },
+
 
     addProperty(data: any) {
       console.log(data)
@@ -140,13 +143,6 @@ export default {
 
     }
   },
-  mounted() {
-    this.form = createForm;
-    this.inputForm = createInput;
-  },
-  computed: mapState({
-    accounts: (state) => state.account.address,
-  }),
 };
 </script>
 <style>

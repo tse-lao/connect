@@ -56,6 +56,10 @@ export default {
     methods:{
         addProperty(){
             this.$emit("add", this.data);
+
+            this.data = {
+                ...defaultSelect,
+            } as Select
         },
         addOption(){
             console.log(this.data)

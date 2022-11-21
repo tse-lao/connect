@@ -47,6 +47,8 @@ export default {
     methods:{
         addProperty(){
             this.$emit("add", this.data);
+
+            this.data =  {} as Input
         }
     },
     mounted(){
@@ -62,7 +64,6 @@ export default {
     margin: 0;
     color: rgba(235, 235, 235, 0.64) !important;
     line-height: 1.6;
-    width: 90%;
     font-size: 15px;
     letter-spacing: 0.05em;
 }
@@ -85,7 +86,6 @@ table{
 .helptext-input {
     background: none !important;
     color: rgba(255, 255, 255, 0.5) !important;
-    width: auto;
     padding: 0px;
     margin: -20px;
     margin-left: 5px;
