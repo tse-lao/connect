@@ -13,6 +13,10 @@
       <div class="form-control">
         <label>Title</label>
         <input v-model="data.title" />
+        <div class="input-helptext error" v-if="data.title.length < 5">
+          You need to have at least a title with 5 characterrs
+
+        </div>
       </div>
       <div class="form-control">
         <label>Fee</label>
@@ -25,7 +29,7 @@
     </div>
     <div class="panel no-bg">
       <h3>Description</h3>
-      <QuillEditor />
+      <QuillEditor ref="description" theme="snow" class="editor" required v-model:content="data.description"/>
     </div>
 
     <div class="panel no-bg column">
@@ -48,16 +52,13 @@ import CreateInput from "../Elements/CreateInput.vue";
 import CreateSelect from "../Elements/CreateSelect.vue";
 import functions from "@/store/api/files";
 import { QuillEditor } from "@vueup/vue-quill";
-import { mapState } from "vuex";
 import Web3 from "web3";
-import createForm from "./forms/createContract.json";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-import createInput from "./forms/createInput.json";
 import Select from "../Elements/Select.vue";
 import DisplayForm from "./DisplayForm.vue";
 import {useAccountStore} from "@/stores/account"
-import { date } from "@formkit/i18n";
 import { useToast } from "vue-toastification";
+import { ref } from "vue";
 
 export default {
   components: { Title, QuillEditor, CreateInput, Select, CreateSelect, DisplayForm },
@@ -65,7 +66,7 @@ export default {
     const account = useAccountStore();
     const toast = useToast()
 
-    return {account, toast};
+    return {account, toast, description};
   },
   data() {
     return {
@@ -86,7 +87,7 @@ export default {
     };
   },
   methods: {
-    async createContract(link) {
+    async createContract(link:any) {
       //find something smarter for thi
       const mainContract = "0x57Eb4beD18FBAD5e405bAF606b1936a4E1754EAc";
       const web3 = new Web3(window.ethereum);
@@ -94,8 +95,8 @@ export default {
         contractInterface.abi,
         mainContract
       );
+     
 
-      //make sure that we extract the user address.
       const createAccount = await contract.methods
         .createNewContract(link, this.data.title, "", web3.utils.toWei("0"), true)
         .send({ from: this.account.address })
@@ -113,6 +114,8 @@ export default {
     },
 
     async startContract() {
+      this.data.description = this.$refs.description.getHTML();
+
       var data = {
         data: this.data,
         form: this.formPreview,

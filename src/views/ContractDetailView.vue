@@ -110,13 +110,14 @@ export default {
     async retrieveContract(contractAddress:string) {
       const result:Object = await web3Functions.readShareContracts(contractAddress);
       this.details = result as any;
+      console.log(result);
       this.retrieveIPFS(this.details.link);
       
     },
     async retrieveIPFS(link:string) {
       const result = await functions.readIPFS(link);
       
-      console.log("important to check this..")
+      console.log("IPFS details retrieval..")
       console.log(result);
       this.formData = result.form;
       this.entryForm = true;

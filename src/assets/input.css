@@ -50,3 +50,11 @@
     border-radius: 50%;
   }
   
+
+  .input-helptext{
+    font-size: 12px;
+  }
+
+  .error{
+    color: red;
+  }
