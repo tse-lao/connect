@@ -68,8 +68,8 @@ const { ethers } = require("hardhat");
                 );
 
                 //this is correct and needs to be reverted
-                const deposit = await contract.connect(otherAccount).depositTokens(amount);
-                expect(deposit).to.be.reverted;
+                const deposit = contract.connect(otherAccount).depositTokens(amount);
+               await  expect(deposit).to.be.reverted;
             });
 
         });

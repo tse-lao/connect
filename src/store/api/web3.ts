@@ -3,6 +3,7 @@ import shareContract from "@/assets/contracts/artifacts/ShareContract.json";
 import Web3 from 'web3';
 import {useAccountStore} from "@/stores/account"
 import { useToast } from "vue-toastification";
+import contracts from "./contracts";
 
 
 const toast = useToast();
@@ -24,6 +25,9 @@ export default {
     //TODO: make sure that we check if the contract exists. 
     const contractDetails = await contract.methods.getContractDetails().call();
     const balance = await contract.methods.getBalance().call()
+    const title = await contract.methods.title().call();
+    console.log("title: ", title);
+    console.log(contractDetails);
     const json: Object = {
       "parentContract": contractDetails[1],
       "owner": contractDetails[0],
@@ -121,7 +125,6 @@ export default {
       abi,
       address
     );
-
 
 
     await contract.methods

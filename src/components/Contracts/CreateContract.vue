@@ -98,7 +98,7 @@ export default {
      
 
       const createAccount = await contract.methods
-        .createNewContract(link, this.data.title, "", web3.utils.toWei("0"), true)
+        .createNewContract(link,"",  this.data.title, web3.utils.toWei("0"), true)
         .send({ from: this.account.address })
         .then((receipt:any) => {
           console.log(receipt);

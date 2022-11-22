@@ -25,10 +25,8 @@ export default {
     methods:{
       async readContract(){
         //TODO: implement the contract. 
-         console.log(this.data);
-        
          const result = await api.readShareContracts(this.data);
-         console.log(result);
+         
          this.contractData = result;
          this.loading= false; 
       }
@@ -100,6 +98,7 @@ export default {
   gap: 6px;
   flex:1;
   text-align:center;
+  align-items: center;
 }
 
 .box:hover {

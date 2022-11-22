@@ -105,9 +105,7 @@ contract PoolContract {
     uint256 public contractBalance;
     uint256 public userCount;
     uint256 public devCount;
-    struct Pool{
-        
-    }
+
 
     //Events.
     event Deposit(address sender, uint256 amount);

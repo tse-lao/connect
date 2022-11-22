@@ -1,18 +1,26 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.6;
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract ShareContract{
+
+struct Contract{
+    address owner;
+    address createdBy;
+    address token;
+    string title;
+    string dataUrl;
+    bool open; 
+    uint fee;
+    uint reservedBalance; 
+    uint users;
+    uint closeTime;
+}
+
+contract ShareContract is Ownable{
     //public variables.
-    address public owner;
-    address public createdBy;
-    string public url;
-    string public title;
-    uint public fee;
-    bool public open;
-    //send money aswel. 
-    uint public availableBalance;
-    uint256 public totalUsers;
     
+    Contract public contractDetails;
     //EVENTS
     event Deposit(address sender, uint amount, uint balance);
     event Withdraw(uint amount, uint balance);
@@ -31,36 +39,31 @@ contract ShareContract{
     }
     Profile[] private profiles;
     mapping(address => uint256) addressIndex;
+    mapping(address => bool) public registered;
     
     address[] private profileAccounts;
     
     mapping(bool => uint256) rewardByIndex;
 
-    constructor(string memory _url, string memory _title,  uint _minFee, address _owner, address _contractAbove, bool _open) payable {
-        owner = _owner;
-        createdBy = _contractAbove;
-        url = _url;
-        fee = _minFee;
-        open = _open;
-        title = _title;
-        
+    constructor(string memory _title, string memory _url, uint _fee,  uint _closeTime,  address _owner, address _contractAbove, bool _open, address _token) payable {
+        require(block.timestamp > _closeTime, "Close time must be in the future");
+        contractDetails.closeTime = _closeTime;        
+        contractDetails.title = _title;
+        contractDetails.owner = _owner;
+        contractDetails.createdBy = _contractAbove;
+        contractDetails.dataUrl = _url;
+        contractDetails.open = _open;
+        contractDetails.fee = _fee;
+        contractDetails.reservedBalance = 0; 
+        contractDetails.users = 0;
+        contractDetails.token = _token;
         emit ContractInteraction(msg.sender, "creation", _title);
-    }
-
-    
-     modifier isOwner() {
-        require(msg.sender == owner, "Permission denied! Only owner");
-        _;
-    }
-    
-    function getContractDetails() public view returns(address, address, string memory, uint, bool){
-        return (owner, createdBy, url, fee, open);
     }
     
     // @dev user submit their data. 
     function userSubmission(string memory _link, bool _thirdparty) public {
         //we want the user to check and submit there work.  
-        require(addressIndex[msg.sender] < 1, "You already have profile!");
+        require(registered[msg.sender], "You already have profile!");
         
         //create new struct. 
         Profile memory newProfile;
@@ -71,8 +74,10 @@ contract ShareContract{
         newProfile.thirdparty = _thirdparty;
         profiles.push(newProfile);
         
-        addressIndex[msg.sender] = totalUsers;
-        totalUsers = totalUsers + 1;
+        addressIndex[msg.sender] = contractDetails.users;
+        contractDetails.users = contractDetails.users + 1;
+
+        registered[msg.sender]= true;
         
         emit UserInteraction(msg.sender, "submit");
         
@@ -90,10 +95,13 @@ contract ShareContract{
     }
     
     // @dev: owner should be able to stop the contract aswell. 
-    function withdrawAll() public isOwner{
-        payable(owner).transfer(payable(address(this)).balance);
+    function withdrawAll() public onlyOwner{
+        uint totalAmount = IERC20(contractDetails.token).balanceOf(address(this)) - contractDetails.reservedBalance;
+        require(totalAmount > 0, "Oops your balance is too low");
+        IERC20(contractDetails.token).transfer(address(this), totalAmount);
+
         
-        emit Withdraw(payable(address(this)).balance, 0);
+        emit Withdraw(totalAmount, totalAmount);
     }
     
     
@@ -103,8 +111,8 @@ contract ShareContract{
     }
     
     // @dev - open or close the contract based on the current status. 
-    function closeOrOpen() public isOwner{
-        open = !open;
+    function closeOrOpen() public onlyOwner{
+        contractDetails.open = !contractDetails.open;
         
         emit ContractInteraction(msg.sender, "update", "status");
     }
@@ -120,49 +128,53 @@ contract ShareContract{
     }
     
     // @dev : Change the fee of the contract. 
-    function changeFee(uint _newFee) public isOwner{
+    function changeFee(uint _newFee) public onlyOwner{
         require(_newFee > 0, "Fee must be above 0");
-        fee = _newFee;
+        contractDetails.fee = _newFee;
         
         emit ContractInteraction(msg.sender, "update", "fee");
     }
     
-    function updateLink(string memory _url) public isOwner{
-        url = _url;
+    function updateLink(string memory _url) public onlyOwner{
+        contractDetails.dataUrl = _url;
         
         emit ContractInteraction(msg.sender, "updateUrl", _url);
     }
     
-    // @dev : withdrawing the money from the account to owner. 
-    function withdraw(uint _amount) public isOwner{
+    // @dev : bot workung yes..  
+    function withdraw(uint _amount) public onlyOwner{
         require(_amount > 0, "Amount should be higher");
-        require(_amount < payable(address(this)).balance, "amount exceed balance");
+        require(_amount < availableBalance(), "Not enough available");
         
-        require(_amount < availableBalance, "Not available");
-        
-        payable(owner).transfer(_amount);
-        emit Withdraw(_amount, availableBalance);
+        IERC20(contractDetails.token).transfer(address(this), _amount);
+        emit Withdraw(_amount, contractDetails.reservedBalance);
+    }
+
+    function availableBalance() private view returns (uint ){
+        uint balance = IERC20(contractDetails.token).balanceOf(address(this)); 
+
+        return balance - contractDetails.reservedBalance;
     }
     
     
     function withdrawFromBalance(uint _amount) public {
         //check balance. 
+        require(registered[msg.sender], "you are not even registererd!");
         uint pointer = addressIndex[msg.sender];
-        
         uint userbalance = profiles[pointer].balance ;
-        
+
         require(_amount <= userbalance, "Your balance should be equal to or less than the balance");
-    
-        payable(msg.sender).transfer(_amount); 
-        emit Withdraw(_amount, payable(address(this)).balance);
-        
+
+
+        IERC20(contractDetails.token).transfer(msg.sender, _amount);
+        emit Withdraw(_amount, userbalance - _amount);
     }
     
     
     // @dev Download all the data from the users. 
-    function getProfiles() public view returns (Profile[] memory){
-      Profile[]    memory id = new Profile[](totalUsers);
-      for (uint i = 0; i < totalUsers; i++) {
+    function getProfiles() public view onlyOwner returns (Profile[] memory) {
+      Profile[] memory id = new Profile[](contractDetails.users);
+      for (uint i = 0; i < contractDetails.users; i++) {
           Profile storage profile = profiles[i];
           id[i] = profile;
       }

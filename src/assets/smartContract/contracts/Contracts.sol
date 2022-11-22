@@ -2,8 +2,9 @@
 pragma solidity ^0.8.6;
 
 import "./ShareContract.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Contracts {
+contract Contracts is Ownable {
     //@dev = EVENTS HERE 
     event ContractInteraction(address owner, address contractAddress, string action);
     event UpdateContract(string title, string link);
@@ -12,48 +13,37 @@ contract Contracts {
     address tokenAddress;
     string public name;
     string private link; 
-    address public owner;
+
+    mapping(uint => Contract) public contracts;
     
     
-    //  @dev = the contructor
     constructor(address _tokenAddress, string memory _name, string memory _link){
-        owner = msg.sender;
         tokenAddress = _tokenAddress;
         name = _name;
         link = _link;
-        
+
         emit ContractInteraction(msg.sender, address(this), "create");
     }
-    
-    //@dev- modifier
-    modifier isOwner(){
-        require(msg.sender == owner, "You are not the owner");
-        _;
-    }
-    
     // @dev - returns info about the contract. 
-    function updateInfo(string memory _name, string memory _link) public {
-        require(msg.sender == owner, "Only owner can update info");
+    function updateInfo(string memory _name, string memory _link) public  onlyOwner{
         name = _name;
         link = _link;
-        
         emit ContractInteraction(msg.sender, address(this), "update");
     }
 
-    function createNewContract(string memory _url, string memory _title, uint _minFee, bool _open) public returns (address){
-         ShareContract a = new ShareContract(_url,_title, _metadata, _minFee, msg.sender, payable(address(this)), _open);
+    function createNewContract(string memory _title, string memory _url, uint _fee,  uint _closeTime,  bool _open) public returns (address){
+         ShareContract a = new ShareContract(_title, _url, _fee, _closeTime,  msg.sender, payable(address(this)), _open, tokenAddress);
          pool.push(address(a));
-            emit ContractInteraction(msg.sender, address(a), 'create');       
+        emit ContractInteraction(msg.sender, address(a), 'create');       
          return address(a);
-         
     }
     
     function countContracts() public view returns(uint){
         return pool.length;
     }
     
-    //TODO: needs to be tested.
-    function removeContract(uint _address) public isOwner{
+    //needs to be tested if it works. 
+    function removeContract(uint _address) public onlyOwner{
         //change this. 
         address contractAddress = pool[_address];
         pool[_address] = pool[pool.length -1];

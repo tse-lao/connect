@@ -123,9 +123,7 @@ export default {
       this.entryForm = true;
     },
     async submitDataToContract() {
-
       const stringedJSON = JSON.stringify(this.inputData);
-
       const encrypted = false;
 
       if (encrypted) {
@@ -133,7 +131,6 @@ export default {
       }
 
       const link:any = await functions.uploadToIPFS(stringedJSON);
-
       this.submitToContract(link);
 
       //now we need to make sure that we get the publickey.
@@ -149,14 +146,10 @@ export default {
     },
 
     async submitToContract(link:string) {
-      //create link from the the submission.
-      //here we create a submission to the contract.
-      //First we submit an not encrypted version.
       const result = await web3Functions.submitToShareContract(
         this.contract,
         link
       );
-      
     },
     
     async deposit(){
@@ -193,26 +186,26 @@ export default {
     <div class="two-layer-template">
       <div class="left-two-layer-template">
         <div class="panel contract-details">
-          <div class="row">
+          <div class="column">
             <h4>{{details.title}}</h4>
           </div>
-          <div class="row">
+          <div class="column">
             <h4>Owner</h4>
             <span> {{ details.owner }}</span>
           </div>
-          <div class="row">
+          <div class="column">
             <h4>Parent Contract</h4>
             <span> {{ details.parentContract }}</span>
           </div>
-          <div class="row">
+          <div class="column">
             <h4>Contract</h4>
             <span>{{ contract }}</span>
           </div>
-          <div class="row">
+          <div class="column">
             <h4>IPFS</h4>
             <span>{{ details.link }}</span>
           </div>
-          <div class="row">
+          <div class="column">
             <h4>Fee</h4>
             <span>{{ details.fee }}</span>
           </div>
