@@ -1,11 +1,13 @@
 import { defineStore } from "pinia";
 import token from "@/store/api/token"
+import profile from "@/store/api/profile"
 
 export const useAccountStore = defineStore('account', {
 
     state: () => ({
         loggedIn: false,
         address: "",
+        username: "", 
         accounts: [], 
         network: "",
         balance: 0,
@@ -40,13 +42,17 @@ export const useAccountStore = defineStore('account', {
                     this.address = accounts[0]
                     this.loggedIn = true;
                     this.tokenBalance = Math.round(parseInt(tokens) / (10 ** 18) * 10000) / 10000;
+
+                    this.getUsername();
                 }
 
 
                 //now get geth the nethwork
             }
         },
-        changeAccounts(){
+        async getUsername(){
+            const username = await profile.getName();
+            this.username = username;
             
         }
 

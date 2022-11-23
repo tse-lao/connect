@@ -141,7 +141,7 @@ button.danger{
   padding: 2rem;
   border-radius: 8px;
   width: 45%;
-  min-width: 300px;
+  min-width: 320px;
   align-content: center;
   align-items: center;
   align-self: center;
@@ -221,8 +221,25 @@ button.danger{
 
 
 
-
-
+/* MODALS*/
+.modal-position{
+  position: absolute;
+  z-index: 100;
+  right: 10px;
+  background: #18141d;
+  padding: 3rem;
+  border: 1px solid green;
+  border-radius: 8px;
+}
+.modal-bg{
+  position: fixed;
+  background: rgba(0,0,0,0.6);
+  z-index: 99;
+  height: 100vh;
+  width: 100vw;
+  top: 64px;
+  left: 0;
+}
 
 
 
@@ -231,6 +248,7 @@ button.danger{
 .row{
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .column{
   display: flex;
@@ -241,3 +259,9 @@ button.danger{
   flex-direction: row-reverse;
 }
 
+.inline{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2rem;
+}

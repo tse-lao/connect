@@ -141,11 +141,8 @@ export default {
        
       <div class="footer-body">
           <div class="links">
-              <a href="">About us</a>
-              <a href="">Jobs</a>
-              <a href="">Blog</a>
-              <a href="">Press</a>
-              <a href="">Contact</a>
+
+              <a href="https://t.me/+Lx-kwEmObs43Njc0">Contact</a>
               <a href="">Privacy Policy</a>
               <a href="https://github.com/tse-lao/connect" target="_blank">Open Source</a>
               <a href="">Terms of Conditions</a>

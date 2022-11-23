@@ -1,6 +1,7 @@
 <template>
   <main>
     <div>
+      <h3>Create Proposal</h3>
       <QuillEditor theme="snow" v-model:content="proposalDescription" ref="editor" />
       
       <div class="column mtb-2">

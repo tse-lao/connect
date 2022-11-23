@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 /// @notice You can use this contract for register a username. 
 /// @dev All function calls are currently implemented without side effects
 /// @custom:experimental This is an experimental contract.
-contract NameRegistration is Ownable{
+contract ProfileRegistration is Ownable{
     event TokenChange(address _oldToken, address _newToken);
     event NameRegistration(address _owner, string _name);
     event NameRemoval(address _owner, string _name);
@@ -22,6 +22,8 @@ contract NameRegistration is Ownable{
     uint public cost;
     mapping(string => bool) public registeredName;
     mapping(address => string) public username;
+
+    mapping(address => address) public nftProfile;
 
     /// @notice Starting contract for registering usernames. 
     /// @dev This can be used for any token. 
@@ -35,7 +37,6 @@ contract NameRegistration is Ownable{
     function changeToken(address _tokenAddr) public onlyOwner{
         address oldToken = token;
         token = _tokenAddr;
-
         emit TokenChange(oldToken, _tokenAddr);
     }
 
@@ -48,7 +49,7 @@ contract NameRegistration is Ownable{
 
     function register(string memory _name) public payable {
         require(!registeredName[_name], "Is already registered");
-        require( IERC20(token).balanceOf(msg.sender) > minBalance, "Not enough balance");
+        require(IERC20(token).balanceOf(msg.sender) > minBalance, "Not enough balance");
 
         username[msg.sender] = _name; 
         registeredName[_name] = true;
@@ -63,5 +64,9 @@ contract NameRegistration is Ownable{
         registeredName[_name] = false;
 
         emit NameRemoval(msg.sender, _name);
+    }
+
+    function changeProfile(address _nftProfile)public{
+        nftProfile[msg.sender] = _nftProfile;
     }
 }

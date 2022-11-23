@@ -9,9 +9,10 @@ import Title from "../components/Elements/Title.vue";
 import Proposal from "../components/Pools/CreateProposal.vue";
 import files from "../store/api/files";
 import ListProposals from '@/components/Pools/ListProposals.vue';
-
+import { onClickOutside } from '@vueuse/core';
 import { useBountyStore } from '../stores/bounties';
 import { useAccountStore } from '../stores/account';
+import { ref } from 'vue';
 
 
 export default {
@@ -21,6 +22,7 @@ export default {
     return {
       bountyAddress: '',
       amount: 0,
+      selectedComponent: '', 
       details: {
         title: "",
         pool: "",
@@ -28,8 +30,8 @@ export default {
         estimatedFee: " ",
         tags: [],
         description: "",
-        developers: 0, 
-        users: 0, 
+        developers: 0,
+        users: 0,
         type: "",
         acceptanceCriteria: "",
         contactDetails: [],
@@ -51,10 +53,19 @@ export default {
     const bounty = useBountyStore();
     const account = useAccountStore();
 
+    const modal = ref('');
+    const modalTarget = ref(null);
+
+    onClickOutside(modalTarget, (event) => {
+        modal.value = '';
+        
+    })
     return {
       // you can return the whole store instance to use it in the template
       bounty,
-      account
+      account, 
+      modal, 
+      modalTarget
     };
   },
 
@@ -81,7 +92,7 @@ export default {
 
       this.details.title = result.name;
 
- 
+
 
       this.details = proposal;
       this.details.proposal = result.proposal;
@@ -106,79 +117,80 @@ export default {
           <h4>{{ details.title }}</h4>
         </div>
       </template>
+      <template #actions>
+        <img src="@/assets/icons/business/investment.svg" @click="modal = 'addFunding'" />
+        <img src="@/assets/icons/business/paperclip.svg" @click="modal = 'createProposal'" />
+      </template>
     </Title>
-
-    <div class="two-layer-template">
-      <div class="left-two-layer-template">
-        <div class="panel contract-details">
-
-          <div class="label">
-            <h4>Contract Address</h4>
-            <span> {{ bountyAddress }}</span>
-          </div>
-          <div class="label">
-            <h4>Contact Details</h4>
-            <div class="contact-list" v-for="item, key in details.contacts" :key="key">
-              <img v-if="item.medium == 'Telegram'" src="https://www.freepnglogos.com/uploads/telegram-logo-png-0.png" alt="medium"
-                class="medium-icon" />
-                <a v-if="item.medium == 'Telegram'" :href="'//t.me/' + item.username" target="_blank">
-                  {{ item.username }}
-                </a>
-
-                <img v-if="item.medium == 'Discord'" src="https://www.freepnglogos.com/uploads/discord-logo-png/discord-logo-logodownload-download-logotipos-1.png" alt="medium"
-                class="medium-icon" />
-                <a v-if="item.medium == 'Discord'" :href="'//t.me/' + item.username" target="_blank">
-                  {{ item.username }}
-                </a>
-            </div>
-          </div>
-
-          <div class="label">
-            <h4>Proposal</h4>
-            <span> {{ details.proposal }}</span>
-          </div>
-
-          <div class="label">
-            <h4>Participants</h4>
-            <span>{{details.users}} participants</span>
-          </div>
-
-          <div class="label">
-            <h4>Devs</h4>
-            <span>{{details.developers}} devs</span>
-          </div>
-
-
-          <div class="label">
-            <h4>Fee</h4>
-            <span> {{ details.balance }} / {{ details.estimatedFee }}</span>
-          </div>
-
-
-          <div class="label">
-            <DepositToContact :address="bountyAddress" />
-          </div>
-
-        </div>
-        <div class="panel">
-          <div class="tags">
-            <div class="tag" v-for="item, key in details.tags" :key="key">
-              {{item}}
-              </div>
-          </div>
-        
-          <span v-html="details.description"></span>
-        </div>
-
+    <div class="modal-bg"  v-if="modal != ''">
+      <div class="modal-position" ref="modalTarget">
+          <Proposal :address="bountyAddress" v-if="modal =='createProposal'"/>
       </div>
-
     </div>
-    <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
     <div class="row">
-      <div class="panel">
-        <h3>Create Proposal</h3>
-        <Proposal :address="bountyAddress" />
+      <div class="panel contract-details">
+
+<div class="label">
+  <h4>Contract</h4>
+  <div class="row">
+    <a :href="'https://mumbai.polygonscan.com/address/' + bountyAddress">This Contract</a>
+    <a :href="'https://mumbai.polygonscan.com/address/' + details.proposal">Data Contract</a>
+  </div>
+</div>
+<div class="label">
+  <h4>Contact Details</h4>
+
+  <div class="inline">
+
+
+    <div class="contact-list" v-for="item, key in details.contacts" :key="key">
+      <img v-if="item.medium == 'Telegram'" src="https://www.freepnglogos.com/uploads/telegram-logo-png-0.png"
+        alt="medium" class="medium-icon" />
+      <a v-if="item.medium == 'Telegram'" :href="'//t.me/' + item.username" target="_blank">
+        {{ item.username }}x
+      </a>
+
+      <img v-if="item.medium == 'Discord'"
+        src="https://www.freepnglogos.com/uploads/discord-logo-png/discord-logo-logodownload-download-logotipos-1.png"
+        alt="medium" class="medium-icon" />
+      <a v-if="item.medium == 'Discord'" :href="'//t.me/' + item.username" target="_blank">
+        {{ item.username }}
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="inline">
+  <div class="label">
+    <h4>Participants</h4>
+    <span>{{ details.users }} participants</span>
+  </div>
+  <div class="label">
+    <h4>Devs</h4>
+    <span>{{ details.developers }} devs</span>
+  </div>
+
+
+  <div class="label">
+    <h4>Fee</h4>
+    <span> {{ details.balance }} / {{ details.estimatedFee }}</span>
+  </div>
+  </div>
+  <div class="label">
+    <h4>Tags</h4>
+    <div class="tags">
+      <div class="tag" v-for="item, key in details.tags" :key="key">
+        {{ item }}
       </div>
+    </div>
+    </div>
+
+    <div class="label">
+      <h4>Description</h4>
+       <span v-html="details.description"></span>
+  </div>
+      </div>
+     
       <div class="panel no-bg scroll-list">
         <ListProposals :contract="bountyAddress" />
       </div>
@@ -186,9 +198,13 @@ export default {
       <div class="panel">
         <ListEvents :contractAddress="bountyAddress" />
       </div>
+      
     </div>
+    </div>
+ 
 
-  </div>
+
+    <!-- We want to build a switch here for the view, that provides the owner to look atmmore details. -->
 
 </template>
 
@@ -202,7 +218,7 @@ export default {
 .open {
   color: #92e2a7;
   font-weight: 900;
-} 
+}
 
 .closed {
   color: #DB8D85;
@@ -237,7 +253,7 @@ export default {
   width: 24px;
 }
 
-.tags{
+.tags {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -245,11 +261,12 @@ export default {
   margin: 1rem;
 }
 
-.tag{
+.tag {
   background: #62B1BD;
-  color:#21212a;
+  color: #21212a;
   border-radius: 6px;
-  padding: 0.5rem;
+  font-size: 12px;
+  padding: 0.2rem;
 }
 
 .two-layer-template {
@@ -278,7 +295,8 @@ table {
 .scroll-list {
   overflow-y: scroll;
 }
-.no-bg{
+
+.no-bg {
   background: none;
 }
 
@@ -331,13 +349,11 @@ table {
 
 .submenu .menu-item:hover {
   border: 1px solid rgba(255, 255, 255, 0.8);
-  background: rgba(0, 0, 0, 0.4)
+  background: rgba(0, 0, 0, 0.4);
 }
 
 @media (min-width: 1024px) {
-  .two-layer-template {
-    display: flex;
-  }
+
 
   .left-two-layer-template {
     flex-direction: row;

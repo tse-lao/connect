@@ -57,7 +57,7 @@ export default {
     <div v-if="startCreate" class="">
         <CreateBounty />
     </div>
-    <div v-else class="content-with-filter">
+    <div v-else class="row content-with-filter">
       <div class="filter" >
             <span @click="selectedBounties(item.address)" v-for="(item, key) in bounty.bounties" :key="key">{{item.name}} ({{item.totalBounties}})</span>
       </div>
@@ -76,6 +76,7 @@ export default {
   flex-direction: row;
   gap: 3rem;
   margin: 2rem;
+  align-content: center;
 }
 .content-with-filter .filter {
   display: 1;
@@ -85,9 +86,13 @@ export default {
 }
 .filter span{
     font-weight: 400;   
+    background: #92e2a7;
+    padding: 0.5rem;
+    color: #302c33;
+    border-radius: 2px;
 }
 .filter span:hover{
-    color: #92e2a7;
+    background: #92e2a7ba;
     cursor: pointer;
 }
 .content-with-filter .content {

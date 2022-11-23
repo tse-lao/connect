@@ -39,3 +39,9 @@ task("mint-token", "Mint tokens").addParam("amount", "Amount of token you want t
 
     console.log(minted.address);
 });
+
+task("deploy-profile", "Deploying own token").setAction(async function (taskArguments, hre) {
+    const profileContract = await hre.ethers.getContractFactory("ProfileRegistration", getAccount());
+    const profile = await profileContract.deploy(process.env.TOKEN_ADDRESS, 100, 0);
+    console.log(`Contract deployed to address: ${profile.address}`);
+});
