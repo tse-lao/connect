@@ -371,7 +371,7 @@ button {
 
 .two-section {
   display: flex;
-  padding: 5% 20%;
+  padding: 5% 10%;
   gap: 24px;
   flex-direction: row;
   text-align: left;

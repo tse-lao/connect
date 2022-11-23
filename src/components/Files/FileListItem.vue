@@ -1,10 +1,10 @@
 <template>
   <div class="file">
     <div class="type" v-if="file.fileType == 'directory'">
-      <img src="../../assets/icons/folder.svg" />
+      <img src="../../assets/icons/interface-sign/more-alt.svg" />
     </div>
     <div class="type" v-else>
-      <img src="../../assets/icons/file-1.svg" />
+      <img src="../../assets/icons/interface-sign/more-alt.svg" />
     </div>
     <div class="name">
       {{ file.name }}
