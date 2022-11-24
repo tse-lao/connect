@@ -39,7 +39,7 @@ export default {
       title: "notimportantnow", 
       proposalDescription: "",
       attachments: [],
-      links: [],
+      links: [{}],
       file: null,
     };
   },
@@ -62,10 +62,8 @@ export default {
         const reader = new window.FileReader();
         reader.readAsArrayBuffer(this.attachments[i]);
         reader.onloadend = async () => {
-
+            console.log(reader)
          const link:any = await files.uploadToIPFS(Buffer(reader.result));
-
-          console.log(link)
           this.links.push(link)
         }
       }
@@ -78,7 +76,7 @@ export default {
 
       let jsonFormat = JSON.stringify({
         description: content,
-        attachments: this.attachments,
+        attachments: this.links,
       });
       
       console.log(this.attachments);
@@ -96,6 +94,7 @@ export default {
     uploadFile(event: any) {
       for (var i = 0; i < event.target.files.length; i++) {
         this.attachments.push(event.target.files[i]);
+        console.log(event.target.files[i])
       }
     },
   },
