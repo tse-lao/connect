@@ -63,7 +63,7 @@ export default {
         reader.readAsArrayBuffer(this.attachments[i]);
         reader.onloadend = async () => {
             console.log(reader)
-         const link:any = await files.uploadToIPFS(Buffer(reader.result));
+           const link:any = await files.uploadToIPFS(Buffer(reader.result));
           this.links.push(link)
         }
       }

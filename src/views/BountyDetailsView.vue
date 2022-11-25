@@ -12,6 +12,7 @@ import ListProposals from '@/components/Pools/ListProposals.vue';
 import { onClickOutside } from '@vueuse/core';
 import { useBountyStore } from '../stores/bounties';
 import { useAccountStore } from '../stores/account';
+import token from "@/store/api/token"
 import { ref } from 'vue';
 
 
@@ -86,21 +87,13 @@ export default {
       this.details.balance = result.balance;
       const proposal = await files.readIPFS(result.proposal);
 
-      console.log(result);
-
-      console.log(proposal);
-
       this.details.title = result.name;
-
-
-
       this.details = proposal;
       this.details.proposal = result.proposal;
 
       this.details.users = result.userCount;
       this.details.developers = result.devCount;
-
-      this.details.balance = result.balance;
+      this.details.balance = await token.getBalance(this.bountyAddress);
 
     }
 

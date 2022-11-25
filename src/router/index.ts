@@ -62,6 +62,11 @@ const router = createRouter({
       name: "Airdrop", 
       component: () => import("../views/AirdropView.vue"),
     },
+    {
+      path: "/cookies",
+      name: "Cookies", 
+      component: () => import("@/components/Data/Cookies.vue"),
+    },
   ],
 });
 
