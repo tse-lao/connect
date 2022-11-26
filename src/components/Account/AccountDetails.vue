@@ -6,6 +6,7 @@ import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 import ProfileRegistration from "./ProfileRegistration.vue";
 import profile from "@/store/api/profile";
+import SignIn from "./SignIn.vue";
 
 export default {
   data(){
@@ -39,7 +40,7 @@ export default {
       console.log(result)
     }
   },
-  components: { ProfileRegistration }
+  components: { ProfileRegistration, SignIn }
 };
 </script>
 
@@ -66,6 +67,10 @@ export default {
         <span>({{ account.address.substring(1, 6) }} ... {{ account.address.substring(account.address.length - 5)
         }})</span>
 
+      </div>
+
+      <div>
+        <SignIn />
       </div>
 
 
