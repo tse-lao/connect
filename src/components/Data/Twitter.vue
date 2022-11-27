@@ -3,6 +3,7 @@
         <div>
             <h3>Showcase all data below:</h3>
             <button @click="getFollowers">Show Twitter api data</button>
+            <button @click="getTweets">Show tweets</button>
             <p>
                 {{data}}
             </p>
@@ -48,6 +49,18 @@
                 catch(e){
                     console.log(e)
                 }   
+        }, 
+
+        analyzeAutomatedTweets(){
+            //here we will analyze all the followers and brand and the engagement of the users with the tweets. 
+
+            try{
+                fetch("https://0.0.0.0:9000/twitter/resultsofusers/username").then(result => result.json())
+                .then(data => {
+                    console.log(data)
+                    this.data = data;
+                })
+            }
         }
     }
     }
