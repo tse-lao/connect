@@ -98,10 +98,11 @@ export default {
             <img src="@/assets/images/choicing_data.svg" alt="alternative" />
           </div>
           <div class="text_section">
-            <h4>Encrypt and collect your data Shared by the insights.</h4>
+            <h4>Collect and encrypt your data.</h4>
             <span>
               We, Connect Fast, provide our users with the options to get back
-              the data you generated from all different platforms.
+              the data you generated from all different platforms. We provide data streams towards your account, where you can encrypt your data and store it.
+              Only you are able to read and decrypt this data.  
             </span>
           </div>
         </div>
@@ -129,10 +130,10 @@ export default {
             <img src="@/assets/images/selecting_data.svg" alt="alternative" />
           </div>
           <div class="text_section">
-            <h4>Sell your data on the market.``</h4>
+            <h4>Sell your data on the market.</h4>
             <span>
-              We have built an internal market where we decide which data we
-              want to share with whom.
+              We have an internal market available for distributing your personal data to third parties. 
+              Third parties request for a specific dataset, we analyze based on the preffered settings of the user if they are suitable for distributing their data. 
             </span>
           </div>
         </div>
