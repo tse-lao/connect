@@ -10,6 +10,7 @@ import App from "@/App.vue";
 import Landing from "@/Landing.vue";
 import "vue-toastification/dist/index.css";
 import router from "./router";
+import approuter from "./router/approuter";
 import VueGtag from "vue-gtag";
 
 import '@/assets/base.css'
@@ -50,7 +51,7 @@ if (arr.length > 0) {
 
     const app = createApp(Landing);
     app.use(router);
-    app.use(store);
+    app.use(approuter);
     app.use(VueGtag, {
       config: { 
         id: "GTM-WL5F7TP",
@@ -62,7 +63,7 @@ if (arr.length > 0) {
 
 }else{
     const app = createApp(Landing);
-    app.use(router);
+    app.use(approuter);
     app.use(store);
     app.use(VueGtag, {
       config: { id: "GTM-WL5F7TP", }

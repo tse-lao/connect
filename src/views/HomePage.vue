@@ -1,80 +1,110 @@
-<script lang="ts">
-
-
-export default {
-  name:"Landing", 
-  methods:{
-    goToApp(){
-        console.log(window.location.host);
-
-        window.location.replace('http://app.'+ window.location.host)
-
-    }, 
-    goLightMode(){
-      document.body.style.backgroundColor = "white";
-
-    }
-  },
-  mounted(){
-    this.goLightMode();
-  }
-};
-</script>
-
-<template color-scheme="light">
-    <div class="homepage">
-        <div class="top_header">
-          <div class="logo">
-            <img src="@/assets/images/cf_logo_Logo.png" alt="logo" />
-            <span> Connect Fast </span>
+<template>
+        <div class="hero_section">
+          <div class="text_section">
+            <h1>Be part of the new generation</h1>
+            <span>
+              We provide everyone the solution to store their personal data within the web3 space, without keeping the transparency, 
+              security and control in their own hands. 
+            </span>
           </div>
-
-          <div class="top_right">
-            
-          
-                <button @click="goToApp">
-                  Open App
-                </button>
-
+          <div class="image_section">
+            <img
+              src="@/assets/images/main_illustration.svg"
+              alt="main_illustartion"
+            />
           </div>
-        </div>
-        <div class="content">
-          <RouterView />
-
+          <div class="hero1"></div>
+        <div class="hero2"></div>
         </div>
 
+      <div class="hero_section">
+        <div class="image_section">
+          <img src="@/assets/images/chessboard.svg" alt="chessboard_file" />
+        </div>
+        <div class="text_section">
+          <h5>What does Connect Fast</h5>
+          <h3>Help to take control of your personal data.</h3>
+          <span>
+            Currently all websites and applications are collecting data you
+            generate. From clicks on certain areas in the application, last
+            visited pages and visited pages in the future. This data will be
+            stored, analyzed and distributed to third parties, all without the
+            exact knowledge of the creator, you the user. To gain back the insight and control of the data we provide a solution
+            to store, analyze and distribute your personal data. Open the app to take a look around. 
+          </span>
+        </div>
+      </div>
+      <div>
         
-      <div class="footer-body">
-          <div class="links">
+        <div class="two-section">
+          <div class="image_section">
+            <img src="@/assets/images/world_connect.svg" alt="alternative" />
+          </div>
+          <div class="text_section">
+            <h4>Regain back insight in the collection of data.</h4>
+            <span>
+              Currently all websites and applications are collecting data you
+              generate. From clicks on certain areas in teh application. To last
+              visited pages and visited pages in the future. This data will be
+              stored, analyzed and distributed to third parties, all without the
+              exact knowledge of the generator, the user. This is against most
+              countries law, but still very difficult to track. With Connect
+              Fast we find a solution to this problem.
+            </span>
+          </div>
+        </div>
+        <div class="two-section left">
+          <div class="image_section">
+            <img src="@/assets/images/choicing_data.svg" alt="alternative" />
+          </div>
+          <div class="text_section">
+            <h4>Collect and encrypt your data.</h4>
+            <span>
+              We, Connect Fast, provide our users with the options to get back
+              the data you generated from all different platforms. We provide data streams towards your account, where you can encrypt your data and store it.
+              Only you are able to read and decrypt this data.  
+            </span>
+          </div>
+        </div>
+        <div class="two-section">
+          <div class="image_section">
+            <img
+              src="@/assets/images/dashboard_connection.svg"
+              alt="alternative"
+            />
+          </div>
+          <div class="text_section">
+            <h4>Decide who you want to Share the data with.</h4>
+            <span>
+              With our smart mechansim you can decide who, when and what data
+              you want to share. This data can be shared based upon a fee or
+              agreement. There is always a case where the value of the
+              distributed data can be shared with third parties, this is only
+              the case when it is decide by the owner of the data in the smart
+              contract.
+            </span>
+          </div>
+        </div>
+        <div class="two-section left">
+          <div class="image_section">
+            <img src="@/assets/images/selecting_data.svg" alt="alternative" />
+          </div>
+          <div class="text_section">
+            <h4>Sell your data on the market.</h4>
+            <span>
+              We have an internal market available for distributing your personal data to third parties. 
+              Third parties request for a specific dataset, we analyze based on the preffered settings of the user if they are suitable for distributing their data. 
+            </span>
+          </div>
+        </div>
+      </div>
 
-              <a href="https://t.me/+Lx-kwEmObs43Njc0">Contact</a>
-              <a href="">Privacy Policy</a>
-              <a href="https://github.com/tse-lao/connect" target="_blank">Open Source</a>
-              <a href="">Terms of Conditions</a>
-          </div>
-          <div class="socials">
-            <div class="image">
-              <img src="@/assets/images/cf_logo_Logo.png" />
-            </div>
-            <div class="links">
-              <a href="https://t.me/+Lx-kwEmObs43Njc0">
-                <img src="@/assets/icons/brand/telegram.svg" />
-              </a>
-              <a href="https://twitter.com/ConnectFastv1">
-                <img src="@/assets/icons/brand/twitter.svg" />
-              </a>
-              <a href="https://discord.gg/ShRxCuZQ">
-                <img src="@/assets/icons/brand/discord.svg" />
-              </a>
-              
-            </div>
-            <div class="copyright">
-              2021 - 2023, All Rights Reserved
-            </div>
-          </div>
-      </div>
-      </div>
 </template>
+<script lang="ts">
+export default{
+    name: "HomePage"
+}
+</script>
 <style scoped> 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
@@ -139,9 +169,7 @@ html {
   color: #142647;
 }
 /* END OF TOP HEADER*/
-.content{
-  padding: 3rem;
-}
+
 /* ------- HERO SECTIONS ____ */
 .hero1 {
   /* bg */
@@ -372,6 +400,7 @@ span {
 
 .footer-body {
   background: #142647;
+  margin-bottom: 0;
   color: rgba(240, 245, 255, 0.3);
   display: flex;
   gap: 2rem;
@@ -380,7 +409,6 @@ span {
   flex-wrap: wrap;
   font-family: Poppins;
   font-weight: 400;
-  min-width: 96vw;
 
   /* Shape */
 }

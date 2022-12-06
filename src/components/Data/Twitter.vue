@@ -1,30 +1,68 @@
 <template>
     <main>
-        <div>
-            <h3>Showcase all data below:</h3>
-            <button @click="signIn">Sign me In on Twitter</button>
-            <button @click="getTweets">Show tweets</button>
-            <p>
-                {{ data }}
-            </p>
+        <div class="twitter-content">
+            <div class="Explanation">
+                <h1>
+                    Twitter Sentimental Analysis.
+                </h1>
+                <span>
+                    You are able to check the tweets sentimental analysis, here we provide the option to check for
+                    instance your own @[your username] tweets to see if your
+                    tweets are overall positive or negative. Depending on the size it currently takes around 5 minutes
+                    to gather the information from twitter.
+                </span>
+            </div>
+            <input v-model="search" />
+            <button @click="getTweets" :disabled="loading">Search Tweets</button>
+
+            <Loading v-if="loading" />
+            <div class="tweet-overview">
+                <div v-if="(data != null && data.tweets.length > 0)" v-for="(item, key) in data.tweets" :key="key">
+                    <Tweet>
+                        <template #user>
+                            {{ item[1] }}
+                        </template>
+                        <template #result><div>
+                            {{ item[3] }}
+                        </div></template>
+                        <template #tweet>{{ item[2] }}</template>
+                        <template #date>{{ item[0] }}</template>
+                    </Tweet>
+                </div>
+            </div>
         </div>
     </main>
 </template>
 
 <script lang="ts">
+import Loading from "@/components/Elements/Loading.vue"
+import Tweet from "@/components/Data/Tweet.vue"
+import { useToast } from "vue-toastification"
 export default {
     name: "TwitterData",
+    components: { Loading, Tweet},
     data() {
         return {
-            data: null,
+            data: {
+                positiveCount: 0,
+                negativeCount: 0,
+                tweets: []
+            },
+            search: "",
+            loading: false,
         }
+    },
+    setup(){
+        const toast = useToast();
+
+        return {toast}
     },
     methods: {
         getFollowers() {
 
             //change this to public IP address 
             try {
-                fetch("http://0.0.0.0:9000/followers/connectfastv1/").then(result => result.json()).then(
+                fetch("http://192.168.0.102:9000/").then(result => result.json()).then(
                     data => {
                         console.log(data)
                         this.data = data;
@@ -38,35 +76,53 @@ export default {
         },
 
         getTweets() {
-            try {
-                fetch("http://0.0.0.0:9000/tweets/connectfastv1/").then(result => result.json()).then(
+            this.loading = true;
+            this.data.tweets = []
+
+                fetch("http://192.168.0.102:9000/tweets/" + this.search).then(result => result.json()).then(
                     data => {
                         console.log(data)
                         this.data = data;
+                        this.loading = false
                     }
-                )
-            }
-            catch (e) {
-                console.log(e)
-            }
+                ).catch((error) => {
+                    window.alert("Currently the API is offline try again later.. ")
+                    console.log(error)
+                    this.loading = false;
+                    
+                })
+           
         },
         signIn() {
-            let consumerToken = import.meta.env.VITE_TWITTER_CONSUMER_TOKEN;
-            const rootUrl = "https://twitter.com/i/oauth2/authorize";
-            const options = {
-                redirect_uri: "http://app.localhost:5147/twitter", // client url cannot be http://localhost:3000/ or http://127.0.0.1:3000/
-                client_id: "cV9Gems2dWxnSWs2OTlyUXhEUDQ6MTpjaQ",
-                state: "state",
-                response_type: "code",
-                scope: ["users.read", "tweet.read", "follows.read", "follows.write"].join(" "), // add/remove scopes as needed
-            };
-            const qs = new URLSearchParams(options).toString();
-            let url =  `${rootUrl}?${qs}`
-
-            url = "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=cV9Gems2dWxnSWs2OTlyUXhEUDQ6MTpjaQ&redirect_uri=https://app.connect-fast.com/twitter&scope=tweet.read%20users.read%20follows.read%20follows.write"
-
-            window.open(url, '_blank').focus();
+            fetch("http://192.168.0.102:9000/twitter/authorize").then(result => result.json()).then(
+                data => {
+                    this.loading = false;
+              
+                    console.log(data)
+                }
+            )
         }
     }
 }
 </script>
+<style>
+.tweet-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+}
+.twitter-content{
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+}
+
+input{
+    border: 1px solid black;
+    color: black;
+}
+</style>
