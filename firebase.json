@@ -6,8 +6,10 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "appAssociation": "AUTO",
-    "rewrites": [ { "source": "app.connect-fast.com/*", "dynamicLinks": true } ]
+    "rewrites": [ { "source": "**",  "destination": "/index.html" } ],
+    "cleanUrls": true,
+
+    "trailingSlash": false
 
   }
 }
