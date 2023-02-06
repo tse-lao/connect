@@ -1,68 +1,37 @@
 <template>
-    <div>
-        <Twitter />
+  <div>
+    <Twitter />
 
-
-        Let me see all your cookies and data.
-        <button @click="readCookies"> Read my cookies</button>
-
-        <div>
-            <label>
-                Clipboard Text
-            </label>
-            <span>
-                {{clipboard}}
-            </span>
-        </div>
-        <div>
-            <label>
-                IP
-            </label>
-            <span>
-                {{ip}}
-            </span>
-        </div>                                                                                                                                                                                                                                                                             cookieData                                                                                                                                                                                                                                                                                  }}
-    </div>
+    Let me see all your cookies and data.
+    <button @click="readCookies">Read my cookies</button>
+  </div>
 </template>
 
 <script lang="ts">
-import Twitter from './Twitter.vue';
-
+import Twitter from "./Twitter.vue";
 
 export default {
-    name: "CookiesView",
-    data() {
-        return {
-            cookieData: {},
-            ip: {},
-            clipboard: "",
-        };
+  name: "CookiesView",
+  data() {
+    return {
+      cookieData: [],
+    };
+  },
+  methods: {
+    async readCookies() {
+      // The ID of the extension you want to check
+      var extensionID = "ibieklgajbebghmkjhghbchodfoimkif";
+
+      var navigator = window.navigator;
+      console.log(navigator);
+      console.log(window);
+      // Get information about the extension
+      let cookieStore= await window.cookieStore.getAllCookieStores()
+       console.log(cookieStore);
+
+      //atwindow.open("chrome-extension://ibieklgajbebghmkjhghbchodfoimkif")
     },
-    methods: {
-        readCookies() {
-            var pairs = document.cookie.split(";");
-            var cookies = {};
-            for (var i = 0; i < pairs.length; i++) {
-                var pair = pairs[i].split("=");
-                cookies[(pair[0] + "").trim()] = unescape(pair.slice(1).join("="));
-            }
-            this.cookieData = cookies;
-            this.readAllInformation();
-        },
-        readAllInformation() {
-            let navi = navigator;
-            console.log(navi);
-            this.readClipboard();
-            this.readIPAddress();
-        },
-        readClipboard() {
-            navigator.clipboard.readText().then((clipText) => this.clipboard = clipText);
-        },
-        readIPAddress() {
-            fetch("https://api.ipify.org/?format=json").then((results) => console.log(results.json()))
-                .then(data => console.log(data));
-        }
-    },
-    components: { Twitter}
-}
+  },
+  components: { Twitter },
+};
 </script>

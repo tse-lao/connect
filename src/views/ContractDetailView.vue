@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       registered: false,
+      loading: true,
       menuSelect: "standard",
       result: "nor esult",
       contract: "",
@@ -58,8 +59,10 @@ export default {
 
   mounted() {
     this.contract = this.$route.params.id as string;
-    this.retrieveContract(this.contract);
-    //now we want to call something that retireve the contrat.
+    if(this.loading){
+      this.retrieveContract(this.contract);
+
+    }
   },
 
   methods: {
@@ -112,6 +115,7 @@ export default {
       this.details = result as any;
       console.log(result);
       this.retrieveIPFS(this.details.link);
+      this.loading = false;
       
     },
     async retrieveIPFS(link:string) {

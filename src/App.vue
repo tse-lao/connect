@@ -1,48 +1,41 @@
 <script lang="ts">
+import { onClickOutside } from "@vueuse/core";
+import { ref } from "vue";
 import "./assets/main.css";
 import AccountDetails from "./components/Account/AccountDetails.vue";
 import ProfilePicture from "./components/Account/ProfilePicture.vue";
-import SetupView from "./components/Setup/SetupView.vue";
-import Sidebar from "./components/Design/Sidebar.vue"
-import { useAccountStore } from "./stores/account.js";
 import Header from "./components/Design/Header.vue";
-import { ref } from "vue";
-import { onClickOutside } from "@vueuse/core";
-
-
+import Sidebar from "./components/Design/Sidebar.vue";
+import SetupView from "./components/Setup/SetupView.vue";
+import { useAccountStore } from "./stores/account.js";
 
 export default {
   name: "App",
   components: { AccountDetails, ProfilePicture, SetupView, Sidebar, Header },
   data() {
-    return (
-      {
-        viewAccount: false,
-        showNav: false,
-        big: true,
-        correctNetwork: false
-      }
-    )
-
+    return {
+      viewAccount: false,
+      showNav: false,
+      big: true,
+      correctNetwork: false,
+    };
   },
   setup() {
     const account = useAccountStore();
     const accountModal = ref(false);
-    const accountTarget = ref(null)
-    //we do something with the outside. 
+    const accountTarget = ref(null);
+    //we do something with the outside.
     onClickOutside(accountTarget, (event) => {
-        accountModal.value = false;
-        
-    })
+      accountModal.value = false;
+    });
 
-    return { account, accountModal, accountTarget }
+    return { account, accountModal, accountTarget };
   },
   methods: {
     login() {
-      this.account.getAccount()
-      console.log("account getting.")
-      //we call the child component to rerender; 
-
+      this.account.getAccount();
+      console.log("account getting.");
+      //we call the child component to rerender;
     },
     detailsShow() {
       this.viewAccount = !this.viewAccount;
@@ -50,59 +43,59 @@ export default {
     onResize() {
       if (window.innerWidth > 700) {
         this.big = true;
-        return
+        return;
       }
-      this.big = false
-      return
+      this.big = false;
+      return;
     },
 
     async networkCheck() {
       const network = await window.ethereum.networkVersion;
-      if (network == 80001) { this.correctNetwork = true }
+      if (network == 80001) {
+        this.correctNetwork = true;
+      }
     },
   },
 
   mounted() {
     this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize);
+      window.addEventListener("resize", this.onResize);
     }),
       this.login();
   },
   created() {
-    if (typeof window.ethereum != 'undefined'){
-      window.ethereum.on('accountsChanged', this.login)
-      window.ethereum.on('chainChanged', this.login)
-      window.ethereum.on('message', (message: any) => {
+    if (typeof window.ethereum != "undefined") {
+      window.ethereum.on("accountsChanged", this.login);
+      window.ethereum.on("chainChanged", this.login);
+      window.ethereum.on("message", (message: any) => {
         console.log(message);
-      })
-
+      });
     }
-     
-
-  }
+  },
 };
 </script>
 <template color-scheme="dark">
-  <div class="header">
-     <div class="menu-icon" @click="showNav = !showNav" >
+  <div>
+    <div class="header">
+      <div class="menu-icon" @click="showNav = !showNav">
         <div class=""></div>
         <div class=""></div>
         <div class=""></div>
       </div>
       <Header @click="accountModal = !accountModal" />
-  </div>
-  <AccountDetails ref="accountTarget" v-if="accountModal"/>
-  <div class="app">
-    <div id="leftSide" v-if="showNav">
-      <Sidebar />
     </div>
-    <div id="content">
-      <RouterView v-if="account.network === '0x13881'" />
-      <div v-else>
-        <SetupView />
+    <AccountDetails ref="accountTarget" v-if="accountModal" />
+    <div class="app">
+      <div id="leftSide" v-if="showNav">
+        <Sidebar />
+      </div>
+      <div id="content">
+        <RouterView v-if="account.network === '0x13881'" />
+        <div v-else>
+          <SetupView />
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 <style scoped >
@@ -116,32 +109,32 @@ body {
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif; */
 }
-.header{
+.header {
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 64px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   justify-content: space-between;
 }
 
-.menu-icon{
+.menu-icon {
   padding: 1rem;
   cursor: pointer;
   display: flex;
-  align-content:center;
+  align-content: center;
   flex-direction: column;
   align-items: center;
 }
-.menu-icon div{
+.menu-icon div {
   height: 2px;
   width: 32px;
-  background-color: rgba(255,255,255,0.7);
+  background-color: rgba(255, 255, 255, 0.7);
   margin-bottom: 6px;
 }
 .app {
   display: flex;
-  flex-flow:row;
+  flex-flow: row;
   gap: 10px;
   width: 100vw;
   overflow: hidden;
@@ -159,7 +152,7 @@ body {
   top: 0;
   bottom: 0;
   position: relative;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 #content {
@@ -171,8 +164,7 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-#content::-webkit-scrollbar{
+#content::-webkit-scrollbar {
   display: none;
 }
-
 </style>

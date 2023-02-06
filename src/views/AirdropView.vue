@@ -13,16 +13,19 @@
             </span>
         </div>
     </div>
+    
+    <StoreData />
     <AirdropVue />
 </template>
 
 <script lang="ts">
 import AirdropVue from '@/components/Dashboard/Airdrop.vue';
-import {useAccountStore} from "@/stores/account"
+import StoreData from '@/components/Data/StoreData.vue';
+import { useAccountStore } from "@/stores/account";
 
 export default{
     name: "AirdropView",
-    components: {AirdropVue} , 
+    components: {AirdropVue, StoreData} , 
     setup(){
         let account = useAccountStore();
 

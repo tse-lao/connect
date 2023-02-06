@@ -9,8 +9,8 @@ const web3:any = new Web3(window.ethereum);
 const tokenContract = import.meta.env.VITE_TOKEN_ADDRESS;
 const TokenContract = new web3.eth.Contract(TokenABI, tokenContract);
 
-import { useToast } from 'vue-toastification'
 import { ethers } from "ethers";
+import { useToast } from 'vue-toastification';
 
 const toast = useToast()
 
@@ -40,7 +40,7 @@ export default {
         console.log("busssyyy...")
         let result = ''
         await TokenContract.getPastEvents('allEvents', {// Using an array means OR: e.g. 20 or 23
-            fromBlock: 28717382,
+            fromBlock: 29229598,
             toBlock: 'latest',
             to: address
         }, function(error, events){ console.log(events); })

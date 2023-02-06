@@ -1,72 +1,86 @@
 <template>
-  <Title>
-    <template #title>
-      {{ data.title }}
-    </template>
-    <template #actions>
-      <button @click="startContract" class="succes">Submit</button>
-    </template>
-  </Title>
-  <div class="contract">
-    <!--  What information do we need to add here?  -->
-    <div class="panel">
-      <div class="form-control">
-        <label>Title</label>
-        <input v-model="data.title" />
-        <div class="input-helptext error" v-if="data.title.length < 5">
-          You need to have at least a title with 5 characterrs
-
+  <div>
+    <Title>
+      <template #title>
+        {{ data.title }}
+      </template>
+      <template #actions>
+        <button @click="startContract" class="succes">Submit</button>
+      </template>
+    </Title>
+    <div class="contract">
+      <!--  What information do we need to add here?  -->
+      <div class="panel">
+        <div class="form-control">
+          <label>Title</label>
+          <input v-model="data.title" />
+          <div class="input-helptext error" v-if="data.title.length < 5">
+            You need to have at least a title with 5 characterrs
+          </div>
+        </div>
+        <div class="form-control">
+          <label>Fee</label>
+          <input type="number" v-model="data.reward" />
+        </div>
+        <div class="form-control">
+          <label>End date</label>
+          <input type="date" v-model="data.end_date" />
         </div>
       </div>
-      <div class="form-control">
-        <label>Fee</label>
-        <input type="number" v-model="data.reward" />
-      </div>
-      <div class="form-control">
-        <label>End date</label>
-        <input type="date" v-model="data.end_date" />
-      </div>
-    </div>
-    <div class="panel no-bg">
-      <h3>Description</h3>
-      <QuillEditor ref="description" theme="snow" class="editor" required v-model:content="data.description"/>
-    </div>
-
-    <div class="panel no-bg column">
-      <Select @selectType="selectType" />
-      <div class="inline-panel">
-        <component v-bind:is="createComponent" @add="addProperty" />
+      <div class="panel no-bg">
+        <h3>Description</h3>
+        <QuillEditor
+          ref="description"
+          theme="snow"
+          class="editor"
+          required
+          v-model="data.description"
+        />
       </div>
 
-    </div>
-    <div class="panel">
-      <DisplayForm v-if="formPreview.length > 1" :formElements="formPreview" />
+      <div class="panel no-bg column">
+        <Select @selectType="selectType" />
+        <div class="inline-panel">
+          <component v-bind:is="createComponent" @add="addProperty" />
+        </div>
+      </div>
+      <div class="panel">
+        <DisplayForm
+          v-if="formPreview.length > 1"
+          :formElements="formPreview"
+        />
+      </div>
     </div>
   </div>
-
 </template>
 <script lang="ts">
 import contractInterface from "@/assets/contracts/artifacts/Contracts.json";
-import Title from "@/components/Elements/Title.vue"
+import Title from "@/components/Elements/Title.vue";
+import functions from "@/store/api/files";
+import { useAccountStore } from "@/stores/account";
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
+import { useToast } from "vue-toastification";
+import Web3 from "web3";
 import CreateInput from "../Elements/CreateInput.vue";
 import CreateSelect from "../Elements/CreateSelect.vue";
-import functions from "@/store/api/files";
-import { QuillEditor } from "@vueup/vue-quill";
-import Web3 from "web3";
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import Select from "../Elements/Select.vue";
 import DisplayForm from "./DisplayForm.vue";
-import {useAccountStore} from "@/stores/account"
-import { useToast } from "vue-toastification";
-import { ref } from "vue";
 
 export default {
-  components: { Title, QuillEditor, CreateInput, Select, CreateSelect, DisplayForm },
-  setup(){
+  components: {
+    Title,
+    QuillEditor,
+    CreateInput,
+    Select,
+    CreateSelect,
+    DisplayForm,
+  },
+  setup() {
     const account = useAccountStore();
-    const toast = useToast()
+    const toast = useToast();
 
-    return {account, toast, description};
+    return { account, toast };
   },
   data() {
     return {
@@ -83,35 +97,44 @@ export default {
       inputType: "input",
       createComponent: "CreateInput",
       dataCode: [],
-      formPreview: [{}]
+      formPreview: [{}],
     };
   },
   methods: {
-    async createContract(link:any) {
+    async createContract(link: any) {
       //find something smarter for thi
       const mainContract = "0x57Eb4beD18FBAD5e405bAF606b1936a4E1754EAc";
-      const web3 = new Web3(window.ethereum);
+      let eth:any = window.ethereum
+      const web3 = new Web3(eth);
+      
+      const abi:any = contractInterface.abi
       const contract = new web3.eth.Contract(
-        contractInterface.abi,
+        abi,
         mainContract
       );
-     
+      
 
-      const createAccount = await contract.methods
-        .createNewContract(link,"",  this.data.title, web3.utils.toWei("0"), true)
+        await contract.methods
+        .createNewContract(
+          link,
+          "",
+          this.data.title,
+          web3.utils.toWei("0"),
+          true
+        )
         .send({ from: this.account.address })
-        .then((receipt:any) => {
+        .then((receipt: any) => {
           console.log(receipt);
-          this.toast.success("Creation is done. ")
+          this.toast.success("Creation is done. ");
           //on success we can update the allownace.
         })
-        .catch((error:any) => {
+        .catch((error: any) => {
           console.error(error);
-          this.toast.error(error.message)
-
+          this.toast.error(error.message);
         });
-
+        
     },
+    
 
     async startContract() {
       this.data.description = this.$refs.description.getHTML();
@@ -126,25 +149,22 @@ export default {
 
       //write file to IPFS here.
       this.createContract(result);
+      
+      //also need to check if this is done correctyl...
     },
 
     async onSubmit() {
       console.log(this.data);
     },
 
-
     addProperty(data: any) {
-      console.log(data)
-      this.formPreview.push({ data: data, inputType: this.inputType })
+      this.formPreview.push({ data: data, inputType: this.inputType });
     },
     selectType(type: string) {
-      this.inputType = type;
-      if (type === 'select') {
-        this.createComponent = 'CreateSelect';
-      } else
-        this.createComponent = 'CreateInput';
-
-    }
+      if (this.inputType === "select") {
+        this.createComponent = "CreateSelect";
+      } else this.createComponent = "CreateInput";
+    },
   },
 };
 </script>
@@ -171,7 +191,6 @@ export default {
 
 .panel {
   align-self: flex-start;
-
 }
 
 input {
