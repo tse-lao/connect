@@ -14,6 +14,10 @@
           <img class="nav-item-icon" src="@/assets/icons/bounty.png" alt="Dashboard" />
           <router-link to="/bounties">Bounties</router-link>
         </div>
+         <div class="nav-item" @click="$router.push('/publisher')">
+          <img class="nav-item-icon" src="@/assets/icons/bounty.png" alt="Publisher" />
+          <router-link to="/publisher">Publisher</router-link>
+        </div>
 
        
       </div>
