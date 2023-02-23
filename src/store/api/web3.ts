@@ -1,23 +1,21 @@
 // import shareContract from "@/assets/contracts/JSON/ShareContract.json";
 import shareContract from "@/assets/contracts/artifacts/ShareContract.json";
-import Web3 from 'web3';
-import {useAccountStore} from "@/stores/account"
+import { useAccountStore } from "@/stores/account";
+import { ethers } from "ethers";
 import { useToast } from "vue-toastification";
-import contracts from "./contracts";
+import Web3 from 'web3';
 
 
 const toast = useToast();
 const abi: any = shareContract.abi;
 
 const account = useAccountStore();
+const web3 = new Web3(window.ethereum);
 
 export default {
 
   async readShareContracts(address: string) {
     //import here the contract abi. 
-
-
-    const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
       abi,
       address
@@ -44,7 +42,6 @@ export default {
   },
 
   async changeFeeShareContract(address: string, newFee: string) {
-    const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
       abi,
       address
@@ -68,12 +65,18 @@ export default {
 
 
   async openCloseContract(address: string) {
-    const web3 = new Web3(window.ethereum);
+
     const contract = new web3.eth.Contract(
       abi,
       address
     );
-    //TODO: make sure that we check if the contract exists. 
+
+    if(!ethers.utils.isAddress(address)){
+      toast.error('This address is not a valid address');
+      return;
+    }
+    
+    console.log(address);
 
     const approve = await contract.methods
       .closeOrOpen()
@@ -95,7 +98,6 @@ export default {
 
 
   async depositToShareContract(address: string, amount: string) {
-    const web3 = new Web3(window.ethereum);
     const contract = new web3.eth.Contract(
       abi,
       address
@@ -119,8 +121,7 @@ export default {
 
   },
 
-  async submitToShareContract(address: string, link: string) {
-    const web3 = new Web3(window.ethereum);
+  async submitToShareContract(address: string, link: string, encrypted:boolean) {
     const contract = new web3.eth.Contract(
       abi,
       address
@@ -128,7 +129,7 @@ export default {
 
 
     await contract.methods
-      .userSubmission(link, true)
+      .userSubmission(link, encrypted)
       .send({ from: account.address })
       .then((receipt: Object) => {
         console.log("approved");

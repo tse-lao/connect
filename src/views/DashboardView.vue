@@ -2,7 +2,13 @@
   <main>
     <h1>Dashboard</h1>
     <div class="row">
+      
+      
+  
       <div class="column">
+        <div class="panel">
+          <FacebookLogin />
+        </div>
         <div class="panel">
             <TokenBalances />
         </div>
@@ -25,14 +31,15 @@
 </template>
 
 <script lang="ts">
+import FacebookLogin from "@/components/Account/FacebookLogin.vue";
 import Airdrop from "@/components/Dashboard/Airdrop.vue";
-import TokenBalances from "@/components/Dashboard/TokenBalances.vue"
+import TokenBalances from "@/components/Dashboard/TokenBalances.vue";
 import TokenTransfers from "@/components/Dashboard/TokenTransfers.vue";
 import Transfer from "@/components/Dashboard/Transfer.vue";
 
 export default {
   name: "Dashboard",
-  components: { TokenBalances, TokenTransfers, Transfer, Airdrop }
+  components: { TokenBalances, TokenTransfers, Transfer, Airdrop, FacebookLogin}
 };
 </script>
 

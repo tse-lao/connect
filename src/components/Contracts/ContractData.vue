@@ -1,30 +1,51 @@
 <script lang="ts">
 import Loading from "@/components/Elements/Loading.vue";
+import functions from "@/store/api/files";
 import web3Functions from "@/store/api/web3";
+import Table from "../Elements/Table.vue";
 
 export default {
   name: "ContractDAta",
-  components: {Loading},
+  components: {Loading, Table},
   data(){
     return {
         loading: true, 
-        items: [],
+        items: [] as any,
+        tableHeaders: [] as any
     }
   },
   props: {
-    address: {
-      type: String,
-      default: "nothing found",
-    },
+      address: {
+        type: String,
+        default: "nothing found",
+      },
   },
   methods:{
     async readAllProfiles(){
-       const result = await web3Functions.AllFromShareContract(this.address);
-       console.log(result);
-       this.items = result;
+      const result = await web3Functions.AllFromShareContract(this.address);
+      console.log(result);
+      //this.items = result;
+       
+      for(let item in result){
+          const link = result[item][3]
+          const ipfs = await functions.readIPFS(link);
+          
+          this.items.push({
+            user : result[item][0], 
+            data: ipfs, 
+            downloads: result[item][1], 
+            balance: result[item][2], 
+            encrypted: result[item][4], 
+            active: result[item][5]      
+          })
+          
+          this.tableHeaders = ['user', 'data', 'downloads', 'balance', 'encrypted', 'active']
+        }
+
+          
        
        this.loading = false;
-    }
+    },
   }, 
   mounted(){
     this.readAllProfiles()
@@ -38,15 +59,8 @@ export default {
     <span>{{ address }}</span>
     
     <Loading v-if="loading" />
-    <div
-        v-for="(item, index) in items"
-        :data="item"
-        :key="index"
-        
-        v-else
-      >
-        {{item}}
-      </div>
+
+        <Table :headers="tableHeaders" :rows="items" />
   </div>
 </template>
 

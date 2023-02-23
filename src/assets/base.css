@@ -142,7 +142,7 @@ button.danger{
   border-radius: 8px;
   width: 45%;
   min-width: 320px;
-  align-content: center;
+  align-content: flex-start;
   align-items: center;
   align-self: center;
 }
@@ -249,6 +249,7 @@ button.danger{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
 }
 .column{
   display: flex;

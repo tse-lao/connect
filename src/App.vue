@@ -120,6 +120,7 @@ body {
 
 .menu-icon {
   padding: 1rem;
+  margin-left: 1rem;
   cursor: pointer;
   display: flex;
   align-content: center;

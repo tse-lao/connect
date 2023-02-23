@@ -4,7 +4,7 @@
             <component v-bind:is="item.inputType" :data="item.data" @submit="addValue" />
         </div>
         <div class="row-reverse">
-            <button>Submit</button>
+            <button @click="showResults">Submit</button>
         </div>
     </div>
 
@@ -12,8 +12,8 @@
 
 
 <script lang="ts">
+import input from "../Elements/Input.vue";
 import select from '../Elements/Select.vue';
-import input from "../Elements/Input.vue"
 
 export default {
     name: "DisplayForm",
@@ -28,10 +28,13 @@ export default {
             type: Array,
             default: []
         }
-    }, 
+    },
     methods:{
         addValue(){
             console.log("here we want to add the change value automatically to the list. ")
+        }, 
+        showResults(){
+            console.log(this.form);
         }
     }
 }

@@ -43,9 +43,8 @@ contract Contracts{
     function createNewContract(string memory _url, string memory _title, string memory _metadata, uint _minFee, bool _open) public returns (address){
          ShareContract a = new ShareContract(_url,_title, _metadata, _minFee, msg.sender, payable(address(this)), _open);
          pool.push(address(a));
-            emit ContractInteraction(msg.sender, address(a), 'create');       
-         return address(a);
-         
+        emit ContractInteraction(msg.sender, address(a), 'create');       
+         return address(a);    
     }
     
     function countContracts() public view returns(uint){

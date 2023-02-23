@@ -14,22 +14,11 @@
   
     <div class="row">
       <div class="person">
-        <h1>Alice</h1>
-        <div class="column gap">
-          <span class="enum">Address: {{ alice.address }}</span>
-          <span class="enum">Public: {{ alice.publicKey }}</span>
-          <span class="enum">Private: {{ alice.privateKey }}</span>
-        </div>
-
+        <AccountWallet name="Alice" :details="alice"/>
         <button @click="createAlice">Create Wallet</button>
       </div>
       <div class="person">
-        <h1>Bob</h1>
-        <div class="column gap">
-          <span class="enum">Address: {{ bob.address }}</span>
-          <span class="enum">Public: {{ bob.publicKey }}</span>
-          <span class="enum">Private: {{ bob.privateKey }}</span>
-        </div>
+        <AccountWallet name="Bob" :details="bob"/>
         <button @click="createBob">Create Bob</button>
       </div>
     </div>
@@ -50,9 +39,11 @@ import EthCrypto from "eth-crypto";
 import { ethers } from "ethers";
 import Web3 from "web3";
 import { useAccountStore } from "../../stores/account";
+import AccountWallet from './Elements/AccountWallet.vue';
 
 export default {
   name: "StoreData",
+  components: { AccountWallet },
   data() {
     return {
       email: "",

@@ -17,18 +17,24 @@
       </div>
       <button @click="getForm">Update Contract</button>
     </div>
+    
   </div>
 </template>
 
 <script lang="ts">
 import web3Functions from "../../store/api/web3";
+import CreateInput from "../Elements/CreateInput.vue";
 
 export default {
   name: "EditContract",
+  components: {CreateInput}, 
   data(){
     return {
         newTitle: null,
         newFee: "0",
+        selectType: "input", 
+        formPreview: [],      
+        createComponent: "CreateInput",
     }
   },
   props: {
@@ -68,6 +74,11 @@ export default {
         console.log("unfortnuately not possible to change. ")
       }
       
+    },
+    selectType(type: string) {
+      if (this.inputType === "select") {
+        this.createComponent = "CreateSelect";
+      } else this.createComponent = "CreateInput";
     },
   },
 };

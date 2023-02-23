@@ -7,16 +7,16 @@ import { createApp } from "vue";
 import Toast from "vue-toastification";
 
 import App from "@/App.vue";
+import '@/assets/base.css';
 import Landing from "@/Landing.vue";
+import VueGtag from "vue-gtag";
 import "vue-toastification/dist/index.css";
 import router from "./router";
 import approuter from "./router/approuter";
-import VueGtag from "vue-gtag";
-
-import '@/assets/base.css'
-
 
 globalThis.Buffer = Buffer
+
+// lets add the appolo instances
 
 //check for domain and change the APP.vue
 const host = window.location.host;
@@ -34,7 +34,8 @@ if (arr.length > 0) {
         id: "GTM-WL5F7TP",
       },
     }, router)
-    app.use(store);
+    app.use(store); 
+    
 
     //here we want the dark theme
 

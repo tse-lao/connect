@@ -1,30 +1,27 @@
 <script lang="ts">
+import Form from '@/components/Elements/Form.vue';
 import Title from '@/components/Elements/Title.vue';
 import { useAccountStore } from '@/stores/account';
+import { useToast } from "vue-toastification";
 import ContractAdmin from "../components/Contracts/ContractAdmin.vue";
 import ContractData from "../components/Contracts/ContractData.vue";
 import EditContract from "../components/Contracts/EditContract.vue";
+
 import functions from "../store/api/files";
 import web3Functions from "../store/api/web3";
 
 
 export default {
   name: "ContractDetail",
-  components: { EditContract, ContractAdmin, ContractData, Title  },
+  components: { EditContract, ContractAdmin, ContractData, Title, Form },
   data() {
     return {
-      registered: false,
+      prefixMumbai: "https://mumbai.polygonscan.com/address/",
       loading: true,
       menuSelect: "standard",
-      result: "nor esult",
       contract: "",
       show: false,
-      amount: "",
-      owner: false,
-      password: "",
-      privateKey: null,
-      inputData: {},
-      newLink: "",
+      owner: true,
       entryForm: false,
       details: {
         owner: "",
@@ -51,10 +48,11 @@ export default {
       default: "nothing found",
     },
   },
-  //TODO: Pinia Account interactions make it better. 
+
  setup(){
     const account = useAccountStore()
-    return {account}
+    const toast = useToast();
+    return {account, toast}
  },
 
   mounted() {
@@ -109,7 +107,34 @@ export default {
 
       return recoveredPubKey;
     }, */
+    formSubmit(formValue:any){
+        console.log("CAlLED IN MAIN COMPONNENT.")
+        console.log(formValue);
+        
+        if(formValue.encrypt){
+          //we need to encrypt the data with the public key of the owner.
+          
+                
+            //now we need to make sure that we get the publickey.
+            /* var pubKey = await this.getContractCreatorKey();
+            console.log(pubKey);
 
+            //nowe we want to create file to submit to there.
+            EncryptToSmart(pubKey, stringedJSON).then((result) => {
+              console.log(result);
+              this.show = true;
+              this.newLink = result;
+            }); */
+            
+            this.toast.error("not yet implemented")
+        }
+        else {
+         this.submitDataToContract(formValue); 
+         this.toast.success("uploading to IPFS..")
+         
+        }
+      },
+      
     async retrieveContract(contractAddress:string) {
       const result:Object = await web3Functions.readShareContracts(contractAddress);
       this.details = result as any;
@@ -118,42 +143,34 @@ export default {
       this.loading = false;
       
     },
+    
     async retrieveIPFS(link:string) {
       const result = await functions.readIPFS(link);
       
       console.log("IPFS details retrieval..")
       console.log(result);
       this.formData = result.form;
+      this.data.data.description = result.data.description;
       this.entryForm = true;
     },
-    async submitDataToContract() {
-      const stringedJSON = JSON.stringify(this.inputData);
-      const encrypted = false;
-
-      if (encrypted) {
-        console.log("shoudl be encrypted");
-      }
+    
+    
+    async submitDataToContract(passedData:object) {
+      const stringedJSON = JSON.stringify(passedData);
 
       const link:any = await functions.uploadToIPFS(stringedJSON);
-      this.submitToContract(link);
+      this.submitToContract(link, passedData.encrypt);
 
-      //now we need to make sure that we get the publickey.
-      /* var pubKey = await this.getContractCreatorKey();
-      console.log(pubKey);
-
-      //nowe we want to create file to submit to there.
-      EncryptToSmart(pubKey, stringedJSON).then((result) => {
-        console.log(result);
-        this.show = true;
-        this.newLink = result;
-      }); */
     },
 
-    async submitToContract(link:string) {
-      const result = await web3Functions.submitToShareContract(
+    async submitToContract(link:string, encrypt:boolean) {
+      await web3Functions.submitToShareContract(
         this.contract,
-        link
+        link, 
+        encrypt
       );
+      
+      
     },
     
     async deposit(){
@@ -172,7 +189,12 @@ export default {
   <div class="content">
     <Title>
         <template #title>
-          {{details.title}}  
+          <div class="row">
+            {{details.title}}  
+            <span v-if="details.status" class="open">OPEN</span>
+            <span v-else class="closed">Closed</span>
+          </div>
+         
         </template>
 
         <template #actions>
@@ -186,58 +208,47 @@ export default {
             @click="openCloseContract"/>
         </template>
     </Title>
-
+    
+    
     <div class="two-layer-template">
       <div class="left-two-layer-template">
         <div class="panel contract-details">
           <div class="column">
-            <h4>{{details.title}}</h4>
+            <h2>Description</h2>
+            <div v-html="data.data.description"></div>
           </div>
           <div class="column">
-            <h4>Owner</h4>
-            <span> {{ details.owner }}</span>
+            <h4>Contracts</h4>
+          <div class="row spacebetween">
+            <a :href="prefixMumbai + details.owner">Owner</a>
+            
+            <a :href="prefixMumbai + details.parentContract">Parent</a>
+            <a :href="prefixMumbai + contract">Contract</a>
+            <a :href="'' + details.link">IPFS</a>
           </div>
-          <div class="column">
-            <h4>Parent Contract</h4>
-            <span> {{ details.parentContract }}</span>
           </div>
-          <div class="column">
-            <h4>Contract</h4>
-            <span>{{ contract }}</span>
-          </div>
-          <div class="column">
-            <h4>IPFS</h4>
-            <span>{{ details.link }}</span>
-          </div>
-          <div class="column">
+
+          <div class="row">
+            <div class="column">
             <h4>Fee</h4>
             <span>{{ details.fee }}</span>
           </div>
-          
+          <div class="column">
+            <h4>Contract balance</h4>
+            <span> {{details.balance}}</span>
+          </div> 
+          </div>
+         
+       
+         
         </div>
         <div class="panel contract-stats">
-          <div class="row">
-            <h4>Rewards</h4>
-            <span> {{details.balance}}</span>
-          </div>
-          <div class="row">
-            <h4>Open status</h4>
-            <span v-if="details.status" class="open">OPEN</span>
-            <span v-else class="closed">Closed</span>
-          </div>
-          <div class="row">
-            <h4>Encryption Method</h4>
-            <span> ETHCKS</span>
-          </div>
-          <div class="row">
-            <button @click="openCloseContract" v-if="details.status">close</button>
-            <button @click="openCloseContract" v-else>open</button>
+          <div class="column">
+            <Form :formElements="formData" @formSubmit="formSubmit"/>
+
           </div>
           
-          <div class="row">
-            <input v-model="amount"/>
-            <button @click="deposit">Deposit</button>
-          </div>
+     
           
           </div>
       </div>
@@ -257,14 +268,7 @@ export default {
 
         <div class="panel" v-if="menuSelect === 'standard'">
           <div>
-            <FormKit
-              type="form"
-              @submit="submitDataToContract"
-              v-model="inputData"
-              v-if="entryForm"
-            >
-              <FormKitSchema :schema="formData" />
-            </FormKit>
+            <Form :formElements="formData "/>
           </div>
         </div>
         <div class="panel" v-if="menuSelect === 'owner'">
@@ -323,7 +327,7 @@ table {
   border-radius: 8px;
   margin: 2rem;
   flex: 1;
-  gap: 16px;
+  place-self: start;
 }
 .submenu{
   display: flex;
@@ -343,9 +347,20 @@ table {
   gap: 2rem;
   margin: 2rem;
 }
+.spacebetween{
+  gap: 1rem;
+}
+.contract-details{
+  gap: 1rem;
+}
+h2{
+  color: white;
+}
 
 .row{
   margin-bottom: 1rem;
+  align-items: center;
+  gap: 1rem;
 }
 .submenu .menu-item:hover {
   border: 1px solid rgba(255,255,255,0.8);
