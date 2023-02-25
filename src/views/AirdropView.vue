@@ -14,7 +14,6 @@
         </div>
     </div>
     
-    <StoreData />
     <AirdropVue />
 </template>
 

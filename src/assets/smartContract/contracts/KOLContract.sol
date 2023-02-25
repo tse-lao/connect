@@ -24,27 +24,22 @@ contract KOLContract is Ownable {
     
     struct Post{
         string ipfs;
-        boolean active;
+        bool active;
         address propser;
         string tracker;
         uint balance;
     }
         
-    constructor(uint _unlockTime, string requirements, address _kol){
+    constructor(uint _unlockTime, string memory _requirements, address _kol){
        require(_unlockTime > block.timestamp, "needs to be in the future");
         unlockTime = _unlockTime;
         kol = payable(_kol);
         emit ContractInteraction(msg.sender, address(this), "create");
     }
     // @dev - returns info about the contract. 
-    function updateRequirements(){
-        emit UpdateContract('requirements');
-    }
-    
+
     //only a user should be able to add this.
-    function addPost(string memory _post) {
-        
-    }
+
     
     //users which only the owner can add.  
     function addUser(address user) public onlyOwner {
@@ -55,10 +50,10 @@ contract KOLContract is Ownable {
         return users[user];
     }
     
-    function changeUnlock(uint _unlockTime){
+    function changeUnlock(uint _unlockTime) public {
         require(unlockTime < _unlockTime, "new unlock needs to be in later");
         unlockTime = _unlockTime;
-        emit UpdateContract(_unlockTime);
+       // emit UpdateContract(_unlockTime);
     }
 }
 
